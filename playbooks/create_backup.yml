@@ -1,0 +1,8 @@
+---
+- name: Create backup
+  hosts: routeros
+  tasks:
+    - include_role:
+        name: Mikrotik-CreateBackup
+      vars:
+        input_role_destination_path: /volumes/mikrotik

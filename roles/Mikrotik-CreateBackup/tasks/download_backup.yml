@@ -1,0 +1,8 @@
+---
+- debug:
+    msg: command sshpass -p "{{ ansible_password }}" sftp {{ ansible_user }}@{{ ansible_host }}:{{ var_role_backup_filename }} {{ input_role_destination_path }}/backup
+- name: Download backup
+  action: command sshpass -p "{{ ansible_password }}" sftp {{ ansible_user }}@{{ ansible_host }}:{{ var_role_backup_filename }} {{ input_role_destination_path }}/backup
+
+- name: Download configuration
+  action: command sshpass -p "{{ ansible_password }}" sftp {{ ansible_user }}@{{ ansible_host }}:{{ var_role_backup_filename_rsc }} {{ input_role_destination_path }}/rsc

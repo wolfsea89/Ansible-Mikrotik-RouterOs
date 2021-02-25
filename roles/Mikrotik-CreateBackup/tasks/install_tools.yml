@@ -1,0 +1,5 @@
+- name: "[Ubuntu] Install tools"
+  apt:
+    pkg:
+    - sshpass
+  when: input_role_os_distribution == "Ubuntu"
