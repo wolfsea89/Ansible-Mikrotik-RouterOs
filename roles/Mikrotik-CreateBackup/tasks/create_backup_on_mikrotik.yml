@@ -1,0 +1,8 @@
+---
+- name: Performing backup of Mikrotik to local storage
+  routeros_command:
+    commands: /system backup save name="{{ var_role_backup_filename }}"
+
+- name: Exporting current configuration to text
+  routeros_command:
+    commands: /export file="{{ var_role_backup_filename_rsc }}"
