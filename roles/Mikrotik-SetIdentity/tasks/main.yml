@@ -1,0 +1,4 @@
+---
+- name: Set identity
+  routeros_command:
+    commands: /system identity set name="{{ input_role_ansible_host }}"

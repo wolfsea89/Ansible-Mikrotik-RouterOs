@@ -3,14 +3,10 @@
   file:
     path: "{{ input_role_destination_path }}/backup"
     state: directory
-    owner: mrachuna
-    group: mrachuna
   delegate_to: localhost
 
 - name: Create backup {{ input_role_destination_path }}/rsc on localhost
   file:
     path: "{{ input_role_destination_path }}/rsc"
-    owner: mrachuna
-    group: mrachuna
     state: directory
   delegate_to: localhost
