@@ -6,8 +6,3 @@
         name: Mikrotik-CreateBackup
       vars:
         input_role_destination_path: /volumes/mikrotik
-
-
-    - name: Set identity
-      routeros_command:
-        commands: /system identity set name="{{ inventory_hostname }}"
