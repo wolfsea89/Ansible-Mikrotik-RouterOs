@@ -1,5 +1,5 @@
 ---
-- name: Create backup
+- name: Configure Router
   hosts: routeros
   tasks:
     - include_role:
@@ -9,8 +9,3 @@
         input_role_ansible_host:     "{{ ansible_host }}"
         input_role_ansible_user:     "{{ ansible_user }}"
         input_role_ansible_password: "{{ ansible_password }}"
-    
-    - include_role:
-        name: Mikrotik-SetIdentity
-      vars:
-        input_role_ansible_host:     "{{ ansible_host }}"
