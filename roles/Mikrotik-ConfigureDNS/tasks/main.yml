@@ -1,0 +1,6 @@
+---
+- name: Configure dns
+  include: configure_dns.yml
+
+- name: Set static dns adress
+  include: configure_static_dns_address.yml

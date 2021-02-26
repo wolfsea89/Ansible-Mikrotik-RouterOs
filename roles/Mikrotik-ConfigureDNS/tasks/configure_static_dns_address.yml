@@ -1,0 +1,15 @@
+---
+- name: Set static dns adress
+  routeros_command:
+    commands: >
+      /ip dns static add name={{ dns_host.name }} 
+      address={{ dns_host.address }} 
+      comment="{{ dns_host.comment | default('') }}"
+      disabled={{ dns_host.disabled | default('no') }} 
+      regexp="{{ dns_host.regexp | default('') }}"
+      ttl={{ dns_host.ttl | default('1d') }} 
+      type={{ dns_host.type | default('A') }}
+  loop: "{{ input_role_dns_static_records }}"
+  loop_control:
+    loop_var: dns_host
+  when: input_role_dns_static_records is defined

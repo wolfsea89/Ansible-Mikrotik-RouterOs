@@ -1,0 +1,23 @@
+---
+input_role_dns_parameters:
+  allow_remote_requests: "yes"
+  verify_doh_cert: "yes"
+  servers:
+    - 8.8.8.8
+    - 4.4.4.4
+  max_udp_packet_size: "4096"
+  query_server_timeout: "2.000"
+  query_total_timeout: "10.000"
+  max_concurrent_queries: "100"
+  max_concurrent_tcp_sessions: "20"
+  cache_size: "2048"
+  cache_max_ttl: "1w"
+
+# input_role_static_records_dns:
+#   - name: "example"
+#     address: "1.1.1.1"
+#     comment: "example"
+#     disabled: "no"
+#     regexp: ""
+#     ttl: 1d
+#     type: 'A'
