@@ -18,4 +18,5 @@
     - include_role:
         name: Mikrotik-ConfigureDNS
       vars:
-        input_role_dns_parameters: "{{ inventory_group_routeros_dns }}"
+        input_role_dns_parameters:     "{{ inventory_group_routeros_dns }}"
+        input_role_dns_static_records: "{{ iventory_group_routeros_dns_static_records }}"
