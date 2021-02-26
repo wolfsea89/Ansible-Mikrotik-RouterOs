@@ -1,4 +1,11 @@
 ---
+- name: Configure Ethernet interfaces
+  include: configure_ethernet.yml
+  loop: "{{ input_role_interface_ethernet }}"
+  loop_control:
+    loop_var: ethernet
+  when: input_role_interface_ethernet is defined
+
 - name: Configure bridges
   include: configure_bridges.yml
   loop: "{{ input_role_interface_bridges }}"

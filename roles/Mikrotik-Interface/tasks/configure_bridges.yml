@@ -7,15 +7,15 @@
 - name: "Add Brigde name {{ bridge.name }}"
   routeros_command:
     commands: >
-    /interface bridge add name="{{ bridge.name }}"
-    comment="{{ bridge.comment }}"
-    {{ bridge.other_params | default('') }}
+      /interface bridge add name="{{ bridge.name }}"
+      comment="{{ bridge.comment }}"
+      {{ bridge.other_params | default('') }}
   when: '"no such item" in bridge_status.stdout'
 
 - name: "Update Brigde name {{ bridge.name }}"
   routeros_command:
     commands: >
-    /interface bridge set [find name={{ bridge.name }}]
-    comment="{{ bridge.comment }}"
-    {{ bridge.other_params | default('') }}
+      /interface bridge set [find name={{ bridge.name }}]
+      comment="{{ bridge.comment }}"
+      {{ bridge.other_params | default('') }}
   when: '"no such item" not in bridge_status.stdout'

@@ -19,6 +19,7 @@
         name: Mikrotik-Interface
       vars:
         input_role_interface_bridges: "{{ inventory_group_routeros_interface_bridges }}"
+        input_role_interface_ethernet: "{{ inventory_group_routeros_interface_ethernet }}"
 
     # - include_role:
     #     name: Mikrotik-ConfigureDNS
