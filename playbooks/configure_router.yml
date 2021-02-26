@@ -9,3 +9,13 @@
         input_role_ansible_host:     "{{ ansible_host }}"
         input_role_ansible_user:     "{{ ansible_user }}"
         input_role_ansible_password: "{{ ansible_password }}"
+
+    - include_role:
+        name: Mikrotik-SetIdentity
+      vars:
+        input_role_ansible_host:     "{{ ansible_host }}"
+
+    - include_role:
+        name: Mikrotik-ConfigureDNS
+      vars:
+        input_role_dns_parameters: "{{ inventory_group_routeros_dns }}"

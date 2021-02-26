@@ -1,0 +1,4 @@
+---
+- name: Configure DNS
+  routeros_command:
+    commands: "/ip dns set allow-remote-requests={{ input_role_dns_parameters.allow_remote_requests }} servers={{ input_role_dns_parameters.servers | join(',') }} verify-doh-cert={{ input_role_dns_parameters.verify_doh_cert }}"
