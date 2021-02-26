@@ -1,0 +1,7 @@
+---
+- name: Configure bridges
+  include: configure_bridges.yml
+  loop: "{{ input_role_interface_bridges }}"
+  loop_control:
+    loop_var: bridge
+  when: input_role_interface_bridges is defined
