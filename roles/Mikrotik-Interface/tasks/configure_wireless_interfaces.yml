@@ -2,11 +2,11 @@
 - name: Configure wireless security profile
   routeros_command:
     commands: >
-    /interface wireless security-profiles set [ find name={{ security_profile.value.name }}]
-    authentication-types={{ security_profile.value.authentication_types | default(vars_role_wireless_security_profiles.authentication_types) }}
-    mode={{ security_profile.value.mode | default(vars_role_wireless_security_profiles.mode) }}
-    wpa-pre-shared-key="{{ security_profile.value.password }}"
-    wpa2-pre-shared-key="{{ security_profile.value.password }}"
+      /interface wireless security-profiles set [ find name={{ security_profile.value.name }}]
+      authentication-types={{ security_profile.value.authentication_types | default(vars_role_wireless_security_profiles.authentication_types) }}
+      mode={{ security_profile.value.mode | default(vars_role_wireless_security_profiles.mode) }}
+      wpa-pre-shared-key="{{ security_profile.value.password }}"
+      wpa2-pre-shared-key="{{ security_profile.value.password }}"
   loop: "{{ lookup('dict', input_role_wireless_security_profiles) }}"
   loop_control:
     loop_var: security_profile
