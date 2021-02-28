@@ -4,11 +4,11 @@
     commands: >
       /ip dns static add name={{ dns_host.name }} 
       address={{ dns_host.address }} 
-      comment="{{ dns_host.comment | default('') }}"
-      disabled={{ dns_host.disabled | default('no') }} 
-      regexp="{{ dns_host.regexp | default('') }}"
-      ttl={{ dns_host.ttl | default('1d') }} 
-      type={{ dns_host.type | default('A') }}
+      comment="{{ dns_host.comment | default(vars_role_default_static_dns_address.comment) }}"
+      disabled={{ dns_host.disabled | default(vars_role_default_static_dns_address.disabled) }} 
+      regexp="{{ dns_host.regexp | default(vars_role_default_static_dns_address.regexp) }}"
+      ttl={{ dns_host.ttl | default(vars_role_default_static_dns_address.ttl) }} 
+      type={{ dns_host.type | default(vars_role_default_static_dns_address.type) }}
   loop: "{{ input_role_dns_static_records }}"
   loop_control:
     loop_var: dns_host

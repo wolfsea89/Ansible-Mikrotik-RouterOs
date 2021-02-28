@@ -1,0 +1,37 @@
+---
+- name: Configure wireless security profile
+  routeros_command:
+    commands: >
+      /interface wireless security-profiles set [ find name={{ security_profile.value.name }}]
+      authentication-types={{ security_profile.value.authentication_types | default(vars_role_wireless_security_profiles.authentication_types) }}
+      mode={{ security_profile.value.mode | default(vars_role_wireless_security_profiles.mode) }}
+      wpa-pre-shared-key="{{ security_profile.value.password }}"
+      wpa2-pre-shared-key="{{ security_profile.value.password }}"
+  loop: "{{ lookup('dict', input_role_wireless_security_profiles) }}"
+  loop_control:
+    loop_var: security_profile
+  when: input_role_wireless_security_profiles is defined
+
+- name: "Update Wireless interface {{ wireless_interface.key }}"
+  routeros_command:
+    commands: >
+      /interface wireless set [find default-name={{ wireless_interface.key }}]
+      name={{ wireless_interface.value.name }}
+      comment="{{ wireless_interface.value.comment | default('') }}"
+      mode={{ wireless_interface.value.mode | default(vars_role_default_wireless_interface.mode)}}
+      band={{ wireless_interface.value.band }}
+      country={{ wireless_interface.value.country | default(vars_role_default_wireless_interface.country) }}
+      channel-width={{ wireless_interface.value.channel_width }}
+      frequency={{ wireless_interface.value.frequency | default(vars_role_default_wireless_interface.frequency) }}
+      ssid="{{ wireless_interface.value.ssid }}"
+      distance={{ wireless_interface.value.distance | default(vars_role_default_wireless_interface.distance) }}
+      installation={{ wireless_interface.value.installation | default(vars_role_default_wireless_interface.installation) }}
+      security-profile="{{ wireless_interface.value.security_profile }}"
+      station-roaming={{ wireless_interface.value.station_roaming | default(vars_role_default_wireless_interface.station_roaming) }}
+      wireless-protocol="{{ wireless_interface.value.wireless_protocol | default(vars_role_default_wireless_interface.wireless_protocol) }}"
+      disabled={{ wireless_interface.value.disabled | default(vars_role_default_wireless_interface.disabled) }}
+      {{ ethernet.other_params | default('') }}
+  loop: "{{ lookup('dict', input_role_wireless_interfaces) }}"
+  loop_control:
+    loop_var: wireless_interface
+  when: input_role_wireless_interfaces is defined

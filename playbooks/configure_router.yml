@@ -10,13 +10,22 @@
         input_role_ansible_user:     "{{ ansible_user }}"
         input_role_ansible_password: "{{ ansible_password }}"
 
-    - include_role:
-        name: Mikrotik-SetIdentity
-      vars:
-        input_role_ansible_host:     "{{ ansible_host }}"
+    # - include_role:
+    #     name: Mikrotik-SetIdentity
+    #   vars:
+    #     input_role_ansible_host:     "{{ inventory_hostname }}"
 
     - include_role:
-        name: Mikrotik-ConfigureDNS
+        name: Mikrotik-Interface
       vars:
-        input_role_dns_parameters:     "{{ inventory_group_routeros_dns }}"
-        input_role_dns_static_records: "{{ iventory_group_routeros_dns_static_records }}"
+        input_role_bridges_interfaces:         "{{ inventory_group_routeros_bridges_interfaces }}"
+        input_role_ethernet_interfaces:        "{{ inventory_group_routeros_ethernet_interfaces }}"
+        input_role_list_interfaces:            "{{ inventory_group_routeros_list_interfaces }}"
+        input_role_wireless_interfaces:        "{{ inventory_group_routeros_wireless_interfaces }}"
+        input_role_wireless_security_profiles: "{{ inventory_group_routeros_wireless_security_profiles }}"
+
+    # - include_role:
+    #     name: Mikrotik-ConfigureDNS
+    #   vars:
+    #     input_role_dns_parameters:     "{{ inventory_group_routeros_dns }}"
+    #     input_role_dns_static_records: "{{ iventory_group_routeros_dns_static_records }}"
