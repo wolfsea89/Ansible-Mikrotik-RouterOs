@@ -1,3 +1,7 @@
+
+/interface bridge
+/interface ethernet
+/interface list
 /interface wireless security-profiles
 set [ find default=yes ] authentication-types=wpa-psk,wpa2-psk mode=\
     dynamic-keys supplicant-identity=MikroTik wpa-pre-shared-key=\
@@ -7,17 +11,6 @@ add authentication-types=wpa-psk,wpa2-psk mode=dynamic-keys name=\
     wpa-pre-shared-key=NiePamietamHasla! wpa2-pre-shared-key=\
     NiePamietamHasla!
 /interface wireless
-set [ find default-name=wlan1 ] band=2ghz-b/g/n channel-width=20/40mhz-XX \
-    comment="SSID: Wybrzeze Klatki Schodowej" disabled=no distance=indoors \
-    frequency=auto installation=indoor mode=ap-bridge name=WiFi-LAN-01 \
-    security-profile="Wybrzeze Klatki Schodowej" ssid=\
-    "Wybrzeze Klatki Schodowej" station-roaming=enabled wireless-protocol=\
-    802.11
-set [ find default-name=wlan2 ] band=5ghz-a/n/ac channel-width=\
-    20/40/80mhz-XXXX disabled=no distance=indoors frequency=auto \
-    installation=indoor mode=ap-bridge name=WiFi-LAN-02 security-profile=\
-    "Wybrzeze Klatki Schodowej" ssid="Wybrzeze Klatki Schodowej" \
-    station-roaming=enabled wireless-protocol=802.11
 /interface wireless manual-tx-power-table
 set WiFi-LAN-01 comment="SSID: Wybrzeze Klatki Schodowej"
 /interface wireless nstreme
@@ -43,16 +36,10 @@ set full policy="local,telnet,ssh,ftp,reboot,read,write,policy,test,winbox,pas\
     sword,web,sniff,sensitive,api,romon,dude,tikapp"
 add name=prometheus policy="read,winbox,web,api,!local,!telnet,!ssh,!ftp,!rebo\
     ot,!write,!policy,!test,!password,!sniff,!sensitive,!romon,!dude,!tikapp"
+/interface bridge port
 /ip neighbor discovery-settings
 set discover-interface-list=LIST-LAN-USERS
 /interface list member
-add comment="Admin Network" interface=LAN-04 list=LIST-LAN-ADMIN
-add interface=WiFi-LAN-01 list=LIST-LAN-USERS
-add comment=LAN-USERS interface=WiFi-LAN-02 list=LIST-LAN-USERS
-add comment=LAN-WAN interface=WAN-01 list=LIST-WAN
-add interface=LAN-01 list=LIST-LAN-PROD
-add interface=LAN-02 list=LIST-LAN-PROD
-add comment=LAN-PROD interface=LAN-03 list=LIST-LAN-PROD
 /ip address
 add address=10.0.0.1/24 interface=LAN-01 network=10.0.0.0
 add address=10.254.0.1/24 comment="Admin Network" interface=LAN-04 network=\
@@ -200,3 +187,31 @@ set allowed-interface-list=LIST-LAN-USERS
 set allowed-interface-list=LIST-LAN-USERS
 /tool traffic-monitor
 add interface=LAN-Users name=tmon1 threshold=0
+
+
+
+/ip firewall filter
+add action=accept chain=forward connection-state=established,related
+add action=accept chain=forward in-interface=br_lan out-interface=ether1 src-address=172.25.100.0/24
+add action=accept chain=forward connection-nat-state=dstnat
+add action=drop chain=forward
+add action=accept chain=output
+add action=accept chain=input connection-state=established,related 
+add action=accept chain=input icmp-options=8:0 protocol=icmp
+add action=accept chain=input icmp-options=3:4 protocol=icmp 
+add action=accept chain=input connection-state=new dst-address=172.25.100.1 dst-port=53 in-interface=br_lan protocol=udp src-address=172.25.100.0/24
+add action=accept chain=input connection-state=new dst-address=172.25.100.1 dst-port=8291 in-interface=br_lan protocol=tcp src-address=172.25.100.0/24
+add action=drop chain=input
+
+
+Zezwalamy na ruch forward dla połączeń już nawiązanych.
+Zezwalamy na ruch forward dla połączeń z sieci LAN.
+Zezwalamy na ruch forward dla możliwych przekierowań portów lub DMZ.
+Odrzucamy resztę ruchu forward.
+Zezwalamy na ruch output (ta reguła nie jest wymagana ponieważ w MikroTik’u domyślną polityką jest accept jednak ja ją zawszę dodaję w celach porządkowych).
+Zezwalamy na ruch input dla połączeń już nawiązanych.
+Zezwalamy na zapytania ping.
+Zezwalamy na komunikaty ICMP o zbyt dużym rozmiarze pakietu (wymagającym fragmentacji).
+Zezwalamy na zapytania do usługi DNS na routerze z sieci LAN.
+Zezwalamy na inicjowanie połączeń do usługi winbox z sieci LAN.
+Odrzucamy resztę ruchu input.

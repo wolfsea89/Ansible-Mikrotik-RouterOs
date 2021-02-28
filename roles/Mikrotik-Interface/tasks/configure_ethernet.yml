@@ -1,8 +1,8 @@
 ---
-- name: "Update Ethernet interface {{ ethernet.port_name }}"
+- name: "Update Ethernet interface {{ ethernet.key }}"
   routeros_command:
     commands: >
-      /interface ethernet set [find default-name={{ ethernet.port_name }}]
-      name={{ ethernet.name }}
-      comment="{{ ethernet.comment | default('') }}"
-      {{ ethernet.other_params | default('') }}
+      /interface ethernet set [find default-name={{ ethernet.key }}]
+      name={{ ethernet.value.name }}
+      comment="{{ ethernet.value.comment | default('') }}"
+      {{ ethernet.value.other_params | default('') }}

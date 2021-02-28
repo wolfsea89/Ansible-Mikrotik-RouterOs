@@ -4,11 +4,6 @@
     commands: >
       /interface list add name={{ interface_list.name }}
 
-- debug:
-    msg: /interface list member add comment="{{ item.comment | default('') }}" interface={{ item.name }} list={{ interface_list.name }} disabled={{ item.disabled | default('no') }}
-  loop: "{{ interface_list.interfaces }}"
-  when: interface_list.interfaces is defined
-
 - name: "Add interface list {{ interface_list.name }}"
   routeros_command:
     commands: >

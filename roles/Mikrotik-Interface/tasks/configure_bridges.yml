@@ -21,7 +21,7 @@
       {{ bridge.other_params | default('') }}
   when: '"no such item" not in bridge_status.stdout'
 
-- name: "Add interface {{ item.name }} to {{ bridge.name }} bridge"
+- name: "Add interface to {{ bridge.name }} bridge"
   routeros_command:
     commands: >
       /interface bridge port add
