@@ -7,7 +7,8 @@
 - name: "Add Brigde name {{ bridge.name }}"
   routeros_command:
     commands: >
-      /interface bridge add name="{{ bridge.name }}"
+      /interface bridge add
+      name="{{ bridge.name }}"
       comment="{{ bridge.comment }}"
       {{ bridge.other_params | default('') }}
   when: '"no such item" in bridge_status.stdout'
@@ -19,3 +20,13 @@
       comment="{{ bridge.comment }}"
       {{ bridge.other_params | default('') }}
   when: '"no such item" not in bridge_status.stdout'
+
+- name: "Add interface {{ item.name }} to {{ bridge.name }} bridge"
+  routeros_command:
+    commands: >
+      /interface bridge port add
+      bridge={{ bridge.name }}
+      interface={{ item.name }}
+      trusted={{ item.trusted }}
+  loop: "{{ bridge.interfaces }}"
+  when: bridge.interfaces is defined

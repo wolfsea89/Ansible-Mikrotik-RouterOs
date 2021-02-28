@@ -13,13 +13,14 @@
     # - include_role:
     #     name: Mikrotik-SetIdentity
     #   vars:
-    #     input_role_ansible_host:     "{{ ansible_host }}"
+    #     input_role_ansible_host:     "{{ inventory_hostname }}"
 
     - include_role:
         name: Mikrotik-Interface
       vars:
-        input_role_interface_bridges: "{{ inventory_group_routeros_interface_bridges }}"
-        input_role_interface_ethernet: "{{ inventory_group_routeros_interface_ethernet }}"
+        input_role_interfaces_bridges:  "{{ inventory_group_routeros_interfaces_bridges }}"
+        input_role_interfaces_ethernet: "{{ inventory_group_routeros_interfaces_ethernet }}"
+        input_role_interfaces_list:     "{{ inventory_group_routeros_interfaces_list }}"
 
     # - include_role:
     #     name: Mikrotik-ConfigureDNS

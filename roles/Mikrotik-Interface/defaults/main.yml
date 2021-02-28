@@ -1,5 +1,5 @@
 ---
-input_role_interface_ethernet:
+input_role_interfaces_ethernet:
   - name: "WAN-01"
     comment: "WAN-01 - VECTRA"
     port_name: ether1
@@ -25,7 +25,11 @@ input_role_interface_ethernet:
     port_name: ether5
     other_params: ""
 
-input_role_interface_bridges:
+input_role_interfaces_bridges:
   - name: ""
     comment: ""
     other_params: ""
+
+input_role_interfaces_list:
+  - WAN
+  - LAN 
