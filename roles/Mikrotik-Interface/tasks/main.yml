@@ -1,24 +1,31 @@
 ---
+- name: Configure wireless security profiles
+  include: configure_wireless_security_profiles.yml
+  loop: "{{ lookup('dict', input_role_wireless_security_profiles) }}"
+  loop_control:
+    loop_var: security_profile
+  when: input_role_wireless_security_profiles is defined
+
 - name: Configure wireless interfaces
   include: configure_wireless_interfaces.yml
 
-- name: Configure Ethernet interfaces
-  include: configure_ethernet.yml
-  loop: "{{ lookup('dict', input_role_ethernet_interfaces) }}"
-  loop_control:
-    loop_var: ethernet
-  when: input_role_ethernet_interfaces is defined
+# - name: Configure Ethernet interfaces
+#   include: configure_ethernet.yml
+#   loop: "{{ lookup('dict', input_role_ethernet_interfaces) }}"
+#   loop_control:
+#     loop_var: ethernet
+#   when: input_role_ethernet_interfaces is defined
 
-- name: Configure bridges
-  include: configure_bridges.yml
-  loop: "{{ input_role_bridges_interfaces }}"
-  loop_control:
-    loop_var: bridge
-  when: input_role_bridges_interfaces is defined
+# - name: Configure bridges
+#   include: configure_bridges.yml
+#   loop: "{{ input_role_bridges_interfaces }}"
+#   loop_control:
+#     loop_var: bridge
+#   when: input_role_bridges_interfaces is defined
 
-- name: Configure interface list
-  include: configure_list_interface.yml
-  loop: "{{ input_role_list_interfaces }}"
-  loop_control:
-    loop_var: interface_list
-  when: input_role_list_interfaces is defined
+# - name: Configure interface list
+#   include: configure_list_interface.yml
+#   loop: "{{ input_role_list_interfaces }}"
+#   loop_control:
+#     loop_var: interface_list
+#   when: input_role_list_interfaces is defined

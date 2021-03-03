@@ -1,50 +1,60 @@
 ---
 - name: Set allow-remote-requests in DNS Server
   routeros_command:
-    commands: "/ip dns set allow-remote-requests={{ input_role_dns_parameters.allow_remote_requests }} verify-doh-cert={{ input_role_dns_parameters.verify_doh_cert }}"
+    commands: 
+     - "/ip dns set allow-remote-requests={{ input_role_dns_parameters.allow_remote_requests }} verify-doh-cert={{ input_role_dns_parameters.verify_doh_cert }}"
   when: input_role_dns_parameters.allow_remote_requests is defined
 
 - name: Set verify-doh-cert in DNS Server
   routeros_command:
-    commands: "/ip dns set verify-doh-cert={{ input_role_dns_parameters.verify_doh_cert }}"
+    commands:
+      - "/ip dns set verify-doh-cert={{ input_role_dns_parameters.verify_doh_cert }}"
   when: input_role_dns_parameters.verify_doh_cert is defined
 
 - name: Set servers in DNS Server
   routeros_command:
-    commands: /ip dns set servers="{{ input_role_dns_parameters.servers | join(',') }}"
+    commands:
+      - /ip dns set servers="{{ input_role_dns_parameters.servers | join(',') }}"
   when: input_role_dns_parameters.servers is defined
 
 - name: Set max-udp-packet-size in DNS Server
   routeros_command:
-    commands: /ip dns set max-udp-packet-size="{{ input_role_dns_parameters.max_udp_packet_size}}"
+    commands: 
+      - /ip dns set max-udp-packet-size="{{ input_role_dns_parameters.max_udp_packet_size}}"
   when: input_role_dns_parameters.max_udp_packet_size is defined
 
 - name: Set query-server-timeout in DNS Server
   routeros_command:
-    commands: /ip dns set query-server-timeout="{{ input_role_dns_parameters.query_server_timeout }}"
+    commands: 
+      - /ip dns set query-server-timeout="{{ input_role_dns_parameters.query_server_timeout }}"
   when: input_role_dns_parameters.query_server_timeout is defined
 
 - name: Set query-total-timeoutin DNS Server
   routeros_command:
-    commands: /ip dns set query-total-timeout="{{ input_role_dns_parameters.query_total_timeout}}"
+    commands: 
+      - /ip dns set query-total-timeout="{{ input_role_dns_parameters.query_total_timeout}}"
   when: input_role_dns_parameters.query_total_timeout is defined      
 
 - name: Set max-concurrent-queries DNS Server
   routeros_command:
-    commands: /ip dns set max-concurrent-queries="{{ input_role_dns_parameters.max_concurrent_queries }}"
+    commands: 
+      - /ip dns set max-concurrent-queries="{{ input_role_dns_parameters.max_concurrent_queries }}"
   when: input_role_dns_parameters.max_concurrent_queries is defined            
 
 - name: Set max-concurrent-tcp-sessions DNS Server
   routeros_command:
-    commands: /ip dns set max-concurrent-tcp-sessions="{{ input_role_dns_parameters.max_concurrent_tcp_sessions }}"
+    commands: 
+      - /ip dns set max-concurrent-tcp-sessions="{{ input_role_dns_parameters.max_concurrent_tcp_sessions }}"
   when: input_role_dns_parameters.max_concurrent_tcp_sessions is defined
 
 - name: Set cache-size DNS Server
   routeros_command:
-    commands: /ip dns set cache-size="{{ input_role_dns_parameters.cache_size }}"
+    commands: 
+      - /ip dns set cache-size="{{ input_role_dns_parameters.cache_size }}"
   when: input_role_dns_parameters.cache_size is defined  
 
 - name: Set cache-max-ttl DNS Server
   routeros_command:
-    commands: /ip dns set cache-max-ttl="{{ input_role_dns_parameters.cache_max_ttl }}"
+    commands: 
+      - /ip dns set cache-max-ttl="{{ input_role_dns_parameters.cache_max_ttl }}"
   when: input_role_dns_parameters.cache_max_ttl is defined  

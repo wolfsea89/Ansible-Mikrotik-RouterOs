@@ -3,13 +3,6 @@
 /interface ethernet
 /interface list
 /interface wireless security-profiles
-set [ find default=yes ] authentication-types=wpa-psk,wpa2-psk mode=\
-    dynamic-keys supplicant-identity=MikroTik wpa-pre-shared-key=\
-    NiePamietamHasla wpa2-pre-shared-key=NiePamietamHasla
-add authentication-types=wpa-psk,wpa2-psk mode=dynamic-keys name=\
-    "Wybrzeze Klatki Schodowej" supplicant-identity=mr-rou-01 \
-    wpa-pre-shared-key=NiePamietamHasla! wpa2-pre-shared-key=\
-    NiePamietamHasla!
 /interface wireless
 /interface wireless manual-tx-power-table
 set WiFi-LAN-01 comment="SSID: Wybrzeze Klatki Schodowej"
