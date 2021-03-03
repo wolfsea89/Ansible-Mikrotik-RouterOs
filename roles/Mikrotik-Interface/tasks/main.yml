@@ -1,4 +1,11 @@
 ---
+- name: Configure wireless security profiles
+  include: configure_wireless_security_profiles.yml
+  loop: "{{ lookup('dict', input_role_wireless_security_profiles) }}"
+  loop_control:
+    loop_var: security_profile
+  when: input_role_wireless_security_profiles is defined
+
 - name: Configure wireless interfaces
   include: configure_wireless_interfaces.yml
 
