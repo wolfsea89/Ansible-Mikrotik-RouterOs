@@ -8,6 +8,10 @@
 
 - name: Configure wireless interfaces
   include: configure_wireless_interfaces.yml
+  loop: "{{ lookup('dict', input_role_wireless_interfaces) }}"
+  loop_control:
+    loop_var: wireless_interface
+  when: input_role_wireless_interfaces is defined
 
 - name: Configure Ethernet interfaces
   include: configure_ethernet.yml
@@ -18,14 +22,14 @@
 
 - name: Configure bridges
   include: configure_bridges.yml
-  loop: "{{ input_role_bridges_interfaces }}"
+  loop: "{{ lookup('dict', input_role_bridges_interfaces) }}"
   loop_control:
     loop_var: bridge
   when: input_role_bridges_interfaces is defined
 
 - name: Configure interface list
   include: configure_list_interface.yml
-  loop: "{{ input_role_list_interfaces }}"
+  loop: "{{ lookup('dict', input_role_list_interfaces) }}"
   loop_control:
     loop_var: interface_list
   when: input_role_list_interfaces is defined

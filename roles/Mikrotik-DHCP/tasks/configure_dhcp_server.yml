@@ -1,0 +1,28 @@
+---
+- name: "Check: {{ dhcp_config.value.name }} pool is exist"
+  routeros_command:
+    commands: /ip dhcp-server print from="{{ dhcp_config.value.name }}"
+  register: dhcp_status
+
+- name: Add {{ dhcp_config.value.name }} dhcp server
+  routeros_command:
+    commands: >
+      /ip dhcp-server add 
+      name="{{ dhcp_config.value.name }}"
+      address-pool="{{ dhcp_config.value.address_pool }}"
+      insert-queue-before="{{ dhcp_config.value.insert_queue_before | default(vars_role_default_dhcp_config.insert_queue_before) }}"
+      interface="{{ dhcp_config.value.interface }}"
+      disabled="{{ dhcp_config.value.disabled | default(vars_role_default_dhcp_config.disabled) }}"
+      {{ dhcp_config.value.other_params | default('') }}
+  when: '"no such item" in dhcp_status.stdout[0]'
+
+- name: "Update {{ dhcp_config.value.name }} dhcp server"
+  routeros_command:
+    commands: >
+      /ip dhcp-server set [ find name="{{ dhcp_config.value.name }}"] 
+      address-pool="{{ dhcp_config.value.address_pool }}"
+      insert-queue-before="{{ dhcp_config.value.insert_queue_before | default(vars_role_default_dhcp_config.insert_queue_before) }}"
+      interface="{{ dhcp_config.value.interface }}"
+      disabled="{{ dhcp_config.value.disabled | default(vars_role_default_dhcp_config.disabled) }}"
+      {{ dhcp_config.value.other_params | default('') }}
+  when: '"no such item" not in dhcp_status.stdout[0]'

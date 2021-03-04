@@ -1,0 +1,55 @@
+---
+input_role_pools:
+  users_network_pool:
+    name: "users-network-pool"
+    comment: "Users Network Pool"
+    ranges: "10.1.0.2-10.1.0.254"
+  
+  admins_network_pool:
+    name: "admins-network-pool"
+    comment: "Admins Network Pool"
+    ranges: "10.254.0.2-10.254.0.10"
+  
+  prod_network_pool:
+    name: "prod-network-pool"
+    comment: "Prod Network Pool"
+    ranges: "10.2.0.2-10.2.0.254"
+
+input_role_dhcp_servers:
+  admins_network_dhcp:
+    name: "admins-network-dhcp"
+    interface: "{{ inventory_group_routeros_ethernet_interfaces.ether5.name }}"
+    address_pool: "{{ inventory_group_routeros_pools.admins_network_pool.name }}"
+  
+  prod_network_dhcp:
+    name: "prod-network-dhcp"
+    interface: "{{ inventory_group_routeros_bridges_interfaces.lan_prod.name }}"
+    address_pool: "{{ inventory_group_routeros_pools.prod_network_pool.name }}"
+  
+  users_network_dhcp:
+    name: "users-network-dhcp"
+    interface: "{{ inventory_group_routeros_bridges_interfaces.lan_users.name }}"
+    address_pool: "{{ inventory_group_routeros_pools.users_network_pool.name }}"
+    insert_queue_before: bottom
+
+input_role_dhcp_network:
+  admins_network_dhcp:
+    address: "10.254.0.0/24"
+    comment: "Admin Network"
+    dns_server: "10.254.0.1" 
+    gateway: "10.254.0.1"
+    domain: "rachuna.net"
+  
+  prod_network_dhcp:
+    address: "10.2.0.0/16"
+    comment: "Prod Network"
+    dns_server: "10.2.0.1" 
+    gateway: "10.2.0.1"
+    domain: "rachuna.net"
+  
+  users_network_dhcp:
+    address: "10.1.0.0/24"
+    comment: "Users Network"
+    dns_server: "10.1.0.1" 
+    gateway: "10.1.0.1"
+    domain: "rachuna.net"

@@ -1,0 +1,28 @@
+---
+- name: "Check: {{ member.name }} is exist on {{ interface_list.value.name }} interface list"
+  routeros_command: 
+    commands: /interface list member print detail where list={{ interface_list.value.name }} interface={{ member.name }}
+  register: list_status
+
+- debug:
+    msg: "{{ list_status.stdout[0] }}"
+  when: '"list" not in list_status.stdout[0]'
+
+- name: "Add {{ member.name }} to {{ interface_list.value.name }} interface list"
+  routeros_command:
+    commands: >
+      /interface list member add
+      comment="{{ member.comment | default('') }}"
+      interface={{ member.name }}
+      list={{ interface_list.value.name }}
+      disabled={{ member.disabled | default('no')}}
+  when: '"list" not in list_status.stdout[0]'
+  
+- name: "Update {{ member.name }} to {{ interface_list.value.name }} interface list"
+  routeros_command:
+    commands: >
+      /interface list member [find interface={{ member.name }}]
+      comment="{{ member.comment | default('') }}"
+      list={{ interface_list.value.name }}
+      disabled={{ member.disabled | default('no')}}
+  when: '"list" not in list_status.stdout[0]'
