@@ -6,3 +6,38 @@
       name={{ ethernet.value.name }}
       comment="{{ ethernet.value.comment | default('') }}"
       {{ ethernet.value.other_params | default('') }}
+
+- name: "Check is set ip address for {{ ethernet.key }}"
+  routeros_command:
+    commands: >
+      /ip address print where address="{{ ethernet.value.address }}" interface={{ ethernet.value.name }}
+  register: ethernet_interface_ip_status
+  when:
+    - ethernet.value.address is defined
+    - ethernet.value.name is defined
+
+- name: "Add ip address for {{ ethernet.key }} - {{ ethernet.value.address }}"
+  routeros_command:
+    commands: >
+      /ip address add
+      address={{ ethernet.value.address }}
+      network={{ ethernet.value.network }}
+      interface={{ ethernet.value.name }}
+      comment="{{ ethernet.value.comment | default('') }}"
+  when:
+    - ethernet.value.address is defined
+    - ethernet.value.name is defined
+    - '" 0 " not in ethernet_interface_ip_status.stdout[0]'
+
+- name: "Update ip address for {{ ethernet.key }} - {{ ethernet.value.address }}"
+  routeros_command:
+    commands: >
+      /ip address set [ find address="{{ ethernet.value.address }}"] 
+      address={{ ethernet.value.address }}
+      network={{ ethernet.value.network }}
+      interface={{ ethernet.value.name }}
+      comment="{{ ethernet.value.comment | default('') }}"
+  when:
+    - ethernet.value.address is defined
+    - ethernet.value.name is defined
+    - '" 0 " in ethernet_interface_ip_status.stdout[0]'

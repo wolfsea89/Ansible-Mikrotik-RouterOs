@@ -17,4 +17,39 @@
       station-roaming={{ wireless_interface.value.station_roaming | default(vars_role_default_wireless_interface.station_roaming) }}
       wireless-protocol="{{ wireless_interface.value.wireless_protocol | default(vars_role_default_wireless_interface.wireless_protocol) }}"
       disabled={{ wireless_interface.value.disabled | default(vars_role_default_wireless_interface.disabled) }}
-      {{ ethernet.other_params | default('') }}
+      {{ wireless_interface.other_params | default('') }}
+
+- name: "Check is set ip address for {{ wireless_interface.key }}"
+  routeros_command:
+    commands: >
+      /ip address print where address="{{ wireless_interface.value.address }}" interface={{ wireless_interface.value.name }}
+  register:  wireless_interface_ip_status
+  when:
+    - wireless_interface.value.address is defined
+    - wireless_interface.value.name is defined
+
+- name: "Add ip address for {{ wireless_interface.key }} - {{ wireless_interface.value.address }}"
+  routeros_command:
+    commands: >
+      /ip address add
+      address={{ wireless_interface.value.address }}
+      network={{ wireless_interface.value.network }}
+      interface={{ wireless_interface.value.name }}
+      comment="{{ wireless_interface.value.comment | default('') }}"
+  when:
+    - wireless_interface.value.address is defined
+    - wireless_interface.value.name is defined
+    - '" 0 " not in wireless_interface_ip_status.stdout[0]'
+
+- name: "Update ip address for {{ wireless_interface.key }} - {{ wireless_interface.value.address }}"
+  routeros_command:
+    commands: >
+      /ip address set [ find address="{{ wireless_interface.value.address }}"] 
+      address={{ wireless_interface.value.address }}
+      network={{ wireless_interface.value.network }}
+      interface={{ wireless_interface.value.name }}
+      comment="{{ wireless_interface.value.comment | default('') }}"
+  when:
+    - wireless_interface.value.address is defined
+    - wireless_interface.value.name is defined
+    - '" 0 " in wireless_interface_ip_status.stdout[0]'
