@@ -1,15 +1,13 @@
 ---
 - name: "Check: {{ security_profile.value.name }} is wireless security profile exist"
   routeros_command:
-    commands:
-      - >
+    commands: >
         /interface wireless security-profiles print from="{{ security_profile.value.name }}"
   register: security_profile_status
 
 - name: Add wireless security profile
   routeros_command:
-    commands: 
-      - >
+    commands: >
         /interface wireless security-profiles add
         name={{ security_profile.value.name }}
         authentication-types="{{ security_profile.value.authentication_types | default(vars_role_wireless_security_profiles.authentication_types) }}"

@@ -1,0 +1,4 @@
+---
+vars_role_default_dhcp_config:
+  insert_queue_before: "first"
+  disabled: "no"
