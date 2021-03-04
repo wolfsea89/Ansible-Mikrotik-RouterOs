@@ -30,3 +30,38 @@
         trusted={{ item.trusted }}
   loop: "{{ bridge.value.interfaces }}"
   when: bridge.value.interfaces is defined
+
+- name: "Check is set ip address for {{ bridge.key }}"
+  routeros_command:
+    commands: >
+      /ip address print where address="{{ bridge.value.address }}" interface={{ bridge.value.name }}
+  register: bridge_interface_ip_status
+  when:
+    - bridge.value.address is defined
+    - bridge.value.name is defined
+
+- name: "Add ip address for {{ bridge.key }} - {{ bridge.value.address }}"
+  routeros_command:
+    commands: >
+      /ip address add
+      address={{ bridge.value.address }}
+      network={{ bridge.value.network }}
+      interface={{ bridge.value.name }}
+      comment="{{ bridge.value.comment | default('') }}"
+  when:
+    - bridge.value.address is defined
+    - bridge.value.name is defined
+    - '" 0 " not in bridge_interface_ip_status.stdout[0]'
+
+- name: "Update ip address for {{ bridge.key }} - {{ bridge.value.address }}"
+  routeros_command:
+    commands: >
+      /ip address set [ find address="{{ bridge.value.address }}"] 
+      address={{ bridge.value.address }}
+      network={{ bridge.value.network }}
+      interface={{ bridge.value.name }}
+      comment="{{ bridge.value.comment | default('') }}"
+  when:
+    - bridge.value.address is defined
+    - bridge.value.name is defined
+    - '" 0 " in bridge_interface_ip_status.stdout[0]'
