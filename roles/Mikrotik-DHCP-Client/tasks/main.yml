@@ -1,0 +1,7 @@
+---
+- name: Configure dhcp clients
+  include: configure_dhcp_clients.yml
+  loop: "{{ input_role_dhcp_clients }}"
+  loop_control:
+    loop_var: dhcp_client
+  when: input_role_dhcp_clients is defined
