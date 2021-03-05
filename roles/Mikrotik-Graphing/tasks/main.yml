@@ -1,0 +1,27 @@
+---
+- name: Set graphing inteface store-every="{{ input_role_graphing.store_every }}"
+  routeros_command:
+    commands: /tool graphing set store-every="{{ input_role_graphing.store_every }}"
+  when: input_role_graphing.store_every is defined
+
+- name: "Check is set graphing queue"
+  routeros_command:
+    commands: /tool graphing queue print where simple-queue=all
+  register:  graphing_queue_interface_status
+
+- name: Set graphing queue 
+  routeros_command:
+    commands: /tool graphing queue add store-on-disk=no
+  when:
+    - '" 0 " not in graphing_queue_interface_status.stdout[0]'
+
+- name: "Check is set graphing resource"
+  routeros_command:
+    commands: /tool graphing resource print where simple-queue=all
+  register:  graphing_resource_interface_status
+
+- name: Set graphing resource 
+  routeros_command:
+    commands: /tool graphing resource add store-on-disk=no
+  when:
+    - '" 0 " not in graphing_resource_interface_status.stdout[0]'

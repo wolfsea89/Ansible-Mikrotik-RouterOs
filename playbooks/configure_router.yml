@@ -45,4 +45,4 @@
     - include_role:
         name: Mikrotik-NTP-Client
       vars:
-        input_role_clock:     "{{ inventory_group_routeros_clock }}"
+        input_role_ntp_client:     "{{ inventory_group_routeros_ntp_client }}"
