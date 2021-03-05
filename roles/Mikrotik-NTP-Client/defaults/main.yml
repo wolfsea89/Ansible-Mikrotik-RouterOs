@@ -1,4 +1,5 @@
 ---
-inventory_group_routeros_dhcp_clients:
-  - comment: "WAN-01 - VECTRA"
-    interface: "WAN-01"
+input_role_ntp_client:
+  time_zone_name: "Europe/Warsaw"
+  primary_ntp: "194.146.251.100"
+  secondary_ntp: "194.146.251.101"
