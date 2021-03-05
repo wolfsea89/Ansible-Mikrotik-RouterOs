@@ -37,7 +37,12 @@
         input_role_dhcp_clients:  "{{ inventory_group_routeros_dhcp_clients }}"
 
     - include_role:
-        name: Mikrotik-ConfigureDNS
+        name: Mikrotik-DNS-Server
       vars:
         input_role_dns_parameters:     "{{ inventory_group_routeros_dns }}"
         input_role_dns_static_records: "{{ iventory_group_routeros_dns_static_records }}"
+
+    - include_role:
+        name: Mikrotik-NTP-Client
+      vars:
+        input_role_clock:     "{{ inventory_group_routeros_clock }}"
