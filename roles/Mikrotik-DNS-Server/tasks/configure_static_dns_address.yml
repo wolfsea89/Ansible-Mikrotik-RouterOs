@@ -1,15 +1,30 @@
 ---
-- name: Set static dns adress
+- name: "Check: {{ dns_host.name }} dns is exist"
+  routeros_command:
+    commands: /ip dns static print where address="{{ dns_host.address }}" name={{ dns_host.name }}
+  register: dns_record_status
+
+- name: "Add {{ dns_host.name }} dns record"
   routeros_command:
     commands: >
-      /ip dns static add name={{ dns_host.name }} 
+      /ip dns static add name={{ dns_host.name }}
       address={{ dns_host.address }} 
       comment="{{ dns_host.comment | default(vars_role_default_static_dns_address.comment) }}"
       disabled={{ dns_host.disabled | default(vars_role_default_static_dns_address.disabled) }} 
       regexp="{{ dns_host.regexp | default(vars_role_default_static_dns_address.regexp) }}"
       ttl={{ dns_host.ttl | default(vars_role_default_static_dns_address.ttl) }} 
       type={{ dns_host.type | default(vars_role_default_static_dns_address.type) }}
-  loop: "{{ input_role_dns_static_records }}"
-  loop_control:
-    loop_var: dns_host
-  when: input_role_dns_static_records is defined
+  when: '"0" not in dns_record_status.stdout[0]'
+
+- name: "Update {{ dns_host.name }} dns record"
+  routeros_command:
+    commands: >
+      /ip dns static set [find name={{ dns_host.name }}]
+      name={{ dns_host.name }}
+      address={{ dns_host.address }} 
+      comment="{{ dns_host.comment | default(vars_role_default_static_dns_address.comment) }}"
+      disabled={{ dns_host.disabled | default(vars_role_default_static_dns_address.disabled) }} 
+      regexp="{{ dns_host.regexp | default(vars_role_default_static_dns_address.regexp) }}"
+      ttl={{ dns_host.ttl | default(vars_role_default_static_dns_address.ttl) }} 
+      type={{ dns_host.type | default(vars_role_default_static_dns_address.type) }}
+  when: '"0" in dns_record_status.stdout[0]'

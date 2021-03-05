@@ -1,14 +1,14 @@
 ---
 - name: Configure system clock
   routeros_command:
-    commands: /system clock set time-zone-name="{{ input_role_clock.time_zone_name }}"
-  when: input_role_clock.time_zone_name
+    commands: /system clock set time-zone-name="{{ input_role_ntp_client.time_zone_name }}"
+  when: input_role_ntp_client.time_zone_name
 
 - name: Configure ntp client
   routeros_command:
     commands: >
       /system ntp client set
       enabled=yes 
-      primary-ntp="{{ input_role_clock.primary_ntp }}"
-      secondary-ntp="{{ input_role_clock.secondary_ntp }}"
-  when: input_role_clock.primary_ntp
+      primary-ntp="{{ input_role_ntp_client.primary_ntp }}"
+      secondary-ntp="{{ input_role_ntp_client.secondary_ntp }}"
+  when: input_role_ntp_client.primary_ntp
