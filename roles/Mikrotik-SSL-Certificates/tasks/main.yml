@@ -1,0 +1,38 @@
+---
+- name: "Create {{ vars_role_tmp_ssl_dir }} directory if it does not exist"
+  file:
+    path: "{{ vars_role_tmp_ssl_dir }}"
+    state: directory
+    recurse: yes
+
+- name: Create server.crt file from variable 
+  copy:
+    content: "{{ input_role_server_certificates.crt }}"
+    dest:    "{{ vars_role_tmp_ssl_dir }}/ssl.crt"
+    mode: 0644
+
+
+- name: Create server.key file from variable 
+  copy:
+    content: "{{ input_role_server_certificates.key }}"
+    dest:    "{{ vars_role_tmp_ssl_dir }}/ssl.key"
+    mode: 0644
+
+- name: Upload server.crt from local storage
+  action: command sshpass -p "{{ input_role_ansible_password }}" scp "{{ vars_role_tmp_ssl_dir }}/ssl.crt" {{ ansible_user }}@{{ ansible_host }}:ssl.crt
+
+- name: Upload server.key from local storage
+  action: command sshpass -p "{{ input_role_ansible_password }}" scp "{{ vars_role_tmp_ssl_dir }}/ssl.key" {{ ansible_user }}@{{ ansible_host }}:ssl.key
+
+- name: "Remove {{ vars_role_tmp_ssl_dir }}"
+  file:
+    path: "{{ vars_role_tmp_ssl_dir }}"
+    state: absent
+
+- name: Import certificate SSL
+  routeros_command:
+    commands: /certificate import file-name=ssl.crt name="{{ input_role_server_certificates.name }}" passphrase="{{ input_role_server_certificates.passphrase }}"
+
+- name: Import private key SSL 
+  routeros_command:
+    commands: /certificate import file-name=ssl.key name="{{ input_role_server_certificates.name }}" passphrase="{{ input_role_server_certificates.passphrase }}"
