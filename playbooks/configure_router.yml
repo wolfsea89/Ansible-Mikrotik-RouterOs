@@ -47,3 +47,11 @@
         name: Mikrotik-NTP-Client
       vars:
         input_role_ntp_client:     "{{ inventory_group_routeros_ntp_client }}"
+
+    - include_role:
+        name: Mikrotik-SSL-Certificates
+      vars:
+        input_role_server_certificates:     "{{ inventory_group_routeros_certificates }}"
+        input_role_ansible_host:            "{{ ansible_host }}"
+        input_role_ansible_user:            "{{ ansible_user }}"
+        input_role_ansible_password:        "{{ ansible_password }}"
