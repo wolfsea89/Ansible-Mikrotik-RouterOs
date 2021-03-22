@@ -47,6 +47,5 @@ inventory_group_routeros_ethernet_interfaces:
 
 Przykładowa komenda:
 ```
-/interface ethernet
-  set [ find default-name=ether2 ] name=LAN-01
+/interface ethernet set [ find default-name=ether2 ] name=LAN-01
 ```
