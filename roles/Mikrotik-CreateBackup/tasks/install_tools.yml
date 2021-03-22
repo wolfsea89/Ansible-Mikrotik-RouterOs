@@ -1,4 +1,5 @@
 - name: "[Ubuntu] Install tools"
+  delegate_to: localhost
   apt:
     pkg:
     - sshpass

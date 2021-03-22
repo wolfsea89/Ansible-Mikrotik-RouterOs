@@ -13,16 +13,20 @@
       dns-server="{{ dhcp_network.value.dns_server }}"
       gateway="{{ dhcp_network.value.gateway }}"
       domain="{{ dhcp_network.value.domain | default('') }}"
+      next-server="{{ dhcp_network.value.next_server | default('') }}"
+      boot-file-name="{{ dhcp_network.value.boot_file_name | default('') }}"
       {{ dhcp_network.value.other_params | default('') }}
   when: '"0" not in network_status.stdout[0]'
 
 - name: "Update {{ dhcp_network.value.address }} dhcp server"
   routeros_command:
     commands: >
-      /ip dhcp-server network set [ find address="{{ dhcp_network.value.address }}"] 
+      /ip dhcp-server network set [ find address="{{ dhcp_network.value.address }}"]
       comment="{{ dhcp_network.value.comment }}"
       dns-server="{{ dhcp_network.value.dns_server }}"
       gateway="{{ dhcp_network.value.gateway }}"
       domain="{{ dhcp_network.value.domain | default('') }}"
+      next-server="{{ dhcp_network.value.next_server | default('') }}"
+      boot-file-name="{{ dhcp_network.value.boot_file_name | default('') }}"
       {{ dhcp_network.value.other_params | default('') }}
   when: '"0" in network_status.stdout[0]'
