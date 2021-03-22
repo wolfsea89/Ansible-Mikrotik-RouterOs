@@ -8,11 +8,16 @@ Playbooki:
 Skrypt wykonuje konfiguracje w następujnącej kolejności
 
 Konfiguracja interface - role: Mikrotik-Interface
+
 [1. Konfiguracja Wifi](docs/interfaces/wireless.md)
+
 [2. Konfiguracja Ethernet](docs/interfaces/ethernet.md)
+
 [3. Listy Intefejsów](docs/interfaces/bridge.md)
+
 [4. Konfiguracja Bridge](docs/interfaces/bridge.md)
-[2. Konfiguracja VLAN](docs/interfaces/vlan.md)
+
+[5. Konfiguracja VLAN](docs/interfaces/vlan.md)
 
 
 Tips
