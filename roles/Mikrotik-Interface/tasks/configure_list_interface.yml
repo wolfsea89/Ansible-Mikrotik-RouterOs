@@ -7,12 +7,12 @@
 - name: "Add interface list {{ interface_list.value.name }}"
   routeros_command:
     commands: >
-      /interface list add 
+      /interface list add
       name={{ interface_list.value.name }}
       comment="{{ interface_list.value.comment | default('') }}"
       {{ interface_list.value.other_params | default('') }}
   when: '"no such item" in list_status.stdout[0]'
-  
+
 - name: "Update interface list {{ interface_list.value.name }}"
   routeros_command:
     commands: >

@@ -8,7 +8,7 @@
         input_role_destination_path: /volumes/mikrotik
         input_role_ansible_host:     "{{ ansible_host }}"
         input_role_ansible_user:     "{{ ansible_user }}"
-        input_role_ansible_password: "{{ ansible_password }}"
+        input_role_ansible_password: "{{ ansible_ssh_pass }}"
 
     - include_role:
         name: Mikrotik-SetIdentity
@@ -54,4 +54,4 @@
         input_role_server_certificates:     "{{ inventory_group_routeros_certificates }}"
         input_role_ansible_host:            "{{ ansible_host }}"
         input_role_ansible_user:            "{{ ansible_user }}"
-        input_role_ansible_password:        "{{ ansible_password }}"
+        input_role_ansible_password:        "{{ ansible_ssh_pass }}"
