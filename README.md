@@ -16,7 +16,8 @@ Skrypt wykonuje konfiguracje w następujnącej kolejności
   - [5. Konfiguracja VLAN](docs/interfaces/vlan.md)
 - [Konfiguracja serwera dhcp (role: Mikrotik-DHCP-Server)](docs/dhcp_server/overview.md)
 - [Konfiguracja klienta dhcp (role: Mikrotik-DHCP-Client)](docs/dhcp_client/overview.md)
-Mikrotik-DNS-Server
+- [Konfiguracja serwera dns (role: Mikrotik-DNS-Server)](docs/dns_server/overview.md)
+
 Mikrotik-NTP-Client
 Mikrotik-SSL-Certificates
 
