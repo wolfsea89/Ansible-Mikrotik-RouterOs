@@ -71,4 +71,4 @@ Przykładowa komenda:
   name="Users Wifi Network"                \
   wpa-pre-shared-key=PaSSw0rd!             \
   wpa2-pre-shared-key=PaSSw0rd!
-``
+```

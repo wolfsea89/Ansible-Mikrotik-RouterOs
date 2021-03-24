@@ -6,25 +6,21 @@ Playbooki:
 - playbooks/configure_router.yml - Konfiguracja routera
 
 Skrypt wykonuje konfiguracje w następujnącej kolejności
+- [Tworzenie kopii zapasowej (role: Mikrotik-CreateBackup)](docs/create_backup/overview.md)
+- Konfiguracja interfaces (role: Mikrotik-Interface)
+  - [1. Konfiguracja Wifi](docs/interfaces/wireless.md)
+  - [2. Konfiguracja Ethernet](docs/interfaces/ethernet.md)
+  - [3. Listy Intefejsów](docs/interfaces/bridge.md)
+  - [4. Konfiguracja Bridge](docs/interfaces/bridge.md)
+  - [5. Konfiguracja VLAN](docs/interfaces/vlan.md)
 
-Konfiguracja interface - role: Mikrotik-Interface
-
-[1. Konfiguracja Wifi](docs/interfaces/wireless.md)
-
-[2. Konfiguracja Ethernet](docs/interfaces/ethernet.md)
-
-[3. Listy Intefejsów](docs/interfaces/bridge.md)
-
-[4. Konfiguracja Bridge](docs/interfaces/bridge.md)
-
-[5. Konfiguracja VLAN](docs/interfaces/vlan.md)
-
-
-Tips
+TO DO
 =========
-Generowanie hasła, które jest osadzone source/tftpboot/menus/install_systems.cfg w lini 4 w miejscu << password >>
 ```
-openssl passwd -1 password
+/interface wireless manual-tx-power-table
+set WiFi-LAN-01 comment="SSID: Wybrzeze Klatki Schodowej"
+/interface wireless nstreme
+set WiFi-LAN-01 comment="SSID: Wybrzeze Klatki Schodowej"
 ```
 
 Author Information
