@@ -48,8 +48,4 @@ Użycie roli
 ```
 
 
-Author Information
-=========
- **Maciej Rachuna**
-##### System Administrator & DevOps Engineer
-rachuna.maciej@gmail.com
+[Powrót](../../README.md)

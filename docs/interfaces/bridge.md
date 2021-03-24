@@ -33,3 +33,4 @@ Przykładowa komenda:
 ```
 /interface bridge add comment="BRIDGE - Proxmox" name=LAN-PROXMOX trusted=yes
 ```
+[Powrót](../../README.md)

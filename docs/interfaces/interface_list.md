@@ -34,3 +34,5 @@ Przykładowa komenda:
 /interface list add name=LIST-WAN
 /interface list member add comment=LAN-WAN interface=WAN-01 list=LIST-WAN
 ```
+
+[Powrót](../../README.md)

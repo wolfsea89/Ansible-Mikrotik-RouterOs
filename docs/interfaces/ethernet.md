@@ -49,3 +49,5 @@ Przykładowa komenda:
 ```
 /interface ethernet set [ find default-name=ether2 ] name=LAN-01
 ```
+
+[Powrót](../../README.md)
