@@ -46,6 +46,7 @@ Przykładowa komenda:
   ssid="Users Wifi Network"                         \
   station-roaming=enabled                           \
   wireless-protocol=802.11
+/ip address add address=10.0.0.4/24 interface=WiFi-LAN-01 network=10.0.0.0
 ```
 
 Security Profiles
