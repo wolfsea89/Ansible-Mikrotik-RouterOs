@@ -72,3 +72,5 @@ Przykładowa komenda:
   wpa-pre-shared-key=PaSSw0rd!             \
   wpa2-pre-shared-key=PaSSw0rd!
 ```
+
+[Powrót](../../README.md)
