@@ -4,10 +4,10 @@ Tworzenie kopii zapsowej
 Czynności jakie wykonuje rola:
 
 1. Instalowanie pakietów
-  - a) sshpsss
+  a) sshpsss
 2. Tworzenie katalogów do pobranie artefaktu
-  - a) "/volumes/mikrotik/backup"
-  - b) "/volumes/mikrotik/rsc"
+  a) "/volumes/mikrotik/backup"
+  b) "/volumes/mikrotik/rsc"
 3. Uruchomienie backupu na routerze Mikrotik
       ```
         /system backup save name="10.0.0.1.20210322.backup"
