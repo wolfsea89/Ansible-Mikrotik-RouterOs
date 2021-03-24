@@ -32,5 +32,6 @@ inventory_group_routeros_bridges_interfaces:
 Przykładowa komenda:
 ```
 /interface bridge add comment="BRIDGE - Proxmox" name=LAN-PROXMOX trusted=yes
+/ip address add address=10.1.0.1/24 interface=LAN-PROXMOX network=10.1.0.0
 ```
 [Powrót](../../README.md)

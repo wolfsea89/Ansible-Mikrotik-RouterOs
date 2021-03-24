@@ -48,6 +48,7 @@ inventory_group_routeros_ethernet_interfaces:
 Przykładowa komenda:
 ```
 /interface ethernet set [ find default-name=ether2 ] name=LAN-01
+/ip address add address=10.0.0.1/24 interface=LAN-01 network=10.0.0.0
 ```
 
 [Powrót](../../README.md)

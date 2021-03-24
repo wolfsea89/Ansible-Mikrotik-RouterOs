@@ -14,6 +14,7 @@ Skrypt wykonuje konfiguracje w następujnącej kolejności
   - [3. Listy Intefejsów](docs/interfaces/bridge.md)
   - [4. Konfiguracja Bridge](docs/interfaces/bridge.md)
   - [5. Konfiguracja VLAN](docs/interfaces/vlan.md)
+- [Konfiguracja serwera dhcp (role: Mikrotik-DHCP-Server)]()
 
 TO DO
 =========
