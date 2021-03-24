@@ -7,6 +7,7 @@ Playbooki:
 
 Skrypt wykonuje konfiguracje w następujnącej kolejności
 - [Tworzenie kopii zapasowej (role: Mikrotik-CreateBackup)](docs/create_backup/overview.md)
+- [Ustawienie nazwy routera (role: Mikrotik-SetIdentity)](docs/set_identity/overview.md)
 - Konfiguracja interfaces (role: Mikrotik-Interface)
   - [1. Konfiguracja Wifi](docs/interfaces/wireless.md)
   - [2. Konfiguracja Ethernet](docs/interfaces/ethernet.md)
