@@ -55,3 +55,6 @@
         input_role_ansible_host:            "{{ ansible_host }}"
         input_role_ansible_user:            "{{ ansible_user }}"
         input_role_ansible_password:        "{{ ansible_ssh_pass }}"
+
+    - include_role:
+        name: Mikrotik-Graphing

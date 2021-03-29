@@ -17,9 +17,9 @@ Skrypt wykonuje konfiguracje w następujnącej kolejności
 - [Konfiguracja serwera dhcp (role: Mikrotik-DHCP-Server)](docs/dhcp_server/overview.md)
 - [Konfiguracja klienta dhcp (role: Mikrotik-DHCP-Client)](docs/dhcp_client/overview.md)
 - [Konfiguracja serwera dns (role: Mikrotik-DNS-Server)](docs/dns_server/overview.md)
-
-Mikrotik-NTP-Client
-Mikrotik-SSL-Certificates
+- [Konfiguracja usługi ntp (role: Mikrotik-NTP-Client)](docs/ntp_client/overview.md)
+- [Konfiguracja certyfikatów SSL (role: Mikrotik-SSL-Certificates)](docs/ssl_certificates/overview.md)
+- [Konfiguracja monitoringu portów (role: Mikrotik-Graphing)](docs/graphing/overview.md)
 
 
 TO DO
