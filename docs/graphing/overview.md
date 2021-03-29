@@ -41,33 +41,14 @@ Użycie roli
 =========
 
 ```
-- name: DHCP Server
+- name: Graphing
   hosts: routeros
   tasks:
     - include_role:
-        name: Mikrotik-DHCP-Server
+        name: Mikrotik-Graphing
       vars:
-        input_role_pools:
-          defaults:
-          users_network_pool:
-            name: "users-network-pool"
-            comment: "Users Network Pool"
-            ranges: "10.1.0.2-10.1.0.254"
-        input_role_dhcp_servers:
-          defaults:
-          users_network_dhcp:
-            name: "users-network-dhcp"
-            interface: "LAN-Users"
-            address_pool: "users-network-pool"
-            insert_queue_before: bottom
-        input_role_dhcp_network:
-          defaults:
-          users_network_dhcp:
-            address: "10.1.0.0/24"
-            comment: "Users Network"
-            dns_server: "10.1.0.1"
-            gateway: "10.1.0.1"
-            domain: "rachuna.net"
+        input_role_graphing:
+          store_every: "24hours"
 ```
 
 
