@@ -1,0 +1,85 @@
+---
+input_role_firewall_rules:
+  dhcp_from_wan:
+    action: drop
+    chain: input
+    comment: "DHCP from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: dccp
+  ssh_from_wan:
+    action: reject
+    chain: input
+    comment: "SSH from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: tcp
+    reject_with: icmp-network-unreachable
+    dst_port: 22
+  ftp_data_from_wan:
+    action: reject
+    chain: input
+    comment: "FTP-DATA from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: tcp
+    reject_with: icmp-network-unreachable
+    dst_port: 20
+  ftp_from_wan:
+    action: reject
+    chain: input
+    comment: "FTP from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: tcp
+    reject_with: icmp-network-unreachable
+    dst_port: 21
+  telnet_from_wan:
+    action: reject
+    chain: input
+    comment: "Telnet from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: tcp
+    reject_with: icmp-network-unreachable
+    dst_port: 23
+  smtp_from_wan:
+    action: reject
+    chain: input
+    comment: "SMTP from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: tcp
+    reject_with: icmp-network-unreachable
+    dst_port: 25
+  dns_from_wan:
+    action: reject
+    chain: input
+    comment: "DNS from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: tcp
+    reject_with: icmp-network-unreachable
+    dst_port: 53
+  http_from_wan:
+    action: reject
+    chain: input
+    comment: "HTTP from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: tcp
+    reject_with: icmp-network-unreachable
+    dst_port: 80
+  windbox_from_wan:
+    action: reject
+    chain: input
+    comment: "Windbox from WAN"
+    disabled: "no"
+    in_interface_list: LIST-WAN
+    protocol: tcp
+    reject_with: icmp-network-unreachable
+    dst_port: 8291
+  forward_from_wan:
+    action: accept
+    chain: forward
+    comment: "Forward from WAN"

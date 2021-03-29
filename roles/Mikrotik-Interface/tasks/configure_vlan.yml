@@ -15,7 +15,7 @@
       comment="{{ vlan.value.comment | default('') }}"
       {{ vlan.value.other_params | default('') }}
   when: '"no such item" in vlan_status.stdout[0]'
-  
+
 - name: "Update VLAN interface {{  vlan.value.name  }}"
   routeros_command:
     commands: >
@@ -36,8 +36,6 @@
   when:
     - vlan.value.address is defined
     - vlan.value.name is defined
-- debug:
-    msg: "{{ vlan_interface_ip_status }}"
 
 - name: "Add ip address for {{ vlan.value.name }} - {{ vlan.value.address }}"
   routeros_command:
@@ -51,14 +49,11 @@
     - vlan.value.address is defined
     - vlan.value.name is defined
     - '" 0 " not in vlan_interface_ip_status.stdout[0]'
-  register: testc
-- debug:
-    msg: "{{ testc }}"
 
 - name: "Update ip address for {{ vlan.value.name }} - {{ vlan.value.address }}"
   routeros_command:
     commands: >
-      /ip address set [ find address="{{ vlan.value.address }}"] 
+      /ip address set [ find address="{{ vlan.value.address }}"]
       address={{ vlan.value.address }}
       network={{ vlan.value.network }}
       interface={{ vlan.value.name }}
@@ -67,9 +62,6 @@
     - vlan.value.address is defined
     - vlan.value.name is defined
     - '" 0 " in vlan_interface_ip_status.stdout[0]'
-  register: testd
-- debug:
-    msg: "{{ testd }}"
 
 ### SET GRAPHING
 - name: "Check is set graphing for {{ vlan.value.name }}"
@@ -92,7 +84,7 @@
 - name: "Update graphing for {{ vlan.value.name }}"
   routeros_command:
     commands: >
-      /tool graphing interface set [ find interface="{{ vlan.value.name }}"] 
+      /tool graphing interface set [ find interface="{{ vlan.value.name }}"]
       store-on-disk={{ vlan.value.graphing.store_on_disk }}
       allow-address="{{ vlan.value.graphing.allow_address | default('') }}"
   when:

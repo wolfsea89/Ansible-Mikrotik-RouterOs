@@ -1,0 +1,16 @@
+---
+- name: Configure Router
+  hosts: routeros
+  tasks:
+    - include_role:
+        name: Mikrotik-CreateBackup
+      vars:
+        input_role_destination_path: /volumes/mikrotik
+        input_role_ansible_host:     "{{ ansible_host }}"
+        input_role_ansible_user:     "{{ ansible_user }}"
+        input_role_ansible_password: "{{ ansible_ssh_pass }}"
+
+    - include_role:
+        name: Mikrotik-Firewall
+      vars:
+        input_role_firewall_rules:     "{{ inventory_group_routeros_firewall_rules }}"

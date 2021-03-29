@@ -1,0 +1,44 @@
+- name: "Check is set firewall {{ firewall_rule.key }} rule"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall filter print where comment="{{ firewall_rule.value.comment }}"
+  register: firewall_rule_status
+
+- name: "Add firewall {{ firewall_rule.key }} rule"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall filter add
+        action={{ firewall_rule.value.action }}
+        chain={{ firewall_rule.value.chain }}
+        comment="{{ firewall_rule.value.comment }}"
+        {% if firewall_rule.value.in_interface_list is defined %}in-interface-list="{{ firewall_rule.value.in_interface_list }}"{% endif %}
+        {% if firewall_rule.value.protocol is defined %}protocol="{{ firewall_rule.value.protocol }}"{% endif %}
+        {% if firewall_rule.value.reject_with is defined %}reject-with="{{ firewall_rule.value.reject_with }}"{% endif %}
+        {% if firewall_rule.value.src_port is defined %}src-port="{{ firewall_rule.value.src_port }}"{% endif %}
+        {% if firewall_rule.value.dst_port is defined %}dst-port="{{ firewall_rule.value.dst_port }}"{% endif %}
+        {% if firewall_rule.value.connection_state is defined %}connection-state="{{ firewall_rule.value.connection_state }}"{% endif %}
+        disabled="{{ firewall_rule.value.disabled |default('yes') }}"
+        {{ firewall_rule.value.other_params | default('') }}
+  when:
+    - '" 0 " not in firewall_rule_status.stdout[0]'
+
+- name: "Update firewall {{ firewall_rule.key }} rule"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall filter set [ find comment="{{ firewall_rule.value.comment }}"]
+        action={{ firewall_rule.value.action }}
+        chain={{ firewall_rule.value.chain }}
+        comment="{{ firewall_rule.value.comment }}"
+        {% if firewall_rule.value.in_interface_list is defined %}in-interface-list="{{ firewall_rule.value.in_interface_list }}"{% endif %}
+        {% if firewall_rule.value.protocol is defined %}protocol="{{ firewall_rule.value.protocol }}"{% endif %}
+        {% if firewall_rule.value.reject_with is defined %}reject-with="{{ firewall_rule.value.reject_with }}"{% endif %}
+        {% if firewall_rule.value.src_port is defined %}src-port="{{ firewall_rule.value.src_port }}"{% endif %}
+        {% if firewall_rule.value.dst_port is defined %}dst-port="{{ firewall_rule.value.dst_port }}"{% endif %}
+        {% if firewall_rule.value.connection_state is defined %}connection-state="{{ firewall_rule.value.connection_state }}"{% endif %}
+        disabled="{{ firewall_rule.value.disabled |default('yes') }}"
+        {{ firewall_rule.value.other_params | default('') }}
+  when:
+    - '" 0 " in firewall_rule_status.stdout[0]'
