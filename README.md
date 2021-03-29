@@ -19,7 +19,7 @@ Skrypt wykonuje konfiguracje w następujnącej kolejności
 - [Konfiguracja serwera dns (role: Mikrotik-DNS-Server)](docs/dns_server/overview.md)
 - [Konfiguracja usługi ntp (role: Mikrotik-NTP-Client)](docs/ntp_client/overview.md)
 - [Konfiguracja certyfikatów SSL (role: Mikrotik-SSL-Certificates)](docs/ssl_certificates/overview.md)
-- [Konfiguracja monitoringu portów (role: Mikrotik-Graphing)]()
+- [Konfiguracja monitoringu portów (role: Mikrotik-Graphing)](docs/graphing/overview.md)
 
 
 TO DO
