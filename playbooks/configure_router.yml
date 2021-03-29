@@ -58,3 +58,8 @@
 
     - include_role:
         name: Mikrotik-Graphing
+
+    - include_role:
+        name: Mikrotik-Firewall
+      vars:
+        input_role_firewall_rules:     "{{ inventory_group_routeros_firewall_rules }}"
