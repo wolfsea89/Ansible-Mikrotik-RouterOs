@@ -1,0 +1,52 @@
+- name: "Check is set firewall {{ firewall_nat_rules.key }} nat rule"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall nat print where comment="{{ firewall_nat_rules.value.comment }}"
+  register: firewall_nat_rules_status
+
+- name: "Add firewall {{ firewall_nat_rules.key }} rule nat"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall nat add
+        action={{ firewall_nat_rules.value.action }}
+        chain={{ firewall_nat_rules.value.chain }}
+        comment="{{ firewall_nat_rules.value.comment }}"
+        {% if firewall_nat_rules.value.in_interface_list is defined %}in-interface-list="{{ firewall_nat_rules.value.in_interface_list }}"{% endif %}
+        {% if firewall_nat_rules.value.out_interface_list is defined %}out-interface-list="{{ firewall_nat_rules.value.out_interface_list }}"{% endif %}
+        {% if firewall_nat_rules.value.src_address is defined %}src-address="{{ firewall_nat_rules.value.src_address }}"{% endif %}
+        {% if firewall_nat_rules.value.protocol is defined %}protocol="{{ firewall_nat_rules.value.protocol }}"{% endif %}
+        {% if firewall_nat_rules.value.reject_with is defined %}reject-with="{{ firewall_nat_rules.value.reject_with }}"{% endif %}
+        {% if firewall_nat_rules.value.src_port is defined %}src-port="{{ firewall_nat_rules.value.src_port }}"{% endif %}
+        {% if firewall_nat_rules.value.dst_port is defined %}dst-port="{{ firewall_nat_rules.value.dst_port }}"{% endif %}
+        {% if firewall_nat_rules.value.connection_state is defined %}connection-state="{{ firewall_nat_rules.value.connection_state }}"{% endif %}
+        {% if firewall_nat_rules.value.log is defined %}log="{{ firewall_nat_rules.value.log }}"{% endif %}
+        {% if firewall_nat_rules.value.log_prefix is defined %}log-prefix="{{ firewall_nat_rules.value.log_prefix }}"{% endif %}
+        disabled="{{ firewall_nat_rules.value.disabled |default('yes') }}"
+        {{ firewall_nat_rules.value.other_params | default('') }}
+  when:
+    - '" 0 " not in firewall_nat_rules_status.stdout[0]'
+
+- name: "Update firewall {{ firewall_nat_rules.key }} nat rule"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall nat set [ find comment="{{ firewall_nat_rules.value.comment }}"]
+        action={{ firewall_nat_rules.value.action }}
+        chain={{ firewall_nat_rules.value.chain }}
+        comment="{{ firewall_nat_rules.value.comment }}"
+        {% if firewall_nat_rules.value.in_interface_list is defined %}in-interface-list="{{ firewall_nat_rules.value.in_interface_list }}"{% endif %}
+        {% if firewall_nat_rules.value.out_interface_list is defined %}out-interface-list="{{ firewall_nat_rules.value.out_interface_list }}"{% endif %}
+        {% if firewall_nat_rules.value.src_address is defined %}src-address="{{ firewall_nat_rules.value.src_address }}"{% endif %}
+        {% if firewall_nat_rules.value.protocol is defined %}protocol="{{ firewall_nat_rules.value.protocol }}"{% endif %}
+        {% if firewall_nat_rules.value.reject_with is defined %}reject-with="{{ firewall_nat_rules.value.reject_with }}"{% endif %}
+        {% if firewall_nat_rules.value.src_port is defined %}src-port="{{ firewall_nat_rules.value.src_port }}"{% endif %}
+        {% if firewall_nat_rules.value.dst_port is defined %}dst-port="{{ firewall_nat_rules.value.dst_port }}"{% endif %}
+        {% if firewall_nat_rules.value.connection_state is defined %}connection-state="{{ firewall_nat_rules.value.connection_state }}"{% endif %}
+        {% if firewall_nat_rules.value.log is defined %}log="{{ firewall_nat_rules.value.log }}"{% endif %}
+        {% if firewall_nat_rules.value.log_prefix is defined %}log-prefix="{{ firewall_nat_rules.value.log_prefix }}"{% endif %}
+        disabled="{{ firewall_nat_rules.value.disabled |default('yes') }}"
+        {{ firewall_nat_rules.value.other_params | default('') }}
+  when:
+    - '" 0 " in firewall_nat_rules_status.stdout[0]'
