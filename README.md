@@ -26,9 +26,9 @@ TO DO
 =========
 ```
 /interface wireless manual-tx-power-table
-set WiFi-LAN-01 comment="SSID: Wybrzeze Klatki Schodowej"
+set WiFi-LAN-01 comment="SSID: Users Wifi Network"
 /interface wireless nstreme
-set WiFi-LAN-01 comment="SSID: Wybrzeze Klatki Schodowej"
+set WiFi-LAN-01 comment="SSID: Users Wifi Network"
 ```
 
 Author Information
