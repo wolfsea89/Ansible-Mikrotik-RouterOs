@@ -83,3 +83,32 @@ input_role_firewall_rules:
     action: accept
     chain: forward
     comment: "Forward from WAN"
+
+input_role_firewall_nat_rules:
+  dhcp_from_wan:
+    action: masquerade
+    chain: srcnat
+    comment: "Users Network"
+    disabled: "no"
+    out_interface_list: LIST-WAN
+    src_address: 10.1.0.0/24
+    log: "no"
+    log_prefix: ""
+  ssh_from_wan:
+    action: masquerade
+    chain: srcnat
+    comment: "Proxmox Network"
+    disabled: "no"
+    out_interface_list: LIST-WAN
+    src_address: 10.2.0.0/24
+    log: "no"
+    log_prefix: ""
+  ftp_data_from_wan:
+    action: masquerade
+    chain: srcnat
+    comment: "Prod Network"
+    disabled: "no"
+    out_interface_list: LIST-WAN
+    src_address: 10.3.0.0/24
+    log: "no"
+    log_prefix: ""
