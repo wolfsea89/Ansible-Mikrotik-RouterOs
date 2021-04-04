@@ -26,6 +26,7 @@ Przykładowa komenda:
   interface=LAN-PROXMOX \
   name=VLAN-PROD        \
   vlan-id=10
+
 /ip address add address=10.3.0.1/24 interface=VLAN-PROD network=10.3.0.0
 ```
 [Powrót](../../README.md)
