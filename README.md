@@ -5,6 +5,9 @@ Playbooki:
 - playbooks/create_backup.yml - Wykonanie kopii zapasowej
 - playbooks/configure_router.yml - Konfiguracja routera
 
+Konfiguracja połączenia SSH - Anisble
+- [Komunikacja](docs/ansible_connections/overview.md)
+
 Skrypt wykonuje konfiguracje w następujnącej kolejności
 - [Tworzenie kopii zapasowej (role: Mikrotik-CreateBackup)](docs/create_backup/overview.md)
 - [Ustawienie nazwy routera (role: Mikrotik-SetIdentity)](docs/set_identity/overview.md)
@@ -20,6 +23,7 @@ Skrypt wykonuje konfiguracje w następujnącej kolejności
 - [Konfiguracja usługi ntp (role: Mikrotik-NTP-Client)](docs/ntp_client/overview.md)
 - [Konfiguracja certyfikatów SSL (role: Mikrotik-SSL-Certificates)](docs/ssl_certificates/overview.md)
 - [Konfiguracja monitoringu portów (role: Mikrotik-Graphing)](docs/graphing/overview.md)
+- [Konfiguracja firewall](docs/firewall/overview.md)
 
 
 TO DO
