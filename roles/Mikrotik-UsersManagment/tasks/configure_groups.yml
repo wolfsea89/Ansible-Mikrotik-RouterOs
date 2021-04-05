@@ -1,0 +1,28 @@
+- name: "Check is {{ group_item..value.name }} group exist"
+  routeros_command:
+    commands:
+      - >
+        /user group print where name="{{ group_item.value.name }}"
+  register: group_status
+
+- name: "Add {{ group_item..value.name }} group"
+  routeros_command:
+    commands:
+      - >
+        /user group add
+        name={{ group_item.value.name }}
+        policy={{ group_item.value.policy | join(',') }}
+        comment="{{ group_item.value.comment |default('') }}"
+  when:
+    - '" 0 " not in group_status.stdout[0]'
+
+- name: "Update {{ group_status..value.name }} group"
+  routeros_command:
+    commands:
+      - >
+        /user group set [ find name="{{ group_item.value.name }}"]
+        name={{ group_item.value.name }}
+        policy={{ group_item.value.policy | join(',')  }}
+        comment="{{ group_item.value.comment |default('') }}"
+  when:
+    - '" 0 " in group_status.stdout[0]'

@@ -1,0 +1,34 @@
+- name: "Check is {{ user_item..value.name }} user exist"
+  routeros_command:
+    commands:
+      - >
+        /user print where name="{{ user_item.value.username }}"
+  register: user_status
+
+- name: "Add {{ user_item..value.name }} user"
+  routeros_command:
+    commands:
+      - >
+        /user add
+        name={{ user_item.value.username }}
+        group={{ user_item.value.group }}
+        comment="{{ user_item.value.comment |default('') }}"
+        address={{ user_item.value.address }}
+        disabled={{ user_item.value.disabled }}
+        password={{ user_item.value.password }}
+  when:
+    - '" 0 " not in user_status.stdout[0]'
+
+- name: "Update {{ user_item..value.name }} user"
+  routeros_command:
+    commands:
+      - >
+        /user set [ find name="{{ user_item.value.username }}"]
+        name={{ user_item.value.username }}
+        group={{ user_item.value.group }}
+        comment="{{ user_item.value.comment |default('') }}"
+        address={{ user_item.value.address }}
+        disabled={{ user_item.value.disabled }}
+        password={{ user_item.value.password }}
+  when:
+    - '" 0 " in user_status.stdout[0]'

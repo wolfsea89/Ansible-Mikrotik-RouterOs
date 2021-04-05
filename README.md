@@ -23,7 +23,7 @@ Skrypt wykonuje konfiguracje w następujnącej kolejności
 - [Konfiguracja usługi ntp (role: Mikrotik-NTP-Client)](docs/ntp_client/overview.md)
 - [Konfiguracja certyfikatów SSL (role: Mikrotik-SSL-Certificates)](docs/ssl_certificates/overview.md)
 - [Konfiguracja monitoringu portów (role: Mikrotik-Graphing)](docs/graphing/overview.md)
-- [Konfiguracja firewall](docs/firewall/overview.md)
+- [Konfiguracja firewall (role: Mikrotik-Firewall)](docs/firewall/overview.md)
 
 
 TO DO

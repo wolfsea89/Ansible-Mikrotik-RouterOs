@@ -1,0 +1,17 @@
+- name: Configure groups
+  include: configure_groups.yml
+  loop: "{{ lookup('dict', input_role_groups) }}"
+  loop_control:
+    loop_var: group_item
+  when:
+    - input_role_groups is defined
+    - group_item.key != "default"
+
+- name: Configure users
+  include: configure_users.yml
+  loop: "{{ lookup('dict', input_role_users) }}"
+  loop_control:
+    loop_var: user_item
+  when:
+    - input_role_users is defined
+    - user_item.key != "default"
