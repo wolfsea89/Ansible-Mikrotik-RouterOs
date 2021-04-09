@@ -1,6 +1,19 @@
 ---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /system backup save name="{{ var_role_backup_filename }}"
+      - /export file="{{ var_role_backup_filename_rsc }}"
+  when: input_role_debug
+
 - name: Create backup of Mikrotik to local storage
   routeros_command:
     commands:
       - /system backup save name="{{ var_role_backup_filename }}"
       - /export file="{{ var_role_backup_filename_rsc }}"
+  register: create_backup_stdout
+
+- name: "[DEBUG] Create backup of Mikrotik to local storage output"
+  debug:
+    msg: "{{ create_backup_stdout.stdout_lines }}"
+  when: input_role_debug
