@@ -1,0 +1,11 @@
+---
+- name: Configure Users Managment
+  hosts: routeros
+  vars:
+    playbooks_roles_debug: true
+  tasks:
+    - include_role:
+        name: Mikrotik-UsersManagment
+      vars:
+        input_role_groups:     "{{ inventory_group_routeros_system_groups }}"
+        input_role_users:      "{{ inventory_group_routeros_system_users }}"

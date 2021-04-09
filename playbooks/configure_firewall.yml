@@ -1,6 +1,8 @@
 ---
 - name: Configure Router
   hosts: routeros
+  vars:
+    playbooks_roles_debug: true
   tasks:
     - include_role:
         name: Mikrotik-CreateBackup
@@ -9,6 +11,7 @@
         input_role_ansible_host:     "{{ ansible_host }}"
         input_role_ansible_user:     "{{ ansible_user }}"
         input_role_ansible_password: "{{ ansible_ssh_pass }}"
+        input_role_debug:            "{{ playbooks_roles_debug }}"
 
     - include_role:
         name: Mikrotik-Firewall
