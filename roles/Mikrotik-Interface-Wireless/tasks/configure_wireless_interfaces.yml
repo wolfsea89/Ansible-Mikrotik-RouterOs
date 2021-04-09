@@ -1,0 +1,47 @@
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - >
+        /interface wireless set [find default-name={{ wireless_interface['key'] }}]
+          name={{ wireless_interface['value']['name'] }}
+          comment="{{ wireless_interface['value']['comment'] | default('') }}"
+          mode={{ wireless_interface['value']['mode'] | default(vars_role_default_wireless_interface['mode']) }}
+          band={{ wireless_interface['value']['band'] }}
+          country={{ wireless_interface['value']['country'] | default(vars_role_default_wireless_interface['country']) }}
+          channel-width={{ wireless_interface['value']['channel-width'] }}
+          frequency={{ wireless_interface['value']['frequency'] | default(vars_role_default_wireless_interface['frequency']) }}
+          ssid="{{ wireless_interface['value']['ssid'] }}"
+          distance={{ wireless_interface['value']['distance'] | default(vars_role_default_wireless_interface['distance']) }}
+          installation={{ wireless_interface['value']['installation'] | default(vars_role_default_wireless_interface['installation']) }}
+          security-profile="{{ wireless_interface['value']['security-profile'] }}"
+          station-roaming={{ wireless_interface['value']['station-roaming'] | default(vars_role_default_wireless_interface['station-roaming']) }}
+          wireless-protocol="{{ wireless_interface['value']['wireless-protocol'] | default(vars_role_default_wireless_interface['wireless-protocol']) }}"
+          disabled={{ wireless_interface['value']['disabled'] | default(vars_role_default_wireless_interface['disabled']) }}
+          {% if wireless_interface['value']['other_params'] is defined %}{{ wireless_interface['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Update Wireless interface {{ wireless_interface.key }}"
+  routeros_command:
+    commands: >
+      /interface wireless set [find default-name={{ wireless_interface['key'] }}]
+        name={{ wireless_interface['value']['name'] }}
+        comment="{{ wireless_interface['value']['comment'] | default('') }}"
+        mode={{ wireless_interface['value']['mode'] | default(vars_role_default_wireless_interface['mode']) }}
+        band={{ wireless_interface['value']['band'] }}
+        country={{ wireless_interface['value']['country'] | default(vars_role_default_wireless_interface['country']) }}
+        channel-width={{ wireless_interface['value']['channel-width'] }}
+        frequency={{ wireless_interface['value']['frequency'] | default(vars_role_default_wireless_interface['frequency']) }}
+        ssid="{{ wireless_interface['value']['ssid'] }}"
+        distance={{ wireless_interface['value']['distance'] | default(vars_role_default_wireless_interface['distance']) }}
+        installation={{ wireless_interface['value']['installation'] | default(vars_role_default_wireless_interface['installation']) }}
+        security-profile="{{ wireless_interface['value']['security-profile'] }}"
+        station-roaming={{ wireless_interface['value']['station-roaming'] | default(vars_role_default_wireless_interface['station-roaming']) }}
+        wireless-protocol="{{ wireless_interface['value']['wireless-protocol'] | default(vars_role_default_wireless_interface['wireless-protocol']) }}"
+        disabled={{ wireless_interface['value']['disabled'] | default(vars_role_default_wireless_interface['disabled']) }}
+        {% if wireless_interface['value']['other_params'] is defined %}{{ wireless_interface['value']['other_params'] }}{% endif %}
+  register: update_interface_wireless_status
+
+- name: "[DEBUG] Update Wireless interface {{ wireless_interface.key }}"
+  debug:
+    msg: "{{ update_interface_wireless_status.stdout_lines }}"
+  when: input_role_debug == true

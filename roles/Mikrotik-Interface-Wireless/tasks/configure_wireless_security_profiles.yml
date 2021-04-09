@@ -1,0 +1,72 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /interface wireless security-profiles print from="{{ security_profile['value']['name'] }}"
+      - >
+        /interface wireless security-profiles add
+          name={{ security_profile['value']['name'] }}
+          authentication-types={{ security_profile['value']['authentication-types'] | default(vars_role_wireless_security_profiles['authentication-types']) }}
+          mode={{ security_profile['value']['mode'] | default(vars_role_wireless_security_profiles['mode']) }}
+          wpa-pre-shared-key="{{ security_profile['value']['password'] }}"
+          wpa2-pre-shared-key="{{ security_profile['value']['password'] }}"
+          {% if firewall_rule.value.security_profile is defined %}{{ firewall_rule.value.security_profile }}{% endif %}
+      - >
+        /interface wireless security-profiles set [ find name="{{ security_profile['value']['name'] }}" ]
+          authentication-types={{ security_profile['value']['authentication-types'] | default(vars_role_wireless_security_profiles['authentication-types']) }}
+          mode={{ security_profile['value']['mode'] | default(vars_role_wireless_security_profiles['mode']) }}
+          wpa-pre-shared-key="{{ security_profile['value']['password'] }}"
+          wpa2-pre-shared-key="{{ security_profile['value']['password'] }}"
+          {% if firewall_rule.value.security_profile is defined %}{{ firewall_rule.value.security_profile }}{% endif %}
+  when: input_role_debug == true
+
+
+- name: "Check: {{ security_profile['value']['name'] }} is wireless security profile exist"
+  routeros_command:
+    commands: /interface wireless security-profiles print from="{{ security_profile['value']['name'] }}"
+  register: security_profile_status
+
+- name: "[DEBUG] Check: {{ security_profile['value']['name'] }} is wireless security profile exist output"
+  debug:
+    msg: "{{ security_profile_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add wireless security profile {{ security_profile['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface wireless security-profiles add
+        name={{ security_profile['value']['name'] }}
+        authentication-types={{ security_profile['value']['authentication-types'] | default(vars_role_wireless_security_profiles['authentication-types']) }}
+        mode={{ security_profile['value']['mode'] | default(vars_role_wireless_security_profiles['mode']) }}
+        wpa-pre-shared-key="{{ security_profile['value']['password'] }}"
+        wpa2-pre-shared-key="{{ security_profile['value']['password'] }}"
+        {% if firewall_rule.value.security_profile is defined %}{{ firewall_rule.value.security_profile }}{% endif %}
+  when: '"no such item" in security_profile_status.stdout[0]'
+  register: add_security_profile_status
+
+- name: "[DEBUG] Add wireless security profile {{ security_profile['value']['name'] }}"
+  debug:
+    msg: "{{ add_security_profile_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_security_profile_status.stdout_lines is defined
+
+- name: "Update wireless security profile {{ security_profile['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface wireless security-profiles set [ find name="{{ security_profile['value']['name'] }}" ]
+        authentication-types={{ security_profile['value']['authentication-types'] | default(vars_role_wireless_security_profiles['authentication-types']) }}
+        mode={{ security_profile['value']['mode'] | default(vars_role_wireless_security_profiles['mode']) }}
+        wpa-pre-shared-key="{{ security_profile['value']['password'] }}"
+        wpa2-pre-shared-key="{{ security_profile['value']['password'] }}"
+        {% if firewall_rule.value.security_profile is defined %}{{ firewall_rule.value.security_profile }}{% endif %}
+
+  when: '"no such item" not in security_profile_status.stdout[0]'
+  register: update_security_profile_status
+
+- name: "[DEBUG] Update wireless security profile {{ security_profile['value']['name'] }}"
+  debug:
+    msg: "{{ update_security_profile_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_security_profile_status.stdout_lines is defined

@@ -1,0 +1,61 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /tool graphing interface print where interface="{{ wireless_interface['value']['name'] }}"
+      - >
+        /tool graphing interface add
+            interface={{ wireless_interface['value']['name'] }}
+            store-on-disk={{ wireless_interface['value']['graphing']['store-on-disk'] }}
+            allow-address="{{ wireless_interface['value']['graphing']['allow-address'] | default('') }}"
+      - >
+        /tool graphing interface set [ find interface="{{ wireless_interface['value']['name'] }}"]
+          store-on-disk={{ wireless_interface['value']['graphing']['store-on-disk'] }}
+          allow-address="{{ wireless_interface['value']['graphing']['allow-address'] | default('') }}"
+  when: input_role_debug == true
+
+- name: "Check is set graphing for {{ wireless_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /tool graphing interface print where interface="{{ wireless_interface['value']['name'] }}"
+  register:  graphing_interface_status
+
+- name: "[DEBUG] Check is set graphing for {{ wireless_interface['value']['name'] }} output"
+  debug:
+    msg: "{{ graphing_interface_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add graphing for {{ wireless_interface.key }}"
+  routeros_command:
+    commands: >
+      /tool graphing interface add
+        interface={{ wireless_interface['value']['name'] }}
+        store-on-disk={{ wireless_interface['value']['graphing']['store-on-disk'] }}
+        allow-address="{{ wireless_interface['value']['graphing']['allow-address'] | default('') }}"
+  when:
+    - '" 0 " not in graphing_interface_status.stdout[0]'
+  register: add_graphing_interface_status
+
+- name: "[DEBUG] Add graphing for {{ wireless_interface.key }} output"
+  debug:
+    msg: "{{ add_wireless_interface_ip_status.stdout_lines }}"
+  when:
+    - add_wireless_interface_ip_status.stdout_lines is defined
+    - input_role_debug == true
+
+- name: "Update graphing for {{ wireless_interface.key }}"
+  routeros_command:
+    commands: >
+      /tool graphing interface set [ find interface="{{ wireless_interface['value']['name'] }}"]
+        store-on-disk={{ wireless_interface['value']['graphing']['store-on-disk'] }}
+        allow-address="{{ wireless_interface['value']['graphing']['allow-address'] | default('') }}"
+  when:
+    - '" 0 " in graphing_interface_status.stdout[0]'
+  register: update_graphing_interface_status
+
+- name: "[DEBUG] Update graphing for {{ wireless_interface.key }} output"
+  debug:
+    msg: "{{ update_graphing_interface_status.stdout_lines }}"
+  when:
+    - update_graphing_interface_status.stdout_lines is defined
+    - input_role_debug == true

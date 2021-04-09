@@ -9,20 +9,20 @@
   stat:
     path: "{{ input_role_destination_path }}/backup/{{ var_role_backup_filename }}"
   register: backup_status
-  when: input_role_debug
+  when: input_role_debug == true
 
 - name: "[DEBUG] {{ input_role_destination_path }}/backup/{{ var_role_backup_filename }} is exit"
   debug:
     msg: "{{ backup_status.stat.exists}}"
-  when: input_role_debug
+  when: input_role_debug == true
 
 - name: "[DEBUG] Check dowload rsc file"
   stat:
     path: "{{ input_role_destination_path }}/backup/{{ var_role_backup_filename }}"
   register: rsc_status
-  when: input_role_debug
+  when: input_role_debug == true
 
 - name: "[DEBUG] {{ input_role_destination_path }}/rsc/{{ var_role_backup_filename_rsc }} is exit"
   debug:
     msg: "{{ rsc_status.stat.exists }}"
-  when: input_role_debug
+  when: input_role_debug == true
