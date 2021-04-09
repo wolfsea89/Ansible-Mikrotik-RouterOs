@@ -1,4 +1,19 @@
 ---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /system identity set name="{{ input_role_ansible_host }}"
+      - /system identity print
+  when: input_role_debug == true
+
 - name: Set identity
   routeros_command:
-    commands: /system identity set name="{{ input_role_ansible_host }}"
+    commands:
+      - /system identity set name="{{ input_role_ansible_host }}"
+      - /system identity print
+  register: set_identity_status
+
+- name: "[DEBUG] Get identity"
+  debug:
+    msg: "{{ set_identity_status.stdout_lines[1] }}"
+  when: input_role_debug == true
