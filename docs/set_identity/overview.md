@@ -7,6 +7,7 @@ Czynności jakie wykonuje rola:
   Przykładowa komenda:
   ```
     /system identity set name="router.rachuna.net"
+    /system identity print
   ```
 
 Użycie roli
@@ -20,6 +21,7 @@ Użycie roli
         name: Mikrotik-SetIdentity
       vars:
         input_role_ansible_host:     "router.rachuna.net"
+        input_role_debug:            true
 ```
 
 

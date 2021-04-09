@@ -2,7 +2,7 @@
 - name: Configure Router
   hosts: routeros
   vars:
-    playbooks_roles_debug: true
+    playbooks_roles_debug: false
   tasks:
     - include_role:
         name: Mikrotik-CreateBackup
@@ -17,6 +17,7 @@
         name: Mikrotik-SetIdentity
       vars:
         input_role_ansible_host:     "{{ inventory_hostname }}"
+        input_role_debug:            true
 
     - include_role:
         name: Mikrotik-Interface
