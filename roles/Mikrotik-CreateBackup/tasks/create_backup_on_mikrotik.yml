@@ -4,7 +4,7 @@
     msg:
       - /system backup save name="{{ var_role_backup_filename }}"
       - /export file="{{ var_role_backup_filename_rsc }}"
-  when: input_role_debug
+  when: input_role_debug == true
 
 - name: Create backup of Mikrotik to local storage
   routeros_command:
@@ -16,4 +16,4 @@
 - name: "[DEBUG] Create backup of Mikrotik to local storage output"
   debug:
     msg: "{{ create_backup_stdout.stdout_lines }}"
-  when: input_role_debug
+  when: input_role_debug == true

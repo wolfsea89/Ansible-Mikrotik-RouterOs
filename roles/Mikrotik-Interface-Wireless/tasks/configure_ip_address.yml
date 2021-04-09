@@ -1,0 +1,64 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip address print where address="{{ wireless_interface['value']['address'] }}" interface={{ wireless_interface['value']['name'] }}
+      - >
+        /ip address add
+          address={{ wireless_interface['value']['address'] }}
+          network={{ wireless_interface['value']['network'] }}
+          interface={{ wireless_interface['value']['name'] }}
+          comment="{{ wireless_interface['value']['comment'] | default('') }}"
+      - >
+        /ip address set [ find address="{{ wireless_interface['value']['address'] }}" ]
+          network={{ wireless_interface['value']['network'] }}
+          interface={{ wireless_interface['value']['name'] }}
+          comment="{{ wireless_interface['value']['comment'] | default('') }}"
+  when: input_role_debug == true
+
+- name: "Check is set ip address for {{ wireless_interface.key }}"
+  routeros_command:
+    commands: /ip address print where address="{{ wireless_interface['value']['address'] }}" interface={{ wireless_interface['value']['name'] }}
+  register:  wireless_interface_ip_status
+
+- name: "[DEBUG] Check is set ip address for {{ wireless_interface.key }} output"
+  debug:
+    msg: "{{ wireless_interface_ip_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add ip address for {{ wireless_interface.key }} - {{ wireless_interface['value']['address'] }}"
+  routeros_command:
+    commands: >
+      /ip address add
+        address={{ wireless_interface['value']['address'] }}
+        network={{ wireless_interface['value']['network'] }}
+        interface={{ wireless_interface['value']['name'] }}
+        comment="{{ wireless_interface['value']['comment'] | default('') }}"
+  when:
+    - '" 0 " not in wireless_interface_ip_status.stdout[0]'
+  register: add_wireless_interface_ip_status
+
+- name: "[DEBUG] Add ip address for {{ wireless_interface.key }} - {{ wireless_interface['value']['address'] }} output"
+  debug:
+    msg: "{{ add_wireless_interface_ip_status.stdout_lines }}"
+  when:
+    - add_wireless_interface_ip_status.stdout_lines is defined
+    - input_role_debug == true
+
+- name: "Update ip address for {{ wireless_interface.key }} - {{ wireless_interface['value']['address'] }}"
+  routeros_command:
+    commands: >
+      /ip address set [ find address="{{ wireless_interface['value']['address'] }}" ]
+      network={{ wireless_interface['value']['network'] }}
+      interface={{ wireless_interface['value']['name'] }}
+      comment="{{ wireless_interface['value']['comment'] | default('') }}"
+  when:
+    - '" 0 " in wireless_interface_ip_status.stdout[0]'
+  register: update_wireless_interface_ip_status
+
+- name: "[DEBUG] Update ip address for {{ wireless_interface.key }} - {{ wireless_interface['value']['address'] }}"
+  debug:
+    msg: "{{ update_wireless_interface_ip_status.stdout_lines }}"
+  when:
+    - update_wireless_interface_ip_status.stdout_lines is defined
+    - input_role_debug == true

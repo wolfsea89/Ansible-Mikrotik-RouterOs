@@ -12,7 +12,7 @@
 - name: "[DEBUG] Create backup {{ input_role_destination_path }}/backup on localhost output"
   debug:
     msg: "{{ install_tools_output }}"
-  when: backup_directory_status
+  when: input_role_debug == true
 
 - name: Create backup {{ input_role_destination_path }}/rsc on localhost
   become: yes
@@ -27,4 +27,4 @@
 - name: "[DEBUG] Create backup {{ input_role_destination_path }}/rsc on localhost"
   debug:
     msg: "{{ install_tools_output }}"
-  when: rsc_directory_status
+  when: input_role_debug == true

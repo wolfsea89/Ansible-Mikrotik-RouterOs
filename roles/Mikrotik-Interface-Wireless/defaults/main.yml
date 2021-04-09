@@ -1,0 +1,133 @@
+input_role_debug: false
+input_role_list_interfaces:
+  list_wan:
+    name: LIST-WAN
+    interfaces:
+      - name: "{{ input_role_ethernet_interfaces.ether1.name }}"
+        comment: "WAN"
+  list_lan_users:
+    name: LIST-LAN-USERS
+    interfaces:
+      - name: "{{ input_role_wireless_interfaces.wlan1.name }}"
+      - name: "{{ input_role_wireless_interfaces.wlan2.name }}"
+        comment: "LAN-USERS"
+  list_lan_admins:
+    name: LIST-LAN-ADMINS
+    interfaces:
+      - name: "{{ input_role_ethernet_interfaces.ether5.name }}"
+        comment: "LAN-ADMINS"
+  list_lan_proxmox:
+    name: LIST-LAN-PROXMOX
+    interfaces:
+      - name: "{{ input_role_ethernet_interfaces.ether2.name }}"
+      - name: "{{ input_role_ethernet_interfaces.ether3.name }}"
+      - name: "{{ input_role_ethernet_interfaces.ether4.name }}"
+        comment: "LAN-PROXMOX"
+
+input_role_wireless_interfaces:
+  wlan1:
+    name: WiFi-LAN-01
+    comment: "SSID: {{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    ssid: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    security_profile: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    band: "2ghz-b/g/n"
+    channel_width: "20/40mhz-XX"
+    address: "10.0.0.4/24"
+    network: "10.0.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+  wlan2:
+    name: WiFi-LAN-02
+    ssid: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    band: "5ghz-a/n/ac"
+    channel_width: "20/40/80mhz-XXXX"
+    security_profile: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    address: "10.0.0.5/24"
+    network: "10.0.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+
+input_role_ethernet_interfaces:
+  ether1:
+    name: "WAN-01"
+    comment: "WAN-01 - VECTRA"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+  ether2:
+    name: "LAN-01"
+    comment: ""
+    address: "10.0.0.1/24"
+    network: "10.0.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+  ether3:
+    name: "LAN-02"
+    comment: ""
+    address: "10.0.0.2/24"
+    network: "10.0.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+  ether4:
+    name: "LAN-03"
+    comment: ""
+    address: "10.0.0.3/24"
+    network: "10.0.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+  ether5:
+    name: "LAN-04"
+    comment: "LAN-04 - Admins Network"
+    address: "10.254.0.1/24"
+    network: "10.254.0.1"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+
+input_role_bridges_interfaces:
+  lan_prod:
+    name: "LAN-PROXMOX"
+    comment: "BRIDGE - Proxmox"
+    address: "10.2.0.1/16"
+    network: "10.2.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+    interfaces:
+      - name: LIST-LAN-PROXMOX
+        trusted: "yes"
+  lan_users:
+    name: "LAN-Users"
+    comment: "BRIDGE - Users"
+    address: "10.1.0.1/24"
+    network: "10.1.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+    interfaces:
+      - name: LIST-LAN-USERS
+        trusted: "no"
+
+input_role_vlan_interfaces:
+  default: # if one element in dictionary
+  vlan_prod:
+    name: VLAN-PROD
+    interface: LAN-PROXMOX
+    vlan_id: 10
+    comment: "VLAN-PROD"
+    address: "10.3.0.1/24"
+    network: "10.3.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+
+input_role_wireless_security_profiles:
+  default: # if one element in dictionary
+  UsersWifiNetwork:
+    name: "Users Wifi Network"
+    password: "PaSSw0rd!"

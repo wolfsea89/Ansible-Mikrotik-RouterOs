@@ -1,7 +1,7 @@
 - name: "[DEBUG] OS Distribution"
   debug:
     msg: "{{ input_role_os_distribution }}"
-  when: input_role_debug
+  when: input_role_debug == true
 
 - name: "[Ubuntu] Install tools"
   delegate_to: localhost
@@ -14,4 +14,4 @@
 - name: "[DEBUG] [Ubuntu] Install tools output"
   debug:
     msg: "{{ install_tools_output }}"
-  when: input_role_debug
+  when: input_role_debug == true

@@ -10,24 +10,24 @@ inventory_group_routeros_wireless_interfaces:
     ssid: "Users Wifi Network"                # SSID
     security_profile: "Users Wifi Network"    # Security Profile
     band: "2ghz-b/g/n"                        # Band
-    channel_width: "20/40mhz-XX"              # Channeel
+    channel-width: "20/40mhz-XX"              # Channeel
     address: "10.0.0.4/24"                    # Interface Address
     network: "10.0.0.0"                       # Network
     graphing:                                 # Enable graphing (optional)
-      allow_address: 0.0.0.0/0                # Allow address do graphing
-      store_on_disk: "no"                     # Store data on disk
+      allow-address: 0.0.0.0/0                # Allow address do graphing
+      store-on-disk: "no"                     # Store data on disk
     other_params: ""                          # Other parameters (optional)
   wlan2:
     name: WiFi-LAN-02
     ssid: "SSID: Users Wifi Network"
     security_profile: "Users Wifi Network"
     band: "5ghz-a/n/ac"
-    channel_width: "20/40/80mhz-XXXX"
+    channel-width: "20/40/80mhz-XXXX"
     address: "10.0.0.5/24"
     network: "10.0.0.0"
     graphing:
-      allow_address: 0.0.0.0/0
-      store_on_disk: "no"
+      allow-address: 0.0.0.0/0
+      store-on-disk: "no"
 ```
 
 Przykładowa komenda:

@@ -1,3 +1,4 @@
+input_role_debug: false
 input_role_list_interfaces:
   list_wan:
     name: LIST-WAN
@@ -6,7 +7,7 @@ input_role_list_interfaces:
         comment: "WAN"
   list_lan_users:
     name: LIST-LAN-USERS
-    interfaces: 
+    interfaces:
       - name: "{{ input_role_wireless_interfaces.wlan1.name }}"
       - name: "{{ input_role_wireless_interfaces.wlan2.name }}"
         comment: "LAN-USERS"
@@ -17,7 +18,7 @@ input_role_list_interfaces:
         comment: "LAN-ADMINS"
   list_lan_proxmox:
     name: LIST-LAN-PROXMOX
-    interfaces: 
+    interfaces:
       - name: "{{ input_role_ethernet_interfaces.ether2.name }}"
       - name: "{{ input_role_ethernet_interfaces.ether3.name }}"
       - name: "{{ input_role_ethernet_interfaces.ether4.name }}"
@@ -27,7 +28,7 @@ input_role_wireless_interfaces:
   wlan1:
     name: WiFi-LAN-01
     comment: "SSID: {{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
-    ssid: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"  
+    ssid: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
     security_profile: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
     band: "2ghz-b/g/n"
     channel_width: "20/40mhz-XX"
@@ -38,7 +39,7 @@ input_role_wireless_interfaces:
       store_on_disk: "no"
   wlan2:
     name: WiFi-LAN-02
-    ssid: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"  
+    ssid: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
     band: "5ghz-a/n/ac"
     channel_width: "20/40/80mhz-XXXX"
     security_profile: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
