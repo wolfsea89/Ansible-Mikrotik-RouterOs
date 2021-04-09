@@ -1,36 +1,30 @@
 ---
 - name: Configure Ethernet interfaces
-  include: configure_ethernet.yml
+  include: configure_ethernet_interface.yml
+  loop: "{{ lookup('dict', input_role_ethernet_interfaces) }}"
+  loop_control:
+    loop_var: ethernet_interface
+  when:
+    - input_role_ethernet_interfaces is defined
+    - ethernet_interface.key != "default"
+
+- name: Configure ip address for interface
+  include: configure_ip_address.yml
+  loop: "{{ lookup('dict', input_role_ethernet_interfaces) }}"
+  loop_control:
+    loop_var: ethernet_interface
+  when:
+    - input_role_ethernet_interfaces is defined
+    - ethernet_interface.value.address is defined
+    - ethernet_interface.value.network is defined
+    - ethernet_interface.key != "default"
+
+- name: Configure graphing interface
+  include: configure_graphing.yml
   loop: "{{ lookup('dict', input_role_ethernet_interfaces) }}"
   loop_control:
     loop_var: ethernet
   when:
     - input_role_ethernet_interfaces is defined
-    - ethernet.key != "default"
-
-- name: Configure interface list
-  include: configure_list_interface.yml
-  loop: "{{ lookup('dict', input_role_list_interfaces) }}"
-  loop_control:
-    loop_var: interface_list
-  when:
-    - input_role_list_interfaces is defined
-    - interface_list.key != "default"
-
-- name: Configure bridges
-  include: configure_bridges.yml
-  loop: "{{ lookup('dict', input_role_bridges_interfaces) }}"
-  loop_control:
-    loop_var: bridge
-  when:
-    - input_role_bridges_interfaces is defined
-    - bridge.key != "default"
-
-- name: Configure VLAN interfaces
-  include: configure_vlan.yml
-  loop: "{{ lookup('dict', input_role_vlan_interfaces) }}"
-  loop_control:
-    loop_var: vlan
-  when:
-    - input_role_vlan_interfaces is defined
-    - vlan.key != "default"
+    - ethernet_interface.value.graphing is defined
+    - ethernet_interface.key != "default"

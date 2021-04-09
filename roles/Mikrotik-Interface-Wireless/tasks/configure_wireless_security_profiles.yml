@@ -17,7 +17,7 @@
           mode={{ security_profile['value']['mode'] | default(vars_role_wireless_security_profiles['mode']) }}
           wpa-pre-shared-key="{{ security_profile['value']['password'] }}"
           wpa2-pre-shared-key="{{ security_profile['value']['password'] }}"
-          {% if firewall_rule.value.security_profile is defined %}{{ firewall_rule.value.security_profile }}{% endif %}
+          {% if security_profile['value']['other_params'] is defined %}{{ security_profile['value']['other_params'] }}{% endif %}
   when: input_role_debug == true
 
 
@@ -40,7 +40,7 @@
         mode={{ security_profile['value']['mode'] | default(vars_role_wireless_security_profiles['mode']) }}
         wpa-pre-shared-key="{{ security_profile['value']['password'] }}"
         wpa2-pre-shared-key="{{ security_profile['value']['password'] }}"
-        {% if firewall_rule.value.security_profile is defined %}{{ firewall_rule.value.security_profile }}{% endif %}
+        {% if security_profile['value']['other_params'] is defined %}{{ security_profile['value']['other_params'] }}{% endif %}
   when: '"no such item" in security_profile_status.stdout[0]'
   register: add_security_profile_status
 
@@ -59,7 +59,7 @@
         mode={{ security_profile['value']['mode'] | default(vars_role_wireless_security_profiles['mode']) }}
         wpa-pre-shared-key="{{ security_profile['value']['password'] }}"
         wpa2-pre-shared-key="{{ security_profile['value']['password'] }}"
-        {% if firewall_rule.value.security_profile is defined %}{{ firewall_rule.value.security_profile }}{% endif %}
+        {% if security_profile['value']['other_params'] is defined %}{{ security_profile['value']['other_params'] }}{% endif %}
 
   when: '"no such item" not in security_profile_status.stdout[0]'
   register: update_security_profile_status

@@ -1,11 +1,11 @@
-- name: "Check is {{ group_item..value.name }} group exist"
+- name: "Check is {{ group_item.value.name }} group exist"
   routeros_command:
     commands:
       - >
         /user group print where name="{{ group_item.value.name }}"
   register: group_status
 
-- name: "Add {{ group_item..value.name }} group"
+- name: "Add {{ group_item.value.name }} group"
   routeros_command:
     commands:
       - >
@@ -16,7 +16,7 @@
   when:
     - '" 0 " not in group_status.stdout[0]'
 
-- name: "Update {{ group_status..value.name }} group"
+- name: "Update {{ group_status.value.name }} group"
   routeros_command:
     commands:
       - >

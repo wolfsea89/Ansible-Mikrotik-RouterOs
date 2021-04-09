@@ -1,0 +1,23 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg: >
+      /interface ethernet set [find default-name={{ ethernet_interface['key'] }} ]
+        name={{ ethernet_interface['value']['name'] }}
+        comment="{{ ethernet_interface['value']['comment'] | default('') }}"
+        {% if ethernet_interface['value']['other_params'] is defined %}{{ ethernet_interface['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Update Ethernet interface {{ ethernet_interface['key'] }}"
+  routeros_command:
+    commands: >
+      /interface ethernet set [find default-name={{ ethernet_interface['key'] }}]
+        name={{ ethernet_interface['value']['name'] }}
+        comment="{{ ethernet_interface['value']['comment'] | default('') }}"
+        {% if ethernet_interface['value']['other_params'] is defined %}{{ ethernet_interface['value']['other_params'] }}{% endif %}
+  register: update_interface_ethernet_status
+
+- name: "[DEBUG] Update Ethernet interface {{ ethernet_interface['key'] }}"
+  debug:
+    msg: "{{ update_interface_ethernet_status.stdout_lines }}"
+  when: input_role_debug == true

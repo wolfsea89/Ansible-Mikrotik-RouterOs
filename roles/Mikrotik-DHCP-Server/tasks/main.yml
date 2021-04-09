@@ -19,3 +19,10 @@
   loop_control:
     loop_var: dhcp_config
   when: input_role_dhcp_servers is defined
+
+- name: Configure dhcp leave
+  include: configure_dhcp_leave.yml
+  loop: "{{ lookup('dict', input_role_dhcp_leaves) }}"
+  loop_control:
+    loop_var: dhcp_leave
+  when: input_role_dhcp_leaves is defined

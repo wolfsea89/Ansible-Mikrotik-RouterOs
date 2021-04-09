@@ -24,6 +24,30 @@ input_role_list_interfaces:
       - name: "{{ input_role_ethernet_interfaces.ether4.name }}"
         comment: "LAN-PROXMOX"
 
+input_role_wireless_interfaces:
+  wlan1:
+    name: WiFi-LAN-01
+    comment: "SSID: {{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    ssid: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    security_profile: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    band: "2ghz-b/g/n"
+    channel_width: "20/40mhz-XX"
+    address: "10.0.0.4/24"
+    network: "10.0.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+  wlan2:
+    name: WiFi-LAN-02
+    ssid: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    band: "5ghz-a/n/ac"
+    channel_width: "20/40/80mhz-XXXX"
+    security_profile: "{{ input_role_wireless_security_profiles.UsersWifiNetwork.name }}"
+    address: "10.0.0.5/24"
+    network: "10.0.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
 
 input_role_ethernet_interfaces:
   ether1:
@@ -101,3 +125,9 @@ input_role_vlan_interfaces:
     graphing:
       allow_address: 0.0.0.0/0
       store_on_disk: "no"
+
+input_role_wireless_security_profiles:
+  default: # if one element in dictionary
+  UsersWifiNetwork:
+    name: "Users Wifi Network"
+    password: "PaSSw0rd!"

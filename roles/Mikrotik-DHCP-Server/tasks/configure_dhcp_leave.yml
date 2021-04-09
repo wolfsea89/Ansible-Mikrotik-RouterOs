@@ -1,0 +1,34 @@
+---
+- name: "Check: {{ dhcp_leave.value.name }} client is exist"
+  routeros_command:
+    commands: 
+      - > 
+        /ip dhcp-server lease print whene client-id="{{ dhcp_leave.value.clientId }}"
+  register: clientlease_status
+
+- name: "Add {{ dhcp_leave.value.address }} client to DHCP Leaves List"
+  routeros_command:
+    commands:
+      - >
+        /ip dhcp-server lease add
+        client-id="{{ dhcp_leave.value.clientId }}"
+        address="{{ dhcp_leave.value.address }}"
+        comment="{{ dhcp_leave.value.comment | default('') }}"
+        server="{{ dhcp_leave.value.server }}"
+        disabled="{{ dhcp_leave.value.disabled | default('no') }}"
+        mac-address="{{ dhcp_leave.value.macAddress }}"
+        {{ dhcp_leave.value.other_params | default('') }}
+  when: '"0 " not in clientlease_status.stdout[0]'
+
+- name: "Update {{ dhcp_leave.value.address }} dhcp server"
+  routeros_command:
+    commands: 
+      - >
+        /ip dhcp-server lease set [ find client-id="{{ dhcp_leave.value.clientId }}" ]
+        client-id="{{ dhcp_leave.value.clientId }}"
+        address="{{ dhcp_leave.value.address }}"
+        comment="{{ dhcp_leave.value.comment | default('') }}"
+        server="{{ dhcp_leave.value.server }}"
+        disabled="{{ dhcp_leave.value.disabled | default('no') }}"
+        mac-address="{{ dhcp_leave.value.macAddress }}"
+  when: '"0 " in clientlease_status.stdout[0]'

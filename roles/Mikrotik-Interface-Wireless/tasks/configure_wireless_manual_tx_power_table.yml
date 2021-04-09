@@ -1,0 +1,23 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - >
+        /interface wireless manual-tx-power-table set [ find name="{{ wireless_interface['value']['name'] }}" ]
+          comment="{{ wireless_interface['value']['comment'] | default('') }}"
+          {% if wireless_interface['value']['other_params'] is defined %}{{ wireless_interface['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Update wireless manual-tx-power-table {{ wireless_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface wireless manual-tx-power-table set [ find name="{{ wireless_interface['value']['name'] }}" ]
+        comment="{{ wireless_interface['value']['comment'] | default('') }}"
+        {% if wireless_interface['value']['other_params'] is defined %}{{ wireless_interface['value']['other_params'] }}{% endif %}
+  register: update_wireless_manual_tx_power_table_status
+
+- name: "[DEBUG] Update wireless manual-tx-power-table {{ wireless_interface['value']['name'] }}"
+  debug:
+    msg: "{{ update_wireless_manual_tx_power_table_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
