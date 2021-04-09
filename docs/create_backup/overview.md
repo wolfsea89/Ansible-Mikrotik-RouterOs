@@ -35,6 +35,7 @@ Użycie roli
         input_role_ansible_host:     "10.0.0.1"
         input_role_ansible_user:     "user_tech"
         input_role_ansible_password: "<< password >>"
+        input_role_debug:            false
 ```
 
 
