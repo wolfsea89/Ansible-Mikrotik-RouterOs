@@ -1,0 +1,25 @@
+input_role_debug: false
+input_role_list_interfaces:
+  list_wan:
+    name: LIST-WAN
+    interfaces:
+      - name: "{{ input_role_ethernet_interfaces.ether1.name }}"
+        comment: "WAN"
+  list_lan_users:
+    name: LIST-LAN-USERS
+    interfaces:
+      - name: "{{ input_role_wireless_interfaces.wlan1.name }}"
+      - name: "{{ input_role_wireless_interfaces.wlan2.name }}"
+        comment: "LAN-USERS"
+  list_lan_admins:
+    name: LIST-LAN-ADMINS
+    interfaces:
+      - name: "{{ input_role_ethernet_interfaces.ether5.name }}"
+        comment: "LAN-ADMINS"
+  list_lan_proxmox:
+    name: LIST-LAN-PROXMOX
+    interfaces:
+      - name: "{{ input_role_ethernet_interfaces.ether2.name }}"
+      - name: "{{ input_role_ethernet_interfaces.ether3.name }}"
+      - name: "{{ input_role_ethernet_interfaces.ether4.name }}"
+        comment: "LAN-PROXMOX"
