@@ -1,0 +1,30 @@
+---
+- name: Configure VLAN interfaces
+  include: configure_vlan_interface.yml
+  loop: "{{ lookup('dict', input_role_vlan_interfaces) }}"
+  loop_control:
+    loop_var: vlan_interface
+  when:
+    - input_role_vlan_interfaces is defined
+    - vlan_interface.key != "default"
+
+- name: Configure ip address for interface
+  include: configure_ip_address.yml
+  loop: "{{ lookup('dict', input_role_vlan_interfaces) }}"
+  loop_control:
+    loop_var: vlan_interface
+  when:
+    - input_role_vlan_interfaces is defined
+    - vlan_interface.value.address is defined
+    - vlan_interface.value.network is defined
+    - vlan_interface.key != "default"
+
+- name: Configure graphing interface
+  include: configure_graphing.yml
+  loop: "{{ lookup('dict', input_role_vlan_interfaces) }}"
+  loop_control:
+    loop_var: bridge
+  when:
+    - input_role_vlan_interfaces is defined
+    - vlan_interface.value.graphing is defined
+    - vlan_interface.key != "default"

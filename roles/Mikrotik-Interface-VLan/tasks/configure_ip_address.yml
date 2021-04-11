@@ -1,0 +1,64 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip address print where address="{{ vlan_interface['value']['address'] }}" interface={{ vlan_interface['value']['name'] }}
+      - >
+        /ip address add
+          address={{ vlan_interface['value']['address'] }}
+          network={{ vlan_interface['value']['network'] }}
+          interface={{ vlan_interface['value']['name'] }}
+          comment="{{ vlan_interface['value']['comment'] | default('') }}"
+      - >
+        /ip address set [ find address="{{ vlan_interface['value']['address'] }}" ]
+          network={{ vlan_interface['value']['network'] }}
+          interface={{ vlan_interface['value']['name'] }}
+          comment="{{ vlan_interface['value']['comment'] | default('') }}"
+  when: input_role_debug == true
+
+- name: "Check is set ip address for {{ vlan_interface['key'] }}"
+  routeros_command:
+    commands: /ip address print where address="{{ vlan_interface['value']['address'] }}" interface={{ vlan_interface['value']['name'] }}
+  register:  vlan_interface_ip_status
+
+- name: "[DEBUG] Check is set ip address for {{ vlan_interface['key']  }} output"
+  debug:
+    msg: "{{ vlan_interface_ip_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add ip address for {{ vlan_interface['key']  }} - {{ vlan_interface['value']['address'] }}"
+  routeros_command:
+    commands: >
+      /ip address add
+        address={{ vlan_interface['value']['address'] }}
+        network={{ vlan_interface['value']['network'] }}
+        interface={{ vlan_interface['value']['name'] }}
+        comment="{{ vlan_interface['value']['comment'] | default('') }}"
+  when:
+    - '" 0 " not in vlan_interface_ip_status.stdout[0]'
+  register: add_vlan_interface_ip_status
+
+- name: "[DEBUG] Add ip address for {{ vlan_interface['key']  }} - {{ vlan_interface['value']['address'] }} output"
+  debug:
+    msg: "{{ add_vlan_interface_ip_status.stdout_lines }}"
+  when:
+    - add_vlan_interface_ip_status.stdout_lines is defined
+    - input_role_debug == true
+
+- name: "Update ip address for {{ vlan_interface['key']  }} - {{ vlan_interface['value']['address'] }}"
+  routeros_command:
+    commands: >
+      /ip address set [ find address="{{ vlan_interface['value']['address'] }}" ]
+      network={{ vlan_interface['value']['network'] }}
+      interface={{ vlan_interface['value']['name'] }}
+      comment="{{ vlan_interface['value']['comment'] | default('') }}"
+  when:
+    - '" 0 " in vlan_interface_ip_status.stdout[0]'
+  register: update_vlan_interface_ip_status
+
+- name: "[DEBUG] Update ip address for {{ vlan_interface['key']  }} - {{ vlan_interface['value']['address'] }}"
+  debug:
+    msg: "{{ update_vlan_interface_ip_status.stdout_lines }}"
+  when:
+    - update_vlan_interface_ip_status.stdout_lines is defined
+    - input_role_debug == true

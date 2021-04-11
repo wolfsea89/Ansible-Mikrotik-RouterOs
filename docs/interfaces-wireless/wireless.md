@@ -34,22 +34,22 @@ Czynności jakie wykonuje rola:
         wpa2-pre-shared-key=PaSSw0rd!
     ```
 3. Ustawia adress IP dla interface
-  ```
-    /ip address add address=10.0.0.4/24 interface=WiFi-LAN-01 network=10.0.0.0
-  ```
+    ```
+      /ip address add address=10.0.0.4/24 interface=WiFi-LAN-01 network=10.0.0.0
+    ```
 4. Ustawia graphing dla interface
-  ```
-    /tool graphing interface add
-        interface=WiFi-LAN-01
-        store-on-disk=no
-        allow-address=10.0.0.0/8
-  ```
+    ```
+      /tool graphing interface add
+          interface=WiFi-LAN-01
+          store-on-disk=no
+          allow-address=10.0.0.0/8
+    ```
 
 Użycie roli
 =========
 
 ```
-- name: Mikrotik Interface Wireless
+- name: Mikrotik Wireless Interface
   hosts: routeros
   tasks:
     - include_role:

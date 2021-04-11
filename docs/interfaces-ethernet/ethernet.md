@@ -10,23 +10,23 @@ Czynności jakie wykonuje rola:
       /interface ethernet set [ find default-name=ether2 ] name=LAN-01
     ```
 2. Ustawia adress IP dla interface
-  ```
-    /ip address add address=10.0.0.4/24 interface=WiFi-LAN-01 network=10.0.0.0
-  ```
+    ```
+      /ip address add address=10.0.0.4/24 interface=WiFi-LAN-01 network=10.0.0.0
+    ```
 3. Ustawia graphing dla interface
-  ```
-    /tool graphing interface add
-        interface=WiFi-LAN-01
-        store-on-disk=no
-        allow-address=10.0.0.0/8
-  ```
+    ```
+      /tool graphing interface add
+          interface=WiFi-LAN-01
+          store-on-disk=no
+          allow-address=10.0.0.0/8
+    ```
 
 
 Użycie roli
 =========
 
 ```
-- name: Mikrotik Interface Ethernet
+- name: Mikrotik Ethernet Interface
   hosts: routeros
   tasks:
     - include_role:
