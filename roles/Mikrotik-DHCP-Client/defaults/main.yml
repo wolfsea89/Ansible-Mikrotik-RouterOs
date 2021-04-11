@@ -1,4 +1,4 @@
 ---
 inventory_group_routeros_dhcp_clients:
-  - comment: "WAN-01 - VECTRA"
+  - comment: "WAN-01"
     interface: "WAN-01"
