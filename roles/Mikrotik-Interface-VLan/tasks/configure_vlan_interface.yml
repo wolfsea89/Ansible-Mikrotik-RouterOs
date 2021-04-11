@@ -1,0 +1,68 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /interface vlan print from="{{ vlan_interface['value']['name'] }}"
+      - >
+        /interface vlan add
+          name={{ vlan_interface['value']['name'] }}
+          interface="{{ vlan_interface['value']['interface'] }}"
+          vlan-id={{ vlan_interface['value']['vlan-id'] }}
+          comment="{{ vlan_interface['value']['comment'] | default('') }}"
+          {% if vlan_interface['value']['other_params'] is defined %}{{ vlan_interface['value']['other_params'] }}{% endif %}
+      - >
+        /interface vlan set [find name={{ vlan_interface['value']['name'] }}]
+          interface="{{ vlan_interface['value']['interface'] }}"
+          vlan-id={{ vlan_interface['value']['vlan-id'] }}
+          comment="{{ vlan_interface['value']['comment'] | default('') }}"
+          {% if vlan_interface['value']['other_params'] is defined %}{{ vlan_interface['value']['other_params'] }}{% endif %}
+  when: '"no such item" not in vlan_interface_status.stdout[0]'
+  when: input_role_debug == true
+
+- name: "Check: {{ vlan_interface['value']['name'] }} is vlan interface exist"
+  routeros_command:
+    commands: >
+        /interface vlan print from="{{ vlan_interface['value']['name'] }}"
+  register: vlan_interface_status
+
+- name: "[DEBUG] Check: {{ vlan_interface['value']['name'] }} is vlan interface exist"
+  debug:
+    msg: "{{ vlan_interface_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add VLAN interface {{ vlan_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface vlan add
+        name={{ vlan_interface['value']['name'] }}
+        interface="{{ vlan_interface['value']['interface'] }}"
+        vlan-id={{ vlan_interface['value']['vlan-id'] }}
+        comment="{{ vlan_interface['value']['comment'] | default('') }}"
+        {% if vlan_interface['value']['other_params'] is defined %}{{ vlan_interface['value']['other_params'] }}{% endif %}
+  when: '"no such item" in vlan_interface_status.stdout[0]'
+  register: add_vlan_interface_status
+
+- name: "[DEBUG] Add VLAN interface {{ vlan_interface['value']['name'] }} output"
+  debug:
+    msg: "{{ add_vlan_interface_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_vlan_interface_status.stdout_lines is defined
+
+- name: "Update VLAN interface {{  vlan_interface['value']['name']  }}"
+  routeros_command:
+    commands: >
+      /interface vlan set [find name={{ vlan_interface['value']['name'] }}]
+        interface="{{ vlan_interface['value']['interface'] }}"
+        vlan-id={{ vlan_interface['value']['vlan-id'] }}
+        comment="{{ vlan_interface['value']['comment'] | default('') }}"
+        {% if vlan_interface['value']['other_params'] is defined %}{{ vlan_interface['value']['other_params'] }}{% endif %}
+  when: '"no such item" not in vlan_interface_status.stdout[0]'
+  register: update_vlan_interface_status
+
+- name: "[DEBUG] Update VLAN interface {{ vlan_interface['value']['name'] }} output"
+  debug:
+    msg: "{{ update_vlan_interface_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_vlan_interface_status.stdout_lines is defined

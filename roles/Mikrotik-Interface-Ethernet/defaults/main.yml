@@ -5,7 +5,7 @@ input_role_ethernet_interfaces:
     comment: "WAN-01"
     graphing:
       allow_address: 0.0.0.0/0
-      store_on_disk: "no"
+      store-on-disk: "no"
   ether2:
     name: "LAN-01"
     comment: ""
@@ -13,7 +13,7 @@ input_role_ethernet_interfaces:
     network: "10.0.0.0"
     graphing:
       allow_address: 0.0.0.0/0
-      store_on_disk: "no"
+      store-on-disk: "no"
   ether3:
     name: "LAN-02"
     comment: ""
@@ -21,20 +21,20 @@ input_role_ethernet_interfaces:
     network: "10.0.0.0"
     graphing:
       allow_address: 0.0.0.0/0
-      store_on_disk: "no"
+      store-on-disk: "no"
   ether4:
     name: "LAN-03"
     comment: ""
     address: "10.0.0.3/24"
     network: "10.0.0.0"
     graphing:
-      allow_address: 0.0.0.0/0
-      store_on_disk: "no"
+      allow-address: 0.0.0.0/0
+      store-on-disk: "no"
   ether5:
     name: "LAN-04"
     comment: "LAN-04 - Admins Network"
     address: "10.254.0.1/24"
     network: "10.254.0.1"
     graphing:
-      allow_address: 0.0.0.0/0
-      store_on_disk: "no"
+      allow-address: 0.0.0.0/0
+      store-on-disk: "no"

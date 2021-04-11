@@ -1,0 +1,13 @@
+input_role_debug: false
+input_role_vlan_interfaces:
+  default: # if one element in dictionary
+  vlan_prod:
+    name: VLAN-PROD
+    interface: LAN-PROXMOX
+    vlan_id: 10
+    comment: "VLAN-PROD"
+    address: "10.3.0.1/24"
+    network: "10.3.0.0"
+    graphing:
+      allow-address: 0.0.0.0/0
+      store-on-disk: "no"

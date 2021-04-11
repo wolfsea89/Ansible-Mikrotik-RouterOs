@@ -20,7 +20,7 @@ Użycie roli
 =========
 
 ```
-- name: Mikrotik Interface Bridge
+- name: Mikrotik List Interface
   hosts: routeros
   tasks:
     - include_role:
