@@ -20,6 +20,7 @@ Użycie roli
     - include_role:
         name: Mikrotik-DHCP-Client
       vars:
+        input_role_debug: true
         input_role_dhcp_clients:
           - comment: "WAN-01"
             interface: "WAN-01"

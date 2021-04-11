@@ -1,13 +1,3 @@
-/interface bridge
-add comment="BRIDGE - Proxmox" name=LAN-PROXMOX
-add comment="BRIDGE - Users" name=LAN-Users
-/interface vlan
-add comment=VLAN-PROD interface=LAN-PROXMOX name=VLAN-PROD vlan-id=10
-/interface list
-add name=LIST-WAN
-add name=LIST-LAN-USERS
-add name=LIST-LAN-PROXMOX
-add name=LIST-LAN-ADMINS
 /ip pool
 add comment="Users Network Pool" name=users-network-pool ranges=\
     10.1.0.2-10.1.0.254
@@ -35,32 +25,11 @@ add name=prometheus policy="read,web,api,!local,!telnet,!ssh,!ftp,!reboot,!wri\
     te,!policy,!test,!winbox,!password,!sniff,!sensitive,!romon,!dude,!tikapp"
 add name=ansible policy="local,telnet,ssh,ftp,reboot,read,write,policy,test,wi\
     nbox,password,web,sniff,sensitive,api,romon,dude,tikapp"
-/interface bridge port
-add bridge=LAN-Users interface=LIST-LAN-USERS
-add bridge=LAN-PROXMOX interface=LIST-LAN-PROXMOX trusted=yes
 /ip neighbor discovery-settings
 set discover-interface-list=LIST-LAN-USERS
-/interface list member
-add interface=WiFi-LAN-01 list=LIST-LAN-USERS
-add comment=LAN-USERS interface=WiFi-LAN-02 list=LIST-LAN-USERS
-add comment=LAN-WAN interface=WAN-01 list=LIST-WAN
-add interface=LAN-01 list=LIST-LAN-PROXMOX
-add interface=LAN-02 list=LIST-LAN-PROXMOX
-add comment=LAN-PROD interface=LAN-03 list=LIST-LAN-PROXMOX
-add comment=LAN-ADMINS interface=LAN-04 list=LIST-LAN-ADMINS
 /ip address
-add address=10.1.0.1/24 comment="BRIDGE - Users" interface=LAN-Users network=\
-    10.1.0.0
-add address=10.2.0.1/24 comment="BRIDGE - Proxmox" interface=LAN-PROXMOX \
-    network=10.2.0.0
-add address=10.2.0.1/16 comment="BRIDGE - Proxmox" interface=LAN-PROXMOX \
-    network=10.2.0.0
-add address=10.3.0.1/24 comment=VLAN-PROD interface=VLAN-PROD network=\
-    10.3.0.0
 /ip cloud
 set ddns-enabled=yes ddns-update-interval=1h
-/ip dhcp-client
-add comment="WAN-01 - VECTRA" disabled=no interface=WAN-01
 /ip dhcp-server alert
 add disabled=no interface=LAN-04 valid-server=00:00:00:00:00:00
 add disabled=no interface=LAN-Users valid-server=00:00:00:00:00:00
@@ -204,9 +173,6 @@ set enabled=yes
 /tool graphing
 set store-every=24hours
 /tool graphing interface
-add interface=LAN-Users store-on-disk=no
-add interface=LAN-PROXMOX store-on-disk=no
-add interface=VLAN-PROD store-on-disk=no
 /tool graphing queue
 add store-on-disk=no
 /tool graphing resource
