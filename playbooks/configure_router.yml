@@ -32,7 +32,11 @@
         name: Mikrotik-Interface-Ethernet
       vars:
         input_role_ethernet_interfaces:        "{{ inventory_host_routeros_ethernet_interfaces }}"
-        input_role_bridges_interfaces:         "{{ inventory_group_routeros_bridges_interfaces }}"
+
+    - include_role:
+        name: Mikrotik-Interface-Bridge
+      vars:
+        input_role_bridges_interfaces:         "{{ inventory_host_routeros_bridges_interfaces }}"
         input_role_list_interfaces:            "{{ inventory_group_routeros_list_interfaces }}"
         input_role_vlan_interfaces:            "{{ inventory_group_routeros_vlan_interfaces }}"
         input_role_wireless_interfaces:        "{{ inventory_host_routeros_wireless_interfaces }}"
