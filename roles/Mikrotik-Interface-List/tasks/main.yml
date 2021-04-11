@@ -1,0 +1,9 @@
+---
+- name: Configure interface list
+  include: configure_list_interface.yml
+  loop: "{{ lookup('dict', input_role_lists_interfaces) }}"
+  loop_control:
+    loop_var: interface_list
+  when:
+    - input_role_lists_interfaces is defined
+    - interface_list.key != "default"

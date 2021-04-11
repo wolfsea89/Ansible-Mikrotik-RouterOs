@@ -2,7 +2,7 @@ input_role_debug: false
 input_role_ethernet_interfaces:
   ether1:
     name: "WAN-01"
-    comment: "WAN-01 - VECTRA"
+    comment: "WAN-01"
     graphing:
       allow_address: 0.0.0.0/0
       store_on_disk: "no"
