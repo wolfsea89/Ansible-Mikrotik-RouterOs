@@ -1,0 +1,56 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /interface bridge port print where bridge="{{ bridge_interface['value']['name'] }}" interface={{ bridge_port['name']}}
+      - >
+        /interface bridge port add
+          bridge="{{ bridge_interface['value']['name'] }}"
+          interface="{{ bridge_port['name'] }}"
+          trusted={{ bridge_port['trusted'] }}
+      - >
+        /interface bridge port [find bridge="{{ bridge_interface['value']['name'] }}" interface={{ bridge_port['name']}} ]
+          trusted={{ bridge_port['trusted'] }}
+  when: input_role_debug == true
+
+- name: "Check: Port {{ bridge_port['name'] }} in {{ bridge_interface['value']['name'] }} is exist"
+  routeros_command:
+    commands: /interface bridge port print where bridge="{{ bridge_interface['value']['name'] }}" interface={{ bridge_port['name']}}
+  register: bridge_port_status
+
+- name: "[DEBUG] Check: Port {{ bridge_port['name'] }} in {{ bridge_interface['value']['name'] }} is exist"
+  debug:
+    msg: "{{ bridge_port_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add port {{ bridge_port['name'] }} in {{ bridge_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface bridge port add
+        bridge="{{ bridge_interface['value']['name'] }}"
+        interface="{{ bridge_port['name'] }}"
+        trusted={{ bridge_port['trusted'] }}
+  when: '" 0 " in bridge_port_status.stdout_lines[0]'
+  register: add_bridge_port_status
+
+- name: "[DEBUG] Add port {{ bridge_port['name'] }} in {{ bridge_interface['value']['name'] }} output"
+  debug:
+    msg: "{{ add_bridge_port_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_bridge_port_status.stdout_lines is defined
+
+- name: "Update port {{ bridge_port['name'] }} in {{ bridge_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface bridge port set [find bridge="{{ bridge_interface['value']['name'] }}" interface={{ bridge_port['name']}} ]
+        trusted={{ bridge_port['trusted'] }}
+  when: '" 0 " not in bridge_port_status.stdout_lines[0]'
+  register: update_bridge_port_status
+
+- name: "[DEBUG] Update port {{ bridge_port['name'] }} in {{ bridge_interface['value']['name'] }} output"
+  debug:
+    msg: "{{ update_bridge_port_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_bridge_port_status.stdout_lines is defined

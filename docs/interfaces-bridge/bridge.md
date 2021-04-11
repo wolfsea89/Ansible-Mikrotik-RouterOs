@@ -3,16 +3,16 @@ Konfiguracja interfejsów Bridge
 
 Przykład inventory:
 ```
-inventory_group_routeros_bridges_interfaces:
+input_role_bridges_interfaces:
   lan_prod:
     name: "LAN-PROXMOX"           # Interface Bridge Name
     comment: "BRIDGE - Proxmox"   # Comment
     address: "10.2.0.1/16"        # Address
     network: "10.2.0.0"           # Network
     graphing:                     # Enable graphing (optional)
-      allow_address: 0.0.0.0/0    # Allow address do graphing
-      store_on_disk: "no"         # Store data on disk
-    other_params: ""              # Optional
+      allow-address: 0.0.0.0/0    # Allow address do graphing
+      store-on_disk: "no"         # Store data on disk
+    other-params: ""              # Optional
     interfaces:                   # Interface list
       - name: LIST-LAN-PROXMOX    #   Interface name
         trusted: "yes"            #   Is inteface trusted?
@@ -22,8 +22,8 @@ inventory_group_routeros_bridges_interfaces:
     address: "10.1.0.1/24"
     network: "10.1.0.0"
     graphing:
-      allow_address: 0.0.0.0/0
-      store_on_disk: "no"
+      allow-address: 0.0.0.0/0
+      store-on-disk: "no"
     interfaces:
       - name: LIST-LAN-USERS
         trusted: "no"
@@ -31,7 +31,9 @@ inventory_group_routeros_bridges_interfaces:
 
 Przykładowa komenda:
 ```
-/interface bridge add comment="BRIDGE - Proxmox" name=LAN-PROXMOX trusted=yes
+/interface bridge add comment="BRIDGE - Proxmox" name=LAN-PROXMOX
+/interface bridge port add bridge="LAN-Users" interface="LIST-LAN-USERS" trusted=no",
 /ip address add address=10.1.0.1/24 interface=LAN-PROXMOX network=10.1.0.0
 ```
+
 [Powrót](../../README.md)

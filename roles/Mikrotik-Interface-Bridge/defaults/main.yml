@@ -1,0 +1,24 @@
+input_role_debug: false
+input_role_bridges_interfaces:
+  lan_prod:
+    name: "LAN-PROXMOX"
+    comment: "BRIDGE - Proxmox"
+    address: "10.2.0.1/16"
+    network: "10.2.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+    interfaces:
+      - name: LIST-LAN-PROXMOX
+        trusted: "yes"
+  lan_users:
+    name: "LAN-Users"
+    comment: "BRIDGE - Users"
+    address: "10.1.0.1/24"
+    network: "10.1.0.0"
+    graphing:
+      allow_address: 0.0.0.0/0
+      store_on_disk: "no"
+    interfaces:
+      - name: LIST-LAN-USERS
+        trusted: "no"
