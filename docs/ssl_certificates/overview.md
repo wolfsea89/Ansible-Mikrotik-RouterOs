@@ -16,14 +16,8 @@ Czynności jakie wykonuje rola:
   ```
   Przykładowa komenda:
   ```
-  /ip dhcp-server network add            \
-    address=10.1.0.0/24                  \
-    boot-file-name=/tftpboot/pxelinux.0  \
-    comment="Users Network"              \
-    dns-server=10.1.0.1                  \
-    domain=rachuna.net                   \
-    gateway=10.1.0.1                     \
-    next-server=10.3.0.1                 \
+    /certificate import file-name=ssl.crt name="router.rachuna.net" passphrase=""
+    /certificate import file-name=ssl.key name="router.rachuna.net" passphrase=""
   ```
 
 
