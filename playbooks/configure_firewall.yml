@@ -16,5 +16,6 @@
     - include_role:
         name: Mikrotik-Firewall
       vars:
-        input_role_firewall_rules:     "{{ inventory_group_routeros_firewall_rules }}"
-        input_role_firewall_nat_rules: "{{ inventory_group_routeros_firewall_nat_rules }}"
+        input_role_firewall_rules:             "{{ inventory_group_routeros_firewall_rules }}"
+        input_role_firewall_nat_rules:         "{{ inventory_group_routeros_firewall_nat_rules }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"

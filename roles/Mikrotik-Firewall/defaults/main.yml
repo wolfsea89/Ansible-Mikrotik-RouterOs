@@ -1,84 +1,85 @@
 ---
+input_role_debug: false
 input_role_firewall_rules:
   dhcp_from_wan:
     action: drop
     chain: input
     comment: "DHCP from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: dccp
   ssh_from_wan:
     action: reject
     chain: input
     comment: "SSH from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: tcp
-    reject_with: icmp-network-unreachable
-    dst_port: 22
+    reject-with: icmp-network-unreachable
+    dst-port: 22
   ftp_data_from_wan:
     action: reject
     chain: input
     comment: "FTP-DATA from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: tcp
-    reject_with: icmp-network-unreachable
-    dst_port: 20
+    reject-with: icmp-network-unreachable
+    dst-port: 20
   ftp_from_wan:
     action: reject
     chain: input
     comment: "FTP from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: tcp
-    reject_with: icmp-network-unreachable
-    dst_port: 21
+    reject-with: icmp-network-unreachable
+    dst-port: 21
   telnet_from_wan:
     action: reject
     chain: input
     comment: "Telnet from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: tcp
-    reject_with: icmp-network-unreachable
-    dst_port: 23
+    reject-with: icmp-network-unreachable
+    dst-port: 23
   smtp_from_wan:
     action: reject
     chain: input
     comment: "SMTP from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: tcp
-    reject_with: icmp-network-unreachable
-    dst_port: 25
+    reject-with: icmp-network-unreachable
+    dst-port: 25
   dns_from_wan:
     action: reject
     chain: input
     comment: "DNS from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: tcp
-    reject_with: icmp-network-unreachable
-    dst_port: 53
+    reject-with: icmp-network-unreachable
+    dst-port: 53
   http_from_wan:
     action: reject
     chain: input
     comment: "HTTP from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: tcp
-    reject_with: icmp-network-unreachable
-    dst_port: 80
+    reject-with: icmp-network-unreachable
+    dst-port: 80
   windbox_from_wan:
     action: reject
     chain: input
     comment: "Windbox from WAN"
     disabled: "no"
-    in_interface_list: LIST-WAN
+    in-interface-list: LIST-WAN
     protocol: tcp
-    reject_with: icmp-network-unreachable
-    dst_port: 8291
+    reject-with: icmp-network-unreachable
+    dst-port: 8291
   forward_from_wan:
     action: accept
     chain: forward
@@ -90,25 +91,25 @@ input_role_firewall_nat_rules:
     chain: srcnat
     comment: "Users Network"
     disabled: "no"
-    out_interface_list: LIST-WAN
-    src_address: 10.1.0.0/24
+    out-interface-list: LIST-WAN
+    src-address: 10.1.0.0/24
     log: "no"
-    log_prefix: ""
+    log-prefix: ""
   proxmox_network:
     action: masquerade
     chain: srcnat
     comment: "Proxmox Network"
     disabled: "no"
-    out_interface_list: LIST-WAN
-    src_address: 10.2.0.0/24
+    out-interface-list: LIST-WAN
+    src-address: 10.2.0.0/24
     log: "no"
-    log_prefix: ""
+    log-prefix: ""
   prod_network:
     action: masquerade
     chain: srcnat
     comment: "Prod Network"
     disabled: "no"
-    out_interface_list: LIST-WAN
-    src_address: 10.3.0.0/24
+    out-interface-list: LIST-WAN
+    src-address: 10.3.0.0/24
     log: "no"
-    log_prefix: ""
+    log-prefix: ""

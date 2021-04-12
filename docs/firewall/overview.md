@@ -30,36 +30,36 @@ Użycie roli
             chain: input
             comment: "DHCP from WAN"
             disabled: "no"
-            in_interface_list: LIST-WAN
+            in-interface-list: LIST-WAN
             protocol: dccp
           ssh_from_wan:
             action: reject
             chain: input
             comment: "SSH from WAN"
             disabled: "no"
-            in_interface_list: LIST-WAN
+            in-interface-list: LIST-WAN
             protocol: tcp
-            reject_with: icmp-network-unreachable
-            dst_port: 22
+            reject-with: icmp-network-unreachable
+            dst-port: 22
         input_role_firewall_nat_rules:
           users_network:
             action: masquerade
             chain: srcnat
             comment: "Users Network"
             disabled: "no"
-            out_interface_list: LIST-WAN
-            src_address: 10.1.0.0/24
+            out-interface-list: LIST-WAN
+            src-address: 10.1.0.0/24
             log: "no"
-            log_prefix: ""
+            log-prefix: ""
           proxmox_network:
             action: masquerade
             chain: srcnat
             comment: "Proxmox Network"
             disabled: "no"
-            out_interface_list: LIST-WAN
-            src_address: 10.2.0.0/24
+            out-interface-list: LIST-WAN
+            src-address: 10.2.0.0/24
             log: "no"
-            log_prefix: ""
+            log-prefix: ""
 ```
 
 
