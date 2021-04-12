@@ -1,14 +1,51 @@
 ---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg: /system clock set time-zone-name="{{ input_role_ntp_client['time-zone-name'] }}"
+  when:
+    - input_role_debug == true
+    - input_role_ntp_client['time-zone-name'] is defined
+
 - name: Configure system clock
   routeros_command:
-    commands: /system clock set time-zone-name="{{ input_role_ntp_client.time_zone_name }}"
-  when: input_role_ntp_client.time_zone_name
+    commands: /system clock set time-zone-name="{{ input_role_ntp_client['time-zone-name'] }}"
+  when: input_role_ntp_client['time-zone-name']
+  register: time_zone_name_status
+
+- name: "[DEBUG] Configure system clock"
+  debug:
+    msg: "{{ time_zone_name_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - time_zone_name_status.stdout_lines is defined
+
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg: >
+       /system ntp client set
+        enabled=yes
+        primary-ntp="{{ input_role_ntp_client['primary-ntp'] }}"
+        secondary-ntp="{{ input_role_ntp_client['secondary-ntp'] }}"
+  when:
+    - input_role_debug == true
+    - input_role_ntp_client['primary-ntp'] is defined
+    - input_role_ntp_client['secondary-ntp'] is defined
 
 - name: Configure ntp client
   routeros_command:
     commands: >
       /system ntp client set
-      enabled=yes 
-      primary-ntp="{{ input_role_ntp_client.primary_ntp }}"
-      secondary-ntp="{{ input_role_ntp_client.secondary_ntp }}"
-  when: input_role_ntp_client.primary_ntp
+        enabled=yes
+        primary-ntp="{{ input_role_ntp_client['primary-ntp'] }}"
+        secondary-ntp="{{ input_role_ntp_client['secondary-ntp'] }}"
+  when:
+    - input_role_ntp_client['primary-ntp'] is defined
+    - input_role_ntp_client['secondary-ntp'] is defined
+  register: ntp_client_status
+
+- name: "[DEBUG] Configure ntp client"
+  debug:
+    msg: "{{ ntp_client_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - ntp_client_status.stdout_lines is defined
