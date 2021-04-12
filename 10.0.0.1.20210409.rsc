@@ -1,21 +1,3 @@
-/ip pool
-add comment="Users Network Pool" name=users-network-pool ranges=\
-    10.1.0.2-10.1.0.254
-add comment="Admins Network Pool" name=admins-network-pool ranges=\
-    10.254.0.2-10.254.0.10
-add comment="Prod Network Pool" name=prod-network-pool ranges=\
-    10.3.0.2-10.3.0.254
-add comment="Proxmox Network Pool" name=proxmox-network-pool ranges=\
-    10.2.0.2-10.2.0.254
-/ip dhcp-server
-add address-pool=admins-network-pool disabled=no interface=LAN-04 name=\
-    admins-network-dhcp
-add address-pool=proxmox-network-pool disabled=no interface=LAN-PROXMOX name=\
-    proxmox-network-dhcp
-add address-pool=users-network-pool disabled=no insert-queue-before=bottom \
-    interface=LAN-Users lease-time=23h59m59s name=users-network-dhcp
-add address-pool=prod-network-pool disabled=no insert-queue-before=bottom \
-    interface=VLAN-PROD name=prod-network-dhcp
 /snmp community
 set [ find default=yes ] disabled=yes
 /user group
@@ -27,72 +9,11 @@ add name=ansible policy="local,telnet,ssh,ftp,reboot,read,write,policy,test,wi\
     nbox,password,web,sniff,sensitive,api,romon,dude,tikapp"
 /ip neighbor discovery-settings
 set discover-interface-list=LIST-LAN-USERS
-/ip address
 /ip cloud
 set ddns-enabled=yes ddns-update-interval=1h
 /ip dhcp-server alert
 add disabled=no interface=LAN-04 valid-server=00:00:00:00:00:00
 add disabled=no interface=LAN-Users valid-server=00:00:00:00:00:00
-/ip dhcp-server lease
-add address=10.1.0.10 client-id=1:30:24:32:ba:55:3b mac-address=\
-    30:24:32:BA:55:3B server=users-network-dhcp
-add address=10.1.0.50 client-id=1:f8:ac:65:29:6e:72 mac-address=\
-    F8:AC:65:29:6E:72 server=users-network-dhcp
-add address=10.2.0.2 client-id=\
-    ff:6b:55:2f:63:0:1:0:1:27:dd:36:e2:c4:34:6b:55:2f:63 mac-address=\
-    C4:34:6B:55:2F:63 server=proxmox-network-dhcp
-add address=10.1.0.150 client-id=1:9c:28:f7:8c:99:2c mac-address=\
-    9C:28:F7:8C:99:2C server=users-network-dhcp
-add address=10.1.0.200 client-id=1:ec:9c:32:5c:66:c8 mac-address=\
-    EC:9C:32:5C:66:C8 server=users-network-dhcp
-add address=10.3.0.2 client-id=\
-    ff:ca:53:9:5a:0:2:0:0:ab:11:df:24:e1:73:8a:46:af:37 mac-address=\
-    06:7B:D4:04:D0:3C server=prod-network-dhcp
-add address=10.1.0.151 client-id=1:7a:a8:ef:2a:6c:e5 mac-address=\
-    7A:A8:EF:2A:6C:E5 server=users-network-dhcp
-add address=10.3.0.3 client-id=\
-    ff:ca:53:9:5a:0:2:0:0:ab:11:e9:f6:ef:9d:1f:1f:88:4a mac-address=\
-    6E:9A:F4:89:42:E5 server=prod-network-dhcp
-add address=10.1.0.2 client-id=1:a4:b1:c1:9:66:72 mac-address=\
-    A4:B1:C1:09:66:72 server=users-network-dhcp
-add address=10.1.0.100 client-id=1:8:0:27:66:7d:7 mac-address=\
-    08:00:27:66:7D:07 server=users-network-dhcp
-/ip dhcp-server network
-add address=10.1.0.0/24 boot-file-name=/tftpboot/pxelinux.0 comment=\
-    "Users Network" dns-server=10.1.0.1 domain=rachuna.net gateway=10.1.0.1 \
-    next-server=10.3.0.1
-add address=10.2.0.0/24 boot-file-name=/tftpboot/pxelinux.0 comment=\
-    "Proxmox Network" dns-server=10.2.0.1 domain=rachuna.net gateway=10.2.0.1 \
-    next-server=10.3.0.1
-add address=10.3.0.0/24 boot-file-name=/tftpboot/pxelinux.0 comment=\
-    "Proxmox Network" dns-server=10.3.0.1 domain=rachuna.net gateway=10.3.0.1 \
-    next-server=10.3.0.1
-add address=10.254.0.0/24 boot-file-name=/tftpboot/pxelinux.0 comment=\
-    "Admin Network" dns-server=10.254.0.1 domain=rachuna.net gateway=\
-    10.254.0.1 next-server=10.3.0.1
-/ip dns
-set allow-remote-requests=yes cache-max-ttl=1d servers=8.8.8.8,4.4.4.4 \
-    verify-doh-cert=yes
-/ip dns static
-add address=10.0.0.1 comment="Router Mikrotik" name=mr-rou-001.rachuna.net
-add address=10.0.0.1 name=router.rachuna.net
-add address=10.2.0.1 comment="Network Prod - Router" name=\
-    mr-rou-001.rachuna.pl
-add address=10.2.0.1 name=router.rachuna.net
-add address=10.2.0.2 comment="Network Prod - Kubernetes" name=\
-    mr-kube-02.rachuna.net
-add address=10.2.0.2 name=jenkins.k8s.rachuna.net
-add address=10.2.0.2 name=kubernetes-dashboard.k8s.rachuna.net
-add address=10.2.0.2 name=gitlab.k8s.rachuna.net
-add address=10.1.0.251 name=jenkins-slave-251.rachuna.net
-add address=10.1.0.253 name=jenkins-master-253.rachuna.net
-add address=10.2.0.2 comment="Network proxmox" name=proxmox-002.rachuna.net
-add address=10.3.0.2 comment="Prod network" name=docker-002.rachuna.net
-add address=10.3.0.2 name=pxe.rachuna.net
-add address=10.3.0.2 name=jenkins.rachuna.net
-add address=10.3.0.3 name=jenkins-slave-003.rachuna.net
-add address=10.1.0.2 comment=mr-vm-002 name=mr-vm-002.rachuna.net
-add address=10.1.0.100 comment=mr-vm-100 name=mr-vm-100.rachuna.net
 /ip firewall address-list
 add address=83.243.104.9 list=router.rachuna.net
 /ip firewall filter
