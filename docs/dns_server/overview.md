@@ -25,8 +25,8 @@ Użycie roli
         name: Mikrotik-DNS-Server
       vars:
         input_role_dns_parameters:
-          allow_remote_requests: "yes"
-          verify_doh_cert: "yes"
+          allow-remote-requests: "yes"
+          verify-doh-cert: "yes"
           servers:
             - 8.8.8.8
             - 4.4.4.4
