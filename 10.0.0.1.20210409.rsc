@@ -85,10 +85,6 @@ set winbox disabled=yes
 set enabled=yes
 /ip upnp
 set enabled=yes
-/system clock
-set time-zone-name=Europe/Warsaw
-/system ntp client
-set enabled=yes primary-ntp=194.146.251.100 secondary-ntp=194.146.251.101
 /system upgrade mirror
 set enabled=yes
 /tool graphing

@@ -25,9 +25,9 @@ Użycie roli
         name: Mikrotik-NTP-Client
       vars:
         input_role_ntp_client:
-          time_zone_name: "Europe/Warsaw"
-          primary_ntp: "194.146.251.100"
-          secondary_ntp: "194.146.251.101"
+          time-zone-name: "Europe/Warsaw"
+          primary-ntp: "194.146.251.100"
+          secondary-ntp: "194.146.251.101"
 ```
 
 
