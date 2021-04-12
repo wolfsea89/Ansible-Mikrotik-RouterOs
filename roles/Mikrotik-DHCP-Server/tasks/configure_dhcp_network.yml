@@ -1,32 +1,78 @@
 ---
-- name: "Check: {{ dhcp_network.value.address }} network is exist"
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip dhcp-server network print address="{{ dhcp_network['value']['address'] }}"
+      - >
+        /ip dhcp-server network add
+          address="{{ dhcp_network['value']['address'] }}"
+          comment="{{ dhcp_network['value']['comment'] }}"
+          dns-server="{{ dhcp_network['value']['dns-server'] }}"
+          gateway="{{ dhcp_network['value']['gateway'] }}"
+          domain="{{ dhcp_network['value']['domain'] | default('') }}"
+          next-server="{{ dhcp_network['value']['next-server'] | default('') }}"
+          boot-file-name="{{ dhcp_network['value']['boot-file-name'] | default('') }}"
+          {% if dhcp_network['value']['other_params'] is defined %}{{ dhcp_network['value']['other_params'] }}{% endif %}
+      - >
+        /ip dhcp-server network set [ find address="{{ dhcp_network['value']['address'] }}"]
+          comment="{{ dhcp_network['value']['comment'] }}"
+          dns-server="{{ dhcp_network['value']['dns-server'] }}"
+          gateway="{{ dhcp_network['value']['gateway'] }}"
+          domain="{{ dhcp_network['value']['domain'] | default('') }}"
+          next-server="{{ dhcp_network['value']['next-server'] | default('') }}"
+          boot-file-name="{{ dhcp_network['value']['boot-file-name'] | default('') }}"
+          {% if dhcp_network['value']['other_params'] is defined %}{{ dhcp_network['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Check: {{ dhcp_network['value']['address'] }} network is exist"
   routeros_command:
-    commands: /ip dhcp-server network print address="{{ dhcp_network.value.address }}"
+    commands: /ip dhcp-server network print address="{{ dhcp_network['value']['address'] }}"
   register: network_status
 
-- name: "Add {{ dhcp_network.value.address }} dhcp network"
+- name: "[DEBUG] Check: {{ dhcp_network['value']['address'] }} network is exist output"
+  debug:
+    msg: "{{ network_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add {{ dhcp_network['value']['address'] }} dhcp network"
   routeros_command:
     commands: >
       /ip dhcp-server network add
-      address="{{ dhcp_network.value.address }}"
-      comment="{{ dhcp_network.value.comment }}"
-      dns-server="{{ dhcp_network.value.dns_server }}"
-      gateway="{{ dhcp_network.value.gateway }}"
-      domain="{{ dhcp_network.value.domain | default('') }}"
-      next-server="{{ dhcp_network.value.next_server | default('') }}"
-      boot-file-name="{{ dhcp_network.value.boot_file_name | default('') }}"
-      {{ dhcp_network.value.other_params | default('') }}
+        address="{{ dhcp_network['value']['address'] }}"
+        comment="{{ dhcp_network['value']['comment'] }}"
+        dns-server="{{ dhcp_network['value']['dns-server'] }}"
+        gateway="{{ dhcp_network['value']['gateway'] }}"
+        domain="{{ dhcp_network['value']['domain'] | default('') }}"
+        next-server="{{ dhcp_network['value']['next-server'] | default('') }}"
+        boot-file-name="{{ dhcp_network['value']['boot-file-name'] | default('') }}"
+        {% if dhcp_network['value']['other_params'] is defined %}{{ dhcp_network['value']['other_params'] }}{% endif %}
   when: '"0" not in network_status.stdout[0]'
+  register: add_network_status
 
-- name: "Update {{ dhcp_network.value.address }} dhcp server"
+- name: "[DEBUG] Add {{ dhcp_network['value']['address'] }} dhcp network"
+  debug:
+    msg: "{{ add_network_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_network_status.stdout_lines is defined
+
+- name: "Update {{ dhcp_network['value']['address'] }} dhcp server"
   routeros_command:
     commands: >
-      /ip dhcp-server network set [ find address="{{ dhcp_network.value.address }}"]
-      comment="{{ dhcp_network.value.comment }}"
-      dns-server="{{ dhcp_network.value.dns_server }}"
-      gateway="{{ dhcp_network.value.gateway }}"
-      domain="{{ dhcp_network.value.domain | default('') }}"
-      next-server="{{ dhcp_network.value.next_server | default('') }}"
-      boot-file-name="{{ dhcp_network.value.boot_file_name | default('') }}"
-      {{ dhcp_network.value.other_params | default('') }}
+      /ip dhcp-server network set [ find address="{{ dhcp_network['value']['address'] }}"]
+        comment="{{ dhcp_network['value']['comment'] }}"
+        dns-server="{{ dhcp_network['value']['dns-server'] }}"
+        gateway="{{ dhcp_network['value']['gateway'] }}"
+        domain="{{ dhcp_network['value']['domain'] | default('') }}"
+        next-server="{{ dhcp_network['value']['next-server'] | default('') }}"
+        boot-file-name="{{ dhcp_network['value']['boot-file-name'] | default('') }}"
+        {% if dhcp_network['value']['other_params'] is defined %}{{ dhcp_network['value']['other_params'] }}{% endif %}
   when: '"0" in network_status.stdout[0]'
+  register: update_network_status
+
+- name: "[DEBUG] Update {{ dhcp_network['value']['address'] }} dhcp server"
+  debug:
+    msg: "{{ update_network_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_network_status.stdout_lines is defined
