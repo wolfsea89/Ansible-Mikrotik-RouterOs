@@ -1,6 +1,6 @@
 ---
 - name: Configure pools
-  include: configure_pools.yml
+  include: configure_dhcp_pools.yml
   loop: "{{ lookup('dict', input_role_pools) }}"
   loop_control:
     loop_var: pool
@@ -8,10 +8,10 @@
 
 - name: Configure dhcp network
   include: configure_dhcp_network.yml
-  loop: "{{ lookup('dict', input_role_dhcp_network) }}"
+  loop: "{{ lookup('dict', input_role_dhcp_networks) }}"
   loop_control:
     loop_var: dhcp_network
-  when: input_role_dhcp_network is defined
+  when: input_role_dhcp_networks is defined
 
 - name: Configure dhcp server
   include: configure_dhcp_server.yml

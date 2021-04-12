@@ -1,0 +1,62 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip pool print from="{{ pool['value']['name'] }}"
+      - >
+        /ip pool add
+          name="{{ pool['value']['name'] }}"
+          comment="{{ pool.value.comment | default('') }}"
+          ranges="{{ pool.value.ranges }}"
+          {% if pool['value']['other_params'] is defined %}{{ pool['value']['other_params'] }}{% endif %}
+      - >
+        /ip pool set [ find name="{{ pool['value']['name'] }}"]
+          comment="{{ pool.value.comment | default('') }}"
+          ranges="{{ pool.value.ranges }}"
+          {% if pool['value']['other_params'] is defined %}{{ pool['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Check: {{ pool['value']['name'] }} pool is exist"
+  routeros_command:
+    commands: /ip pool print from="{{ pool['value']['name'] }}"
+  register: pool_status
+
+- name: "[DEBUG] Check: {{ pool['value']['name'] }} pool is exist output"
+  debug:
+    msg: "{{ pool_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: Add {{ pool['value']['name'] }} pool
+  routeros_command:
+    commands: >
+      /ip pool add
+        name="{{ pool['value']['name'] }}"
+        comment="{{ pool.value.comment | default('') }}"
+        ranges="{{ pool.value.ranges }}"
+        {% if pool['value']['other_params'] is defined %}{{ pool['value']['other_params'] }}{% endif %}
+  when: '"no such item" in pool_status.stdout[0]'
+  register: add_pool_status
+
+- name: "[DEBUG] Add {{ pool['value']['name'] }} pool"
+  debug:
+    msg: "{{ add_pool_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_pool_status.stdout_lines is defined
+
+- name: Update {{ pool['value']['name'] }} pool
+  routeros_command:
+    commands: >
+      /ip pool set [ find name="{{ pool['value']['name'] }}"]
+        comment="{{ pool.value.comment | default('') }}"
+        ranges="{{ pool.value.ranges }}"
+        {% if pool['value']['other_params'] is defined %}{{ pool['value']['other_params'] }}{% endif %}
+  when: '"no such item" not in pool_status.stdout[0]'
+  register: update_pool_status
+
+- name: "[DEBUG] Update {{ pool['value']['name'] }} pool"
+  debug:
+    msg: "{{ update_pool_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_pool_status.stdout_lines is defined

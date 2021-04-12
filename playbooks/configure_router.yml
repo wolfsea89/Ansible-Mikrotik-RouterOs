@@ -7,17 +7,17 @@
     - include_role:
         name: Mikrotik-CreateBackup
       vars:
-        input_role_destination_path: "{{ inventory_host_routeros_backup_path }}"
-        input_role_ansible_host:     "{{ ansible_host }}"
-        input_role_ansible_user:     "{{ ansible_user }}"
-        input_role_ansible_password: "{{ ansible_ssh_pass }}"
-        input_role_debug:            "{{ playbooks_roles_debug }}"
+        input_role_destination_path:           "{{ inventory_host_routeros_backup_path }}"
+        input_role_ansible_host:               "{{ ansible_host }}"
+        input_role_ansible_user:               "{{ ansible_user }}"
+        input_role_ansible_password:           "{{ ansible_ssh_pass }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
 
     - include_role:
         name: Mikrotik-SetIdentity
       vars:
-        input_role_ansible_host:     "{{ inventory_hostname }}"
-        input_role_debug:            "{{ playbooks_roles_debug }}"
+        input_role_ansible_host:               "{{ inventory_hostname }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
 
     - include_role:
         name: Mikrotik-Interface-Wireless
@@ -37,8 +37,8 @@
     - include_role:
         name: Mikrotik-Interface-List
       vars:
-        input_role_lists_interfaces:            "{{ inventory_host_routeros_lists_interfaces }}"
-        input_role_debug:                       "{{ playbooks_roles_debug }}"
+        input_role_lists_interfaces:           "{{ inventory_host_routeros_lists_interfaces }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
 
     - include_role:
         name: Mikrotik-Interface-Bridge
@@ -53,17 +53,19 @@
         input_role_debug:                      "{{ playbooks_roles_debug }}"
 
     - include_role:
-        name: Mikrotik-DHCP-Server
-      vars:
-        input_role_pools:        "{{ inventory_group_routeros_pools }}"
-        input_role_dhcp_servers: "{{ inventory_group_routeros_dhcp_servers }}"
-        input_role_dhcp_network: "{{ inventory_group_routeros_dhcp_networks }}"
-        input_role_dhcp_leaves:  "{{ inventory_group_routeros_dhcp_leaves }}"
-
-    - include_role:
         name: Mikrotik-DHCP-Client
       vars:
-        input_role_dhcp_clients:  "{{ inventory_group_routeros_dhcp_clients }}"
+        input_role_dhcp_clients:               "{{ inventory_host_routeros_dhcp_clients }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-DHCP-Server
+      vars:
+        input_role_pools:                      "{{ inventory_group_routeros_pools }}"
+        input_role_dhcp_servers:               "{{ inventory_group_routeros_dhcp_servers }}"
+        input_role_dhcp_networks:              "{{ inventory_group_routeros_dhcp_networks }}"
+        input_role_dhcp_leaves:                "{{ inventory_group_routeros_dhcp_leaves }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
 
     - include_role:
         name: Mikrotik-DNS-Server
