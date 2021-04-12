@@ -9,3 +9,5 @@ ansible_user: user_tech
 ansible_become: yes
 ansible_ssh_pass: "<< password >>"
 ```
+
+[Powrót](../../README.md)
