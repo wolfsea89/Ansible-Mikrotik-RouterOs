@@ -1,0 +1,61 @@
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /user group print where name="{{ group_item['value']['name'] }}"
+      - >
+        /user group add
+          name={{ group_item['value']['name'] }}
+          policy={{ group_item['value']['policy'] | join(',') }}
+          comment="{{ group_item['value']['comment'] |default('') }}"
+      - >
+        /user group set [ find name="{{ group_item['value']['name'] }}"]
+          policy={{ group_item['value']['policy'] | join(',') }}
+          comment="{{ group_item['value']['comment'] |default('') }}"
+  when: input_role_debug == true
+
+- name: "Check is {{ group_item['value']['name'] }} group exist"
+  routeros_command:
+    commands: /user group print where name="{{ group_item['value']['name'] }}"
+  register: group_status
+
+- name: "[DEBUG] Check is {{ group_item['value']['name'] }} group exist"
+  debug:
+    msg: "{{ group_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add {{ group_item['value']['name'] }} group"
+  routeros_command:
+    commands:
+      - >
+        /user group add
+          name={{ group_item['value']['name'] }}
+          policy={{ group_item['value']['policy'] | join(',') }}
+          comment="{{ group_item['value']['comment'] |default('') }}"
+  when:
+    - '" 0 " not in group_status.stdout[0]'
+  register: add_group_status
+
+- name: "[DEBUG] Add {{ group_item['value']['name'] }} group"
+  debug:
+    msg: "{{ add_group_status.stdout_lines }}"
+  when:
+    - add_group_status.stdout_lines is defined
+    - input_role_debug == true
+
+- name: "Update {{ group_status.value.name }} group"
+  routeros_command:
+    commands:
+      - >
+        /user group set [ find name="{{ group_item['value']['name'] }}"]
+          policy={{ group_item['value']['policy'] | join(',') }}
+          comment="{{ group_item['value']['comment'] |default('') }}"
+  when:
+    - '" 0 " in group_status.stdout[0]'
+  register: update_group_status
+
+- name: "[DEBUG] Update {{ group_item['value']['name'] }} group"
+  debug:
+    msg: "{{ update_group_status.stdout_lines }}"
+  when:
+    - update_group_status.stdout_lines is defined
+    - input_role_debug == true

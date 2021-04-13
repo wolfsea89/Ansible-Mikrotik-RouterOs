@@ -1,0 +1,14 @@
+---
+- name: Install tools
+  become: yes
+  include: install_tools.yml
+
+- name: Create Infrastructure directories on localhost
+  include: create_infrastructure_directories_on_localhost.yml
+
+- name: Create backup of Mikrotik to local storage
+  include: create_backup_on_mikrotik.yml
+
+- name: Dowload backup
+  include: download_backup.yml
+

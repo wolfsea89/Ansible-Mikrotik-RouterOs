@@ -1,0 +1,30 @@
+---
+- name: Create backup {{ input_role_destination_path }}/backup on localhost
+  become: yes
+  delegate_to: localhost
+  file:
+    path: "{{ input_role_destination_path }}/backup"
+    state: directory
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+  register: backup_directory_status
+
+- name: "[DEBUG] Create backup {{ input_role_destination_path }}/backup on localhost output"
+  debug:
+    msg: "{{ install_tools_output }}"
+  when: input_role_debug == true
+
+- name: Create backup {{ input_role_destination_path }}/rsc on localhost
+  become: yes
+  delegate_to: localhost
+  file:
+    path: "{{ input_role_destination_path }}/rsc"
+    state: directory
+    owner: "{{ lookup('env', 'USER') }}"
+    group: "{{ lookup('env', 'USER') }}"
+  register: rsc_directory_status
+
+- name: "[DEBUG] Create backup {{ input_role_destination_path }}/rsc on localhost"
+  debug:
+    msg: "{{ install_tools_output }}"
+  when: input_role_debug == true

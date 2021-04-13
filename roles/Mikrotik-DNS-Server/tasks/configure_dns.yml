@@ -1,0 +1,140 @@
+---
+- name: Set allow-remote-requests in DNS Server
+  routeros_command:
+    commands:
+     - "/ip dns set allow-remote-requests={{ input_role_dns_parameters['allow-remote-requests'] }}"
+  when: input_role_dns_parameters['allow-remote-requests'] is defined
+  register: allow_remote_requests_status
+
+- name: "[DEBUG] Set allow-remote-requests in DNS Server"
+  debug:
+    msg: "{{ allow_remote_requests_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - allow_remote_requests_status.stdout_lines is defined
+
+- name: Set verify-doh-cert in DNS Server
+  routeros_command:
+    commands:
+      - "/ip dns set verify-doh-cert={{ input_role_dns_parameters['verify-doh-cert'] }}"
+  when: input_role_dns_parameters['verify-doh-cert'] is defined
+  register: verify_doh_cert_status
+
+- name: "[DEBUG] Set allow-remote-requests in DNS Server"
+  debug:
+    msg: "{{ verify_doh_cert_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - verify_doh_cert_status.stdout_lines is defined
+
+- name: Set servers in DNS Server
+  routeros_command:
+    commands:
+      - /ip dns set servers="{{ input_role_dns_parameters['servers'] | join(',') }}"
+  when: input_role_dns_parameters['servers'] is defined
+  register: servers_status
+
+- name: "[DEBUG] Set servers in DNS Server"
+  debug:
+    msg: "{{ servers_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - servers_status.stdout_lines is defined
+
+- name: Set max-udp-packet-size in DNS Server
+  routeros_command:
+    commands:
+      - /ip dns set max-udp-packet-size="{{ input_role_dns_parameters['max-udp-packet-size'] }}"
+  when: input_role_dns_parameters['max-udp-packet-size'] is defined
+  register: max_udp_packet_size_status
+
+- name: "[DEBUG] Set max-udp-packet-size in DNS Server"
+  debug:
+    msg: "{{ max_udp_packet_size_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - max_udp_packet_size_status.stdout_lines is defined
+
+- name: Set query-server-timeout in DNS Server
+  routeros_command:
+    commands:
+      - /ip dns set query-server-timeout="{{ input_role_dns_parameters['query-server-timeout'] }}"
+  when: input_role_dns_parameters['query-server-timeout'] is defined
+  register: query_server_timeout
+
+- name: "[DEBUG] Set query-server-timeout in DNS Server"
+  debug:
+    msg: "{{ query_server_timeout.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - query_server_timeout.stdout_lines is defined
+
+- name: Set query-total-timeoutin DNS Server
+  routeros_command:
+    commands:
+      - /ip dns set query-total-timeout="{{ input_role_dns_parameters['query-total-timeout'] }}"
+  when: input_role_dns_parameters['query-total-timeout'] is defined
+  register: query_total_timeout_status
+
+- name: "[DEBUG] Set query-total-timeoutin DNS Server"
+  debug:
+    msg: "{{ query_total_timeout_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - query_total_timeout_status.stdout_lines is defined
+
+- name: Set max-concurrent-queries DNS Server
+  routeros_command:
+    commands:
+      - /ip dns set max-concurrent-queries="{{ input_role_dns_parameters['max-concurrent-queries'] }}"
+  when: input_role_dns_parameters['max-concurrent-queries'] is defined
+  register: max_concurrent_queries_status
+
+- name: "[DEBUG] Set max-concurrent-queries DNS Server"
+  debug:
+    msg: "{{ max_concurrent_queries_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - max_concurrent_queries_status.stdout_lines is defined
+
+- name: Set max-concurrent-tcp-sessions DNS Server
+  routeros_command:
+    commands:
+      - /ip dns set max-concurrent-tcp-sessions="{{ input_role_dns_parameters['max-concurrent-tcp-sessions'] }}"
+  when: input_role_dns_parameters['max-concurrent-tcp-sessions'] is defined
+  register: max_concurrent_tcp_sessions_status
+
+- name: "[DEBUG] Set max-concurrent-tcp-sessions DNS Server"
+  debug:
+    msg: "{{ max_concurrent_tcp_sessions_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - max_concurrent_tcp_sessions_status.stdout_lines is defined
+
+- name: Set cache-size DNS Server
+  routeros_command:
+    commands:
+      - /ip dns set cache-size="{{ input_role_dns_parameters['cache-size'] }}"
+  when: input_role_dns_parameters['cache-size'] is defined
+  register: cache_size_status
+
+- name: "[DEBUG] SSet cache-size DNS Server"
+  debug:
+    msg: "{{ cache_size_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - cache_size_status.stdout_lines is defined
+
+- name: Set cache-max-ttl DNS Server
+  routeros_command:
+    commands:
+      - /ip dns set cache-max-ttl="{{ input_role_dns_parameters['cache-max-ttl'] }}"
+  when: input_role_dns_parameters['cache-max-ttl'] is defined
+  register: cache_max_ttl_status
+
+- name: "[DEBUG] Set cache-max-ttl DNS Serverr"
+  debug:
+    msg: "{{ cache_max_ttl_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - cache_max_ttl_status.stdout_lines is defined

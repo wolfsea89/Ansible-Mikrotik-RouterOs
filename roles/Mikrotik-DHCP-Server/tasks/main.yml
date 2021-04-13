@@ -1,0 +1,28 @@
+---
+- name: Configure pools
+  include: configure_dhcp_pools.yml
+  loop: "{{ lookup('dict', input_role_pools) }}"
+  loop_control:
+    loop_var: pool
+  when: input_role_pools is defined
+
+- name: Configure dhcp network
+  include: configure_dhcp_network.yml
+  loop: "{{ lookup('dict', input_role_dhcp_networks) }}"
+  loop_control:
+    loop_var: dhcp_network
+  when: input_role_dhcp_networks is defined
+
+- name: Configure dhcp server
+  include: configure_dhcp_server.yml
+  loop: "{{ lookup('dict', input_role_dhcp_servers) }}"
+  loop_control:
+    loop_var: dhcp_config
+  when: input_role_dhcp_servers is defined
+
+- name: Configure dhcp leave
+  include: configure_dhcp_leave.yml
+  loop: "{{ lookup('dict', input_role_dhcp_leaves) }}"
+  loop_control:
+    loop_var: dhcp_leave
+  when: input_role_dhcp_leaves is defined

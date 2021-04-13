@@ -1,0 +1,71 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip dhcp-server print from="{{ dhcp_config['value']['name'] }}"
+      - >
+        /ip dhcp-server add
+          name="{{ dhcp_config['value']['name'] }}"
+          address-pool="{{ dhcp_config['value']['address-pool'] }}"
+          insert-queue-before="{{ dhcp_config['value']['insert-queue-before'] | default(vars_role_default_dhcp_config['insert-queue-before']) }}"
+          interface="{{ dhcp_config['value']['interface'] }}"
+          disabled="{{ dhcp_config['value']['disabled'] | default(vars_role_default_dhcp_config.disabled) }}"
+          {% if dhcp_config['value']['other_params'] is defined %}{{ dhcp_config['value']['other_params'] }}{% endif %}
+      - >
+        /ip dhcp-server set [ find name="{{ dhcp_config['value']['name'] }}"]
+          address-pool="{{ dhcp_config['value']['address-pool'] }}"
+          insert-queue-before="{{ dhcp_config['value']['insert-queue-before'] | default(vars_role_default_dhcp_config['insert-queue-before']) }}"
+          interface="{{ dhcp_config['value']['interface'] }}"
+          disabled="{{ dhcp_config['value']['disabled'] | default(vars_role_default_dhcp_config.disabled) }}"
+          {% if dhcp_config['value']['other_params'] is defined %}{{ dhcp_config['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Check: {{ dhcp_config['value']['name'] }} pool is exist"
+  routeros_command:
+    commands: /ip dhcp-server print from="{{ dhcp_config['value']['name'] }}"
+  register: dhcp_status
+
+- name: "[DEBUG] Check: {{ dhcp_config['value']['name'] }} pool is exist"
+  debug:
+    msg: "{{ dhcp_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: Add {{ dhcp_config['value']['name'] }} dhcp server
+  routeros_command:
+    commands: >
+      /ip dhcp-server add
+        name="{{ dhcp_config['value']['name'] }}"
+        address-pool="{{ dhcp_config['value']['address-pool'] }}"
+        insert-queue-before="{{ dhcp_config['value']['insert-queue-before'] | default(vars_role_default_dhcp_config['insert-queue-before']) }}"
+        interface="{{ dhcp_config['value']['interface'] }}"
+        disabled="{{ dhcp_config['value']['disabled'] | default(vars_role_default_dhcp_config.disabled) }}"
+        {% if dhcp_config['value']['other_params'] is defined %}{{ dhcp_config['value']['other_params'] }}{% endif %}
+  when: '"no such item" in dhcp_status.stdout[0]'
+  register: add_dhcp_status
+
+- name: "[DEBUG] Add {{ dhcp_config['value']['name'] }} dhcp server"
+  debug:
+    msg: "{{ add_dhcp_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_dhcp_status.stdout_lines is defined
+
+
+- name: "Update {{ dhcp_config['value']['name'] }} dhcp server"
+  routeros_command:
+    commands: >
+      /ip dhcp-server set [ find name="{{ dhcp_config['value']['name'] }}"]
+        address-pool="{{ dhcp_config['value']['address-pool'] }}"
+        insert-queue-before="{{ dhcp_config['value']['insert-queue-before'] | default(vars_role_default_dhcp_config['insert-queue-before']) }}"
+        interface="{{ dhcp_config['value']['interface'] }}"
+        disabled="{{ dhcp_config['value']['disabled'] | default(vars_role_default_dhcp_config.disabled) }}"
+        {% if dhcp_config['value']['other_params'] is defined %}{{ dhcp_config['value']['other_params'] }}{% endif %}
+  when: '"no such item" not in dhcp_status.stdout[0]'
+  register: update_dhcp_status
+
+- name: "[DEBUG] Update {{ dhcp_config['value']['name'] }} dhcp server"
+  debug:
+    msg: "{{ update_dhcp_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_dhcp_status.stdout_lines is defined

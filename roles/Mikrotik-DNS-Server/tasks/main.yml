@@ -1,0 +1,10 @@
+---
+- name: Configure dns
+  include: configure_dns.yml
+
+- name: Set static dns adress
+  include: configure_static_dns_address.yml
+  loop: "{{ input_role_dns_static_records }}"
+  loop_control:
+    loop_var: dns_host
+  when: input_role_dns_static_records is defined

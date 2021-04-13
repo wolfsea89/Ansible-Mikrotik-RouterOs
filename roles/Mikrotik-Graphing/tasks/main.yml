@@ -1,0 +1,74 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /tool graphing set store-every="{{ input_role_graphing['store-every'] }}"
+      - /tool graphing queue print where simple-queue=all
+      - /tool graphing queue add store-on-disk=no
+      - /tool graphing resource print where simple-queue=all
+      - /tool graphing resource add store-on-disk=no
+
+- name: Set graphing inteface store-every="{{ input_role_graphing['store-every'] }}"
+  routeros_command:
+    commands: /tool graphing set store-every="{{ input_role_graphing['store-every'] }}"
+  when: input_role_graphing['store-every'] is defined
+  register: store_every_status
+
+- name: "[DEBUG] Set graphing inteface store-every={{ input_role_graphing['store-every'] }}"
+  debug:
+    msg: "{{ store_every_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - store_every_status.stdout_lines is defined
+
+- name: "Check is set graphing queue"
+  routeros_command:
+    commands: /tool graphing queue print where simple-queue=all
+  register:  queue_store_on_disk_status
+
+- name: "[DEBUG] Check is set graphing queue"
+  debug:
+    msg: "{{ queue_store_on_disk_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - queue_store_on_disk_status.stdout_lines is defined
+
+- name: Set graphing queue
+  routeros_command:
+    commands: /tool graphing queue add store-on-disk=no
+  when:
+    - '" 0 " not in queue_store_on_disk_status.stdout[0]'
+  register:  queue_store_on_disk_status
+
+- name: "[DEBUG] Set graphing queue"
+  debug:
+    msg: "{{ queue_store_on_disk_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - queue_store_on_disk_status.stdout_lines is defined
+
+- name: "Check is set graphing resource"
+  routeros_command:
+    commands: /tool graphing resource print where simple-queue=all
+  register:  resource_store_on_disk_status
+
+- name: "[DEBUG] Check is set graphing resource"
+  debug:
+    msg: "{{ resource_store_on_disk_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - resource_store_on_disk_status.stdout_lines is defined
+
+- name: Set graphing resource
+  routeros_command:
+    commands: /tool graphing resource add store-on-disk=no
+  when:
+    - '" 0 " not in resource_store_on_disk_status.stdout[0]'
+  register: add_resource_store_on_disk_status
+
+- name: "[DEBUG] Set graphing resource"
+  debug:
+    msg: "{{ add_resource_store_on_disk_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_resource_store_on_disk_status.stdout_lines is defined

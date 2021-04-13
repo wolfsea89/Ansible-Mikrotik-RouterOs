@@ -1,0 +1,17 @@
+- name: Configure firewall rules
+  include: firewall_rules.yml
+  loop: "{{ lookup('dict', input_role_firewall_rules) }}"
+  loop_control:
+    loop_var: firewall_rule
+  when:
+    - input_role_firewall_rules is defined
+    - firewall_rule.key != "default"
+
+- name: Configure firewall nat rules
+  include: firewall_nat_rules.yml
+  loop: "{{ lookup('dict', input_role_firewall_nat_rules) }}"
+  loop_control:
+    loop_var: firewall_nat_rules
+  when:
+    - input_role_firewall_nat_rules is defined
+    - firewall_nat_rules.key != "default"

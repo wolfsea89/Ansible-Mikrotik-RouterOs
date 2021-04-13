@@ -1,0 +1,7 @@
+---
+vars_role_default_static_dns_address:
+  comment: ''
+  disabled: 'no'
+  regexp: ''
+  ttl: "1d"
+  type: 'A'

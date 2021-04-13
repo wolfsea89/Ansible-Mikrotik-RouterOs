@@ -1,0 +1,61 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /tool graphing interface print where interface="{{ bridge_interface['value']['name'] }}"
+      - >
+        /tool graphing interface add
+            interface={{ bridge_interface['value']['name'] }}
+            store-on-disk={{ bridge_interface['value']['graphing']['store-on-disk'] }}
+            allow-address="{{ bridge_interface['value']['graphing']['allow-address'] | default('') }}"
+      - >
+        /tool graphing interface set [ find interface="{{ bridge_interface['value']['name'] }}"]
+          store-on-disk={{ bridge_interface['value']['graphing']['store-on-disk'] }}
+          allow-address="{{ bridge_interface['value']['graphing']['allow-address'] | default('') }}"
+  when: input_role_debug == true
+
+- name: "Check is set graphing for {{ bridge_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /tool graphing interface print where interface="{{ bridge_interface['value']['name'] }}"
+  register:  graphing_interface_status
+
+- name: "[DEBUG] Check is set graphing for {{ bridge_interface['value']['name'] }} output"
+  debug:
+    msg: "{{ graphing_interface_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add graphing for {{ bridge_interface[.key }}"
+  routeros_command:
+    commands: >
+      /tool graphing interface add
+        interface={{ bridge_interface['value']['name'] }}
+        store-on-disk={{ bridge_interface['value']['graphing']['store-on-disk'] }}
+        allow-address="{{ bridge_interface['value']['graphing']['allow-address'] | default('') }}"
+  when:
+    - '" 0 " not in graphing_interface_status.stdout[0]'
+  register: add_graphing_interface_status
+
+- name: "[DEBUG] Add graphing for {{ bridge_interface[.key }} output"
+  debug:
+    msg: "{{ add_graphing_interface_status.stdout_lines }}"
+  when:
+    - add_graphing_interface_status.stdout_lines is defined
+    - input_role_debug == true
+
+- name: "Update graphing for {{ bridge_interface[.key }}"
+  routeros_command:
+    commands: >
+      /tool graphing interface set [ find interface="{{ bridge_interface['value']['name'] }}"]
+        store-on-disk={{ bridge_interface['value']['graphing']['store-on-disk'] }}
+        allow-address="{{ bridge_interface['value']['graphing']['allow-address'] | default('') }}"
+  when:
+    - '" 0 " in graphing_interface_status.stdout[0]'
+  register: update_graphing_interface_status
+
+- name: "[DEBUG] Update graphing for {{ bridge_interface[.key }} output"
+  debug:
+    msg: "{{ update_graphing_interface_status.stdout_lines }}"
+  when:
+    - update_graphing_interface_status.stdout_lines is defined
+    - input_role_debug == true

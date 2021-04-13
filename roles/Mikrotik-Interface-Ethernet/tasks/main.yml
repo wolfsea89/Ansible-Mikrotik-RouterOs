@@ -1,0 +1,30 @@
+---
+- name: Configure Ethernet interfaces
+  include: configure_ethernet_interface.yml
+  loop: "{{ lookup('dict', input_role_ethernet_interfaces) }}"
+  loop_control:
+    loop_var: ethernet_interface
+  when:
+    - input_role_ethernet_interfaces is defined
+    - ethernet_interface.key != "default"
+
+- name: Configure ip address for interface
+  include: configure_ip_address.yml
+  loop: "{{ lookup('dict', input_role_ethernet_interfaces) }}"
+  loop_control:
+    loop_var: ethernet_interface
+  when:
+    - input_role_ethernet_interfaces is defined
+    - ethernet_interface.value.address is defined
+    - ethernet_interface.value.network is defined
+    - ethernet_interface.key != "default"
+
+- name: Configure graphing interface
+  include: configure_graphing.yml
+  loop: "{{ lookup('dict', input_role_ethernet_interfaces) }}"
+  loop_control:
+    loop_var: ethernet
+  when:
+    - input_role_ethernet_interfaces is defined
+    - ethernet_interface.value.graphing is defined
+    - ethernet_interface.key != "default"

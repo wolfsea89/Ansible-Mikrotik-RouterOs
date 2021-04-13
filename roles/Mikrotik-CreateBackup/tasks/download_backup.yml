@@ -1,0 +1,28 @@
+---
+- name: Download backup
+  action: command sshpass -p "{{ input_role_ansible_password }}" sftp {{ input_role_ansible_user }}@{{ input_role_ansible_host }}:{{ var_role_backup_filename }} {{ input_role_destination_path }}/backup
+
+- name: Download configuration
+  action: command sshpass -p "{{ input_role_ansible_password }}" sftp {{ input_role_ansible_user }}@{{ input_role_ansible_host }}:{{ var_role_backup_filename_rsc }} {{ input_role_destination_path }}/rsc
+
+- name: "[DEBUG] Check dowload backup"
+  stat:
+    path: "{{ input_role_destination_path }}/backup/{{ var_role_backup_filename }}"
+  register: backup_status
+  when: input_role_debug == true
+
+- name: "[DEBUG] {{ input_role_destination_path }}/backup/{{ var_role_backup_filename }} is exit"
+  debug:
+    msg: "{{ backup_status.stat.exists}}"
+  when: input_role_debug == true
+
+- name: "[DEBUG] Check dowload rsc file"
+  stat:
+    path: "{{ input_role_destination_path }}/backup/{{ var_role_backup_filename }}"
+  register: rsc_status
+  when: input_role_debug == true
+
+- name: "[DEBUG] {{ input_role_destination_path }}/rsc/{{ var_role_backup_filename_rsc }} is exit"
+  debug:
+    msg: "{{ rsc_status.stat.exists }}"
+  when: input_role_debug == true

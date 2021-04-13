@@ -1,0 +1,77 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip dns static print where address="{{ dns_host['address'] }}" name={{ dns_host['name'] }}
+      - >
+        /ip dns static add name={{ dns_host['name'] }}
+          address={{ dns_host['address'] }}
+          comment="{{ dns_host['comment'] | default(vars_role_default_static_dns_address['comment']) }}"
+          disabled={{ dns_host['disabled'] | default(vars_role_default_static_dns_address['disabled']) }}
+          regexp="{{ dns_host['regexp'] | default(vars_role_default_static_dns_address['regexp']) }}"
+          ttl={{ dns_host['ttl'] | default(vars_role_default_static_dns_address['ttl']) }}
+          type={{ dns_host['type'] | default(vars_role_default_static_dns_address['type']) }}
+          {% if dns_host['other_params'] is defined %}{{ dns_host['other_params'] }}{% endif %}
+      - >
+        /ip dns static set [find name={{ dns_host['name'] }}]
+          address={{ dns_host['address'] }}
+          comment="{{ dns_host['comment'] | default(vars_role_default_static_dns_address['comment']) }}"
+          disabled={{ dns_host['disabled'] | default(vars_role_default_static_dns_address['disabled']) }}
+          regexp="{{ dns_host['regexp'] | default(vars_role_default_static_dns_address['regexp']) }}"
+          ttl={{ dns_host['ttl'] | default(vars_role_default_static_dns_address['ttl']) }}
+          type={{ dns_host['type'] | default(vars_role_default_static_dns_address['type']) }}
+          {% if dns_host['other_params'] is defined %}{{ dns_host['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Check: {{ dns_host['name'] }} dns is exist"
+  routeros_command:
+    commands: /ip dns static print where address="{{ dns_host['address'] }}" name={{ dns_host['name'] }}
+  register: dns_record_status
+
+- name: "[DEBUG] Check: {{ dns_host['name'] }} dns is exist"
+  debug:
+    msg: "{{ dns_record_status.stdout_lines }}"
+  when: input_role_debug == true
+
+
+- name: "Add {{ dns_host['name'] }} dns record"
+  routeros_command:
+    commands: >
+      /ip dns static add name={{ dns_host['name'] }}
+        address={{ dns_host['address'] }}
+        comment="{{ dns_host['comment'] | default(vars_role_default_static_dns_address['comment']) }}"
+        disabled={{ dns_host['disabled'] | default(vars_role_default_static_dns_address['disabled']) }}
+        regexp="{{ dns_host['regexp'] | default(vars_role_default_static_dns_address['regexp']) }}"
+        ttl={{ dns_host['ttl'] | default(vars_role_default_static_dns_address['ttl']) }}
+        type={{ dns_host['type'] | default(vars_role_default_static_dns_address['type']) }}
+        {% if dns_host['other_params'] is defined %}{{ dns_host['other_params'] }}{% endif %}
+  when: '"0" not in dns_record_status.stdout[0]'
+  register: add_dns_record_status
+
+- name: "[DEBUG] Add {{ dns_host['name'] }} dns record"
+  debug:
+    msg: "{{ add_dns_record_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_dns_record_status.stdout_lines is defined
+
+- name: "Update {{ dns_host['name'] }} dns record"
+  routeros_command:
+    commands: >
+      /ip dns static set [find name={{ dns_host['name'] }}]
+        address={{ dns_host['address'] }}
+        comment="{{ dns_host['comment'] | default(vars_role_default_static_dns_address['comment']) }}"
+        disabled={{ dns_host['disabled'] | default(vars_role_default_static_dns_address['disabled']) }}
+        regexp="{{ dns_host['regexp'] | default(vars_role_default_static_dns_address['regexp']) }}"
+        ttl={{ dns_host['ttl'] | default(vars_role_default_static_dns_address['ttl']) }}
+        type={{ dns_host['type'] | default(vars_role_default_static_dns_address['type']) }}
+        {% if dns_host['other_params'] is defined %}{{ dns_host['other_params'] }}{% endif %}
+  when: '"0" in dns_record_status.stdout[0]'
+  register: add_dns_record_status
+
+- name: "[DEBUG] Update {{ dns_host['name'] }} dns record"
+  debug:
+    msg: "{{ add_dns_record_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_dns_record_status.stdout_lines is defined

@@ -1,0 +1,4 @@
+---
+input_role_debug: false
+input_role_graphing:
+  store-every: "24hours"

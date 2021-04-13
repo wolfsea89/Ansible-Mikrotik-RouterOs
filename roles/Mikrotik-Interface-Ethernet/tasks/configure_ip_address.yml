@@ -1,0 +1,64 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip address print where address="{{ ethernet_interface['value']['address'] }}" interface={{ ethernet_interface['value']['name'] }}
+      - >
+        /ip address add
+          address={{ ethernet_interface['value']['address'] }}
+          network={{ ethernet_interface['value']['network'] }}
+          interface={{ ethernet_interface['value']['name'] }}
+          comment="{{ ethernet_interface['value']['comment'] | default('') }}"
+      - >
+        /ip address set [ find address="{{ ethernet_interface['value']['address'] }}" ]
+          network={{ ethernet_interface['value']['network'] }}
+          interface={{ ethernet_interface['value']['name'] }}
+          comment="{{ ethernet_interface['value']['comment'] | default('') }}"
+  when: input_role_debug == true
+
+- name: "Check is set ip address for {{ ethernet_interface['key'] }}"
+  routeros_command:
+    commands: /ip address print where address="{{ ethernet_interface['value']['address'] }}" interface={{ ethernet_interface['value']['name'] }}
+  register:  ethernet_interface_ip_status
+
+- name: "[DEBUG] Check is set ip address for {{ ethernet_interface['key']  }} output"
+  debug:
+    msg: "{{ ethernet_interface_ip_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add ip address for {{ ethernet_interface['key']  }} - {{ ethernet_interface['value']['address'] }}"
+  routeros_command:
+    commands: >
+      /ip address add
+        address={{ ethernet_interface['value']['address'] }}
+        network={{ ethernet_interface['value']['network'] }}
+        interface={{ ethernet_interface['value']['name'] }}
+        comment="{{ ethernet_interface['value']['comment'] | default('') }}"
+  when:
+    - '" 0 " not in ethernet_interface_ip_status.stdout[0]'
+  register: add_ethernet_interface_ip_status
+
+- name: "[DEBUG] Add ip address for {{ ethernet_interface['key']  }} - {{ ethernet_interface['value']['address'] }} output"
+  debug:
+    msg: "{{ add_ethernet_interface_ip_status.stdout_lines }}"
+  when:
+    - add_ethernet_interface_ip_status.stdout_lines is defined
+    - input_role_debug == true
+
+- name: "Update ip address for {{ ethernet_interface['key']  }} - {{ ethernet_interface['value']['address'] }}"
+  routeros_command:
+    commands: >
+      /ip address set [ find address="{{ ethernet_interface['value']['address'] }}" ]
+      network={{ ethernet_interface['value']['network'] }}
+      interface={{ ethernet_interface['value']['name'] }}
+      comment="{{ ethernet_interface['value']['comment'] | default('') }}"
+  when:
+    - '" 0 " in ethernet_interface_ip_status.stdout[0]'
+  register: update_ethernet_interface_ip_status
+
+- name: "[DEBUG] Update ip address for {{ ethernet_interface['key']  }} - {{ ethernet_interface['value']['address'] }}"
+  debug:
+    msg: "{{ update_ethernet_interface_ip_status.stdout_lines }}"
+  when:
+    - update_ethernet_interface_ip_status.stdout_lines is defined
+    - input_role_debug == true

@@ -1,0 +1,65 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /interface bridge print from={{ bridge_interface['value']['name'] }}
+      - >
+        /interface bridge add
+          name="{{ bridge_interface['value']['name'] }}"
+          comment="{{ bridge_interface['value']['comment'] }}"
+          {% if bridge_interface['value']['other_params'] is defined %}{{ bridge_interface['value']['other_params'] }}{% endif %}
+      - >
+        /interface bridge set [find name={{ bridge_interface['value']['name'] }}]
+          comment="{{ bridge_interface['value']['comment'] }}"
+          {% if bridge_interface['value']['other_params'] is defined %}{{ bridge_interface['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Check: {{ bridge_interface['value']['name'] }} is brige exist"
+  routeros_command:
+    commands: /interface bridge print from={{ bridge_interface['value']['name'] }}
+  register: bridge_interface_status
+
+- name: "[DEBUG] Check: {{ bridge_interface['value']['name'] }} is brige exist output"
+  debug:
+    msg: "{{ bridge_interface_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add Brigde name {{ bridge_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface bridge add
+        name="{{ bridge_interface['value']['name'] }}"
+        comment="{{ bridge_interface['value']['comment'] }}"
+        {% if bridge_interface['value']['other_params'] is defined %}{{ bridge_interface['value']['other_params'] }}{% endif %}
+  when: '"no such item" in bridge_interface_status.stdout_lines[0]'
+  register: add_bridge_interface_status
+
+- name: "[DEBUG] Add Brigde name {{ bridge_interface['value']['name'] }} output"
+  debug:
+    msg: "{{ add_bridge_interface_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_bridge_interface_status.stdout_lines is defined
+
+- name: "Update Brigde name {{ bridge_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface bridge set [find name={{ bridge_interface['value']['name'] }}]
+        comment="{{ bridge_interface['value']['comment'] }}"
+        {% if bridge_interface['value']['other_params'] is defined %}{{ bridge_interface['value']['other_params'] }}{% endif %}
+  when: '"no such item" not in bridge_interface_status.stdout_lines[0]'
+  register: update_bridge_interface_status
+
+- name: "[DEBUG] Update Brigde name {{ bridge_interface['value']['name'] }} output"
+  debug:
+    msg: "{{ update_bridge_interface_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_bridge_interface_status.stdout_lines is defined
+
+- name: Configure Bridge ports
+  include: configure_bridge_interface_port.yml
+  loop: "{{ bridge_interface.value.interfaces }}"
+  loop_control:
+    loop_var: bridge_port
+  when: bridge_interface.value.interfaces is defined

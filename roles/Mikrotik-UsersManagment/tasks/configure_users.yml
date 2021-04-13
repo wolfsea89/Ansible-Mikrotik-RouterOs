@@ -1,0 +1,71 @@
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /user print where name="{{ user_item['value']['name'] }}"
+      - >
+        /user add
+          name={{ user_item['value']['name'] }}
+          group={{ user_item['value']['group'] }}
+          comment="{{ user_item['value']['comment'] |default('') }}"
+          address={{ user_item['value']['address']  | join(',') }}
+          disabled={{ user_item['value']['disabled']  | default('no') }}
+          {% if user_item['value']['password'] is defined %}password="{{ user_item['value']['password'] }}"{% endif %}
+      - >
+        /user set [ find name="{{ user_item['value']['name'] }}"]
+          group={{ user_item['value']['group'] }}
+          comment="{{ user_item['value']['comment'] |default('') }}"
+          address={{ user_item['value']['address'] | join(',') }}
+          disabled={{ user_item['value']['disabled']  | default('no') }}
+          {% if user_item['value']['password'] is defined %}password="{{ user_item['value']['password'] }}"{% endif %}
+  when: input_role_debug == true
+
+- name: "Check is {{ user_item['value']['name'] }} user exist"
+  routeros_command:
+    commands: /user print where name="{{ user_item['value']['name'] }}"
+  register: user_status
+
+- name: "[DEBUG] Check is {{ user_item['value']['name'] }} user exist"
+  debug:
+    msg: "{{ user_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add {{ user_item['value']['name'] }} user"
+  routeros_command:
+    commands: >
+      /user add
+        name={{ user_item['value']['name'] }}
+        group={{ user_item['value']['group'] }}
+        comment="{{ user_item['value']['comment'] |default('') }}"
+        address={{ user_item['value']['address']  | join(',') }}
+        disabled={{ user_item['value']['disabled']  | default('no') }}
+        {% if user_item['value']['password'] is defined %}password="{{ user_item['value']['password'] }}"{% endif %}
+  when:
+    - '" 0 " not in user_status.stdout[0]'
+  register: add_user_status
+
+- name: "[DEBUG] Add {{ user_item['value']['name'] }} user"
+  debug:
+    msg: "{{ add_user_status.stdout_lines }}"
+  when:
+    - add_user_status.stdout_lines is defined
+    - input_role_debug == true
+
+- name: "Update {{ user_item['value']['name'] }} user"
+  routeros_command:
+    commands: >
+      /user set [ find name="{{ user_item['value']['name'] }}"]
+        group={{ user_item['value']['group'] }}
+        comment="{{ user_item['value']['comment'] |default('') }}"
+        address={{ user_item['value']['address']  | join(',') }}
+        disabled={{ user_item['value']['disabled']  | default('no') }}
+        {% if user_item['value']['password'] is defined %}password="{{ user_item['value']['password'] }}"{% endif %}
+  when:
+    - '" 0 " in user_status.stdout[0]'
+  register: update_user_status
+
+- name: "[DEBUG] Update {{ user_item['value']['name'] }} user"
+  debug:
+    msg: "{{ update_user_status.stdout_lines }}"
+  when:
+    - update_user_status.stdout_lines is defined
+    - input_role_debug == true

@@ -1,0 +1,5 @@
+---
+input_role_debug: false
+input_role_dhcp_clients:
+  - comment: "WAN-01"
+    interface: "WAN-01"

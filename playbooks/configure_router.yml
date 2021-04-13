@@ -1,0 +1,108 @@
+---
+- name: Configure Router
+  hosts: routeros
+  vars:
+    playbooks_roles_debug: false
+  tasks:
+    - include_role:
+        name: Mikrotik-CreateBackup
+      vars:
+        input_role_destination_path:           "{{ inventory_host_routeros_backup_path }}"
+        input_role_ansible_host:               "{{ ansible_host }}"
+        input_role_ansible_user:               "{{ ansible_user }}"
+        input_role_ansible_password:           "{{ ansible_ssh_pass }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-SetIdentity
+      vars:
+        input_role_ansible_host:               "{{ inventory_hostname }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-Interface-Wireless
+      vars:
+        input_role_wireless_interfaces:        "{{ inventory_host_routeros_wireless_interfaces }}"
+        input_role_wireless_security_profiles: "{{ inventory_group_routeros_wireless_security_profiles }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+      when:
+        - inventory_host_routeros_wireless_interfaces is defined
+
+    - include_role:
+        name: Mikrotik-Interface-Ethernet
+      vars:
+        input_role_ethernet_interfaces:        "{{ inventory_host_routeros_ethernet_interfaces }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-Interface-List
+      vars:
+        input_role_lists_interfaces:           "{{ inventory_host_routeros_lists_interfaces }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-Interface-Bridge
+      vars:
+        input_role_bridges_interfaces:         "{{ inventory_host_routeros_bridge_interfaces }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-Interface-VLan
+      vars:
+        input_role_vlan_interfaces:            "{{ inventory_group_routeros_vlan_interfaces }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-DHCP-Client
+      vars:
+        input_role_dhcp_clients:               "{{ inventory_host_routeros_dhcp_clients }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-DHCP-Server
+      vars:
+        input_role_pools:                      "{{ inventory_group_routeros_pools }}"
+        input_role_dhcp_servers:               "{{ inventory_group_routeros_dhcp_servers }}"
+        input_role_dhcp_networks:              "{{ inventory_group_routeros_dhcp_networks }}"
+        input_role_dhcp_leaves:                "{{ inventory_group_routeros_dhcp_leaves }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-DNS-Server
+      vars:
+        input_role_dns_parameters:             "{{ inventory_group_routeros_dns }}"
+        input_role_dns_static_records:         "{{ iventory_group_routeros_dns_static_records }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-NTP-Client
+      vars:
+        input_role_ntp_client:                 "{{ inventory_group_routeros_ntp_client }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-SSL-Certificates
+      vars:
+        input_role_server_certificates:        "{{ inventory_group_routeros_certificates }}"
+        input_role_ansible_host:               "{{ ansible_host }}"
+        input_role_ansible_user:               "{{ ansible_user }}"
+        input_role_ansible_password:           "{{ ansible_ssh_pass }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-Graphing
+      vars:
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-Firewall
+      vars:
+        input_role_firewall_rules:             "{{ inventory_group_routeros_firewall_rules }}"
+        input_role_firewall_nat_rules:         "{{ inventory_group_routeros_firewall_nat_rules }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-UsersManagment
+      vars:
+        input_role_groups:     "{{ inventory_group_routeros_system_groups }}"
+        input_role_users:      "{{ inventory_group_routeros_system_users }}"

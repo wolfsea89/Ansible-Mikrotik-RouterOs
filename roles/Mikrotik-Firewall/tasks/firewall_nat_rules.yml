@@ -1,0 +1,112 @@
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip firewall nat print where comment="{{ firewall_nat_rules['value']['comment'] }}"
+      - >
+        /ip firewall nat add
+          action={{ firewall_nat_rules['value']['action'] }}
+          chain={{ firewall_nat_rules['value']['chain'] }}
+          comment="{{ firewall_nat_rules['value']['comment'] }}"
+          {% if firewall_nat_rules['value']['in-interface-list'] is defined %}in-interface-list="{{ firewall_nat_rules['value']['in-interface-list'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['out-interface-list'] is defined %}out-interface-list="{{ firewall_nat_rules['value']['out-interface-list'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['src-address'] is defined %}src-address="{{ firewall_nat_rules['value']['src-address'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['protocol'] is defined %}protocol="{{ firewall_nat_rules['value']['protocol'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['reject-with'] is defined %}reject-with="{{ firewall_nat_rules['value']['reject-with'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['src-port'] is defined %}src-port="{{ firewall_nat_rules['value']['src-port'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['dst-port'] is defined %}dst-port="{{ firewall_nat_rules['value']['dst-port'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['connection-state'] is defined %}connection-state="{{ firewall_nat_rules['value']['connection-state'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['log'] is defined %}log="{{ firewall_nat_rules['value']['log'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['log-prefix'] is defined %}log-prefix="{{ firewall_nat_rules['value']['log-prefix'] }}"{% endif %}
+          disabled="{{ firewall_nat_rules['value']['disabled'] |default('yes') }}"
+          {% if firewall_nat_rules['value']['other_params'] is defined %}{{ firewall_nat_rules['value']['other_params'] }}{% endif %}
+      - >
+        /ip firewall nat set [ find comment="{{ firewall_nat_rules['value']['comment'] }}"]
+          action={{ firewall_nat_rules['value']['action'] }}
+          chain={{ firewall_nat_rules['value']['chain'] }}
+          comment="{{ firewall_nat_rules['value']['comment'] }}"
+          {% if firewall_nat_rules['value']['in-interface-list'] is defined %}in-interface-list="{{ firewall_nat_rules['value']['in-interface-list'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['out-interface-list'] is defined %}out-interface-list="{{ firewall_nat_rules['value']['out-interface-list'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['src-address'] is defined %}src-address="{{ firewall_nat_rules['value']['src-address'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['protocol'] is defined %}protocol="{{ firewall_nat_rules['value']['protocol'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['reject-with'] is defined %}reject-with="{{ firewall_nat_rules['value']['reject-with'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['src-port'] is defined %}src-port="{{ firewall_nat_rules['value']['src-port'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['dst-port'] is defined %}dst-port="{{ firewall_nat_rules['value']['dst-port'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['connection-state'] is defined %}connection-state="{{ firewall_nat_rules['value']['connection-state'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['log'] is defined %}log="{{ firewall_nat_rules['value']['log'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['log-prefix'] is defined %}log-prefix="{{ firewall_nat_rules['value']['log-prefix'] }}"{% endif %}
+          disabled="{{ firewall_nat_rules['value']['disabled'] |default('yes') }}"
+          {% if firewall_nat_rules['value']['other_params'] is defined %}{{ firewall_nat_rules['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Check is set firewall {{ firewall_nat_rules['key'] }} nat rule"
+  routeros_command:
+    commands:
+      - /ip firewall nat print where comment="{{ firewall_nat_rules['value']['comment'] }}"
+  register: firewall_nat_rules_status
+
+- name: "[DEBUG] Check is set firewall {{ firewall_nat_rules['key'] }} nat rule"
+  debug:
+    msg: "{{ firewall_nat_rules_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add firewall {{ firewall_nat_rules['key'] }} rule nat"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall nat add
+          action={{ firewall_nat_rules['value']['action'] }}
+          chain={{ firewall_nat_rules['value']['chain'] }}
+          comment="{{ firewall_nat_rules['value']['comment'] }}"
+          {% if firewall_nat_rules['value']['in-interface-list'] is defined %}in-interface-list="{{ firewall_nat_rules['value']['in-interface-list'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['out-interface-list'] is defined %}out-interface-list="{{ firewall_nat_rules['value']['out-interface-list'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['src-address'] is defined %}src-address="{{ firewall_nat_rules['value']['src-address'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['protocol'] is defined %}protocol="{{ firewall_nat_rules['value']['protocol'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['reject-with'] is defined %}reject-with="{{ firewall_nat_rules['value']['reject-with'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['src-port'] is defined %}src-port="{{ firewall_nat_rules['value']['src-port'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['dst-port'] is defined %}dst-port="{{ firewall_nat_rules['value']['dst-port'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['connection-state'] is defined %}connection-state="{{ firewall_nat_rules['value']['connection-state'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['log'] is defined %}log="{{ firewall_nat_rules['value']['log'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['log-prefix'] is defined %}log-prefix="{{ firewall_nat_rules['value']['log-prefix'] }}"{% endif %}
+          disabled="{{ firewall_nat_rules['value']['disabled'] |default('yes') }}"
+          {% if firewall_nat_rules['value']['other_params'] is defined %}{{ firewall_nat_rules['value']['other_params'] }}{% endif %}
+  when:
+    - '" 0 " not in firewall_nat_rules_status.stdout[0]'
+  register: add_firewall_nat_rules_status
+
+- name: "[DEBUG] Add firewall {{ firewall_nat_rules['key'] }} rule nat"
+  debug:
+    msg: "{{ add_firewall_nat_rules_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_firewall_nat_rules_status.stdout_lines is defined
+
+- name: "Update firewall {{ firewall_nat_rules['key'] }} nat rule"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall nat set [ find comment="{{ firewall_nat_rules['value']['comment'] }}"]
+          action={{ firewall_nat_rules['value']['action'] }}
+          chain={{ firewall_nat_rules['value']['chain'] }}
+          comment="{{ firewall_nat_rules['value']['comment'] }}"
+          {% if firewall_nat_rules['value']['in-interface-list'] is defined %}in-interface-list="{{ firewall_nat_rules['value']['in-interface-list'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['out-interface-list'] is defined %}out-interface-list="{{ firewall_nat_rules['value']['out-interface-list'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['src-address'] is defined %}src-address="{{ firewall_nat_rules['value']['src-address'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['protocol'] is defined %}protocol="{{ firewall_nat_rules['value']['protocol'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['reject-with'] is defined %}reject-with="{{ firewall_nat_rules['value']['reject-with'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['src-port'] is defined %}src-port="{{ firewall_nat_rules['value']['src-port'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['dst-port'] is defined %}dst-port="{{ firewall_nat_rules['value']['dst-port'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['connection-state'] is defined %}connection-state="{{ firewall_nat_rules['value']['connection-state'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['log'] is defined %}log="{{ firewall_nat_rules['value']['log'] }}"{% endif %}
+          {% if firewall_nat_rules['value']['log-prefix'] is defined %}log-prefix="{{ firewall_nat_rules['value']['log-prefix'] }}"{% endif %}
+          disabled="{{ firewall_nat_rules['value']['disabled'] |default('yes') }}"
+          {% if firewall_nat_rules['value']['other_params'] is defined %}{{ firewall_nat_rules['value']['other_params'] }}{% endif %}
+  when:
+    - '" 0 " in firewall_nat_rules_status.stdout[0]'
+  register: update_firewall_nat_rules_status
+
+- name: "[DEBUG] Update firewall {{ firewall_nat_rules['key'] }} rule nat"
+  debug:
+    msg: "{{ update_firewall_nat_rules_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_firewall_nat_rules_status.stdout_lines is defined

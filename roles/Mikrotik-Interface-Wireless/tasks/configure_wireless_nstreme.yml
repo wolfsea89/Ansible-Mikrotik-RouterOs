@@ -1,0 +1,23 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - >
+        /interface wireless nstreme set [ find name="{{ wireless_interface['value']['name'] }}" ]
+          comment="{{ wireless_interface['value']['comment'] | default('') }}"
+          {% if wireless_interface['value']['other_params'] is defined %}{{ wireless_interface['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Update wireless nstreme {{ wireless_interface['value']['name'] }}"
+  routeros_command:
+    commands: >
+      /interface wireless nstreme set [ find name="{{ wireless_interface['value']['name'] }}" ]
+        comment="{{ wireless_interface['value']['comment'] | default('') }}"
+        {% if wireless_interface['value']['other_params'] is defined %}{{ wireless_interface['value']['other_params'] }}{% endif %}
+  register: update_wireless_nstreme_status
+
+- name: "[DEBUG] Update wireless nstreme {{ wireless_interface['value']['name'] }}"
+  debug:
+    msg: "{{ update_wireless_nstreme_status.stdout_lines }}"
+  when:
+    - input_role_debug == true

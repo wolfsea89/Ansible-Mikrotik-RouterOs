@@ -1,0 +1,15 @@
+---
+vars_role_default_wireless_interface:
+  country: poland
+  mode: ap-bridge
+  frequency: auto
+  frequency: auto
+  distance: "indoors"
+  installation: "indoor"
+  disabled: "no"
+  station-roaming: enabled
+  wireless-protocol: "802.11"
+
+vars_role_wireless_security_profiles:
+  authentication-types: "wpa-psk,wpa2-psk"
+  mode: dynamic-keys

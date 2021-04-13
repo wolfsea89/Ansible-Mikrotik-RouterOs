@@ -1,0 +1,21 @@
+---
+- name: Configure Router
+  hosts: routeros
+  vars:
+    playbooks_roles_debug: true
+  tasks:
+    - include_role:
+        name: Mikrotik-CreateBackup
+      vars:
+        input_role_destination_path: "{{ inventory_host_routeros_backup_path }}"
+        input_role_ansible_host:     "{{ ansible_host }}"
+        input_role_ansible_user:     "{{ ansible_user }}"
+        input_role_ansible_password: "{{ ansible_ssh_pass }}"
+        input_role_debug:            "{{ playbooks_roles_debug }}"
+
+    - include_role:
+        name: Mikrotik-Firewall
+      vars:
+        input_role_firewall_rules:             "{{ inventory_group_routeros_firewall_rules }}"
+        input_role_firewall_nat_rules:         "{{ inventory_group_routeros_firewall_nat_rules }}"
+        input_role_debug:                      "{{ playbooks_roles_debug }}"

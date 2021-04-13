@@ -1,0 +1,30 @@
+---
+- name: Configure Bridge interfaces
+  include: configure_bridge_interface.yml
+  loop: "{{ lookup('dict', input_role_bridges_interfaces) }}"
+  loop_control:
+    loop_var: bridge_interface
+  when:
+    - input_role_bridges_interfaces is defined
+    - bridge_interface.key != "default"
+
+- name: Configure ip address for interface
+  include: configure_ip_address.yml
+  loop: "{{ lookup('dict', input_role_bridges_interfaces) }}"
+  loop_control:
+    loop_var: bridge_interface
+  when:
+    - input_role_bridges_interfaces is defined
+    - bridge_interface.value.address is defined
+    - bridge_interface.value.network is defined
+    - bridge_interface.key != "default"
+
+- name: Configure graphing interface
+  include: configure_graphing.yml
+  loop: "{{ lookup('dict', input_role_bridges_interfaces) }}"
+  loop_control:
+    loop_var: bridge
+  when:
+    - input_role_bridges_interfaces is defined
+    - bridge_interface.value.graphing is defined
+    - bridge_interface.key != "default"

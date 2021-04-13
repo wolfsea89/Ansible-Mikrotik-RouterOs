@@ -1,0 +1,56 @@
+- name: Configure wireless security profiles
+  include: configure_wireless_security_profiles.yml
+  loop: "{{ lookup('dict', input_role_wireless_security_profiles) }}"
+  loop_control:
+    loop_var: security_profile
+  when:
+    - input_role_wireless_security_profiles is defined
+    - security_profile.key != "default"
+
+- name: Configure wireless interfaces
+  include: configure_wireless_interfaces.yml
+  loop: "{{ lookup('dict', input_role_wireless_interfaces) }}"
+  loop_control:
+    loop_var: wireless_interface
+  when:
+    - input_role_wireless_interfaces is defined
+    - wireless_interface.key != "default"
+
+- name: Configure wireless manual-tx-power-table
+  include: configure_wireless_manual_tx_power_table.yml
+  loop: "{{ lookup('dict', input_role_wireless_interfaces) }}"
+  loop_control:
+    loop_var: wireless_interface
+  when:
+    - input_role_wireless_interfaces is defined
+    - wireless_interface.key != "default"
+
+- name: Configure wireless nstreme
+  include: configure_wireless_nstreme.yml
+  loop: "{{ lookup('dict', input_role_wireless_interfaces) }}"
+  loop_control:
+    loop_var: wireless_interface
+  when:
+    - input_role_wireless_interfaces is defined
+    - wireless_interface.key != "default"
+
+- name: Configure ip address for interface
+  include: configure_ip_address.yml
+  loop: "{{ lookup('dict', input_role_wireless_interfaces) }}"
+  loop_control:
+    loop_var: wireless_interface
+  when:
+    - input_role_wireless_interfaces is defined
+    - wireless_interface.value.address is defined
+    - wireless_interface.value.network is defined
+    - wireless_interface.key != "default"
+
+- name: Configure graphing interface
+  include: configure_graphing.yml
+  loop: "{{ lookup('dict', input_role_wireless_interfaces) }}"
+  loop_control:
+    loop_var: wireless_interface
+  when:
+    - input_role_wireless_interfaces is defined
+    - wireless_interface.value.graphing is defined
+    - wireless_interface.key != "default"

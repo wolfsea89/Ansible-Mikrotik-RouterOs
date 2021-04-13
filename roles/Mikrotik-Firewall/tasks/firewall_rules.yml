@@ -1,0 +1,95 @@
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip firewall filter print where comment="{{ firewall_rule['value']['comment'] }}"
+      - >
+        /ip firewall filter add
+          action={{ firewall_rule['value']['action'] }}
+          chain={{ firewall_rule['value']['chain'] }}
+          comment="{{ firewall_rule['value']['comment'] }}"
+          {% if firewall_rule['value']['in-interface-list'] is defined %}in-interface-list="{{ firewall_rule['value']['in-interface-list'] }}"{% endif %}
+          {% if firewall_rule['value']['protocol'] is defined %}protocol="{{ firewall_rule['value']['protocol'] }}"{% endif %}
+          {% if firewall_rule['value']['reject-with'] is defined %}reject-with="{{ firewall_rule['value']['reject-with'] }}"{% endif %}
+          {% if firewall_rule['value']['src-port'] is defined %}src-port="{{ firewall_rule['value']['src-port'] }}"{% endif %}
+          {% if firewall_rule['value']['dst-port'] is defined %}dst-port="{{ firewall_rule['value']['dst-port'] }}"{% endif %}
+          {% if firewall_rule['value']['connection-state'] is defined %}connection-state="{{ firewall_rule['value']['connection-state'] }}"{% endif %}
+          disabled="{{ firewall_rule['value']['disabled'] |default('yes') }}"
+          {% if firewall_rule['value']['other_params'] is defined %}{{ firewall_rule['value']['other_params'] }}{% endif %}
+      - >
+        /ip firewall filter set [ find comment="{{ firewall_rule.value.comment }}"]
+          action={{ firewall_rule['value']['action'] }}
+          chain={{ firewall_rule['value']['chain'] }}
+          comment="{{ firewall_rule['value']['comment'] }}"
+          {% if firewall_rule['value']['in-interface-list'] is defined %}in-interface-list="{{ firewall_rule['value']['in-interface-list'] }}"{% endif %}
+          {% if firewall_rule['value']['protocol'] is defined %}protocol="{{ firewall_rule['value']['protocol'] }}"{% endif %}
+          {% if firewall_rule['value']['reject-with'] is defined %}reject-with="{{ firewall_rule['value']['reject-with'] }}"{% endif %}
+          {% if firewall_rule['value']['src-port'] is defined %}src-port="{{ firewall_rule['value']['src-port'] }}"{% endif %}
+          {% if firewall_rule['value']['dst-port'] is defined %}dst-port="{{ firewall_rule['value']['dst-port'] }}"{% endif %}
+          {% if firewall_rule['value']['connection-state'] is defined %}connection-state="{{ firewall_rule['value']['connection-state'] }}"{% endif %}
+          disabled="{{ firewall_rule['value']['disabled'] |default('yes') }}"
+          {% if firewall_rule['value']['other_params'] is defined %}{{ firewall_rule['value']['other_params'] }}{% endif %}
+
+- name: "Check is set firewall {{ firewall_rule['key'] }} rule"
+  routeros_command:
+    commands:
+      - /ip firewall filter print where comment="{{ firewall_rule['value']['comment'] }}"
+  register: firewall_rule_status
+
+- name: "[DEBUG] Check is set firewall {{ firewall_rule['key'] }} rule"
+  debug:
+    msg: "{{ firewall_rule_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add firewall {{ firewall_rule['key'] }} rule"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall filter add
+          action={{ firewall_rule['value']['action'] }}
+          chain={{ firewall_rule['value']['chain'] }}
+          comment="{{ firewall_rule['value']['comment'] }}"
+          {% if firewall_rule['value']['in-interface-list'] is defined %}in-interface-list="{{ firewall_rule['value']['in-interface-list'] }}"{% endif %}
+          {% if firewall_rule['value']['protocol'] is defined %}protocol="{{ firewall_rule['value']['protocol'] }}"{% endif %}
+          {% if firewall_rule['value']['reject-with'] is defined %}reject-with="{{ firewall_rule['value']['reject-with'] }}"{% endif %}
+          {% if firewall_rule['value']['src-port'] is defined %}src-port="{{ firewall_rule['value']['src-port'] }}"{% endif %}
+          {% if firewall_rule['value']['dst-port'] is defined %}dst-port="{{ firewall_rule['value']['dst-port'] }}"{% endif %}
+          {% if firewall_rule['value']['connection-state'] is defined %}connection-state="{{ firewall_rule['value']['connection-state'] }}"{% endif %}
+          disabled="{{ firewall_rule['value']['disabled'] |default('yes') }}"
+          {% if firewall_rule['value']['other_params'] is defined %}{{ firewall_rule['value']['other_params'] }}{% endif %}
+  when:
+    - '" 0 " not in firewall_rule_status.stdout[0]'
+  register: add_firewall_rule_status
+
+- name: "[DEBUG] Add firewall {{ firewall_rule['key'] }} rule nat"
+  debug:
+    msg: "{{ add_firewall_rule_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_firewall_rule_status.stdout_lines is defined
+
+- name: "Update firewall {{ firewall_rule.key }} rule"
+  routeros_command:
+    commands:
+      - >
+        /ip firewall filter set [ find comment="{{ firewall_rule.value.comment }}"]
+          action={{ firewall_rule['value']['action'] }}
+          chain={{ firewall_rule['value']['chain'] }}
+          comment="{{ firewall_rule['value']['comment'] }}"
+          {% if firewall_rule['value']['in-interface-list'] is defined %}in-interface-list="{{ firewall_rule['value']['in-interface-list'] }}"{% endif %}
+          {% if firewall_rule['value']['protocol'] is defined %}protocol="{{ firewall_rule['value']['protocol'] }}"{% endif %}
+          {% if firewall_rule['value']['reject-with'] is defined %}reject-with="{{ firewall_rule['value']['reject-with'] }}"{% endif %}
+          {% if firewall_rule['value']['src-port'] is defined %}src-port="{{ firewall_rule['value']['src-port'] }}"{% endif %}
+          {% if firewall_rule['value']['dst-port'] is defined %}dst-port="{{ firewall_rule['value']['dst-port'] }}"{% endif %}
+          {% if firewall_rule['value']['connection-state'] is defined %}connection-state="{{ firewall_rule['value']['connection-state'] }}"{% endif %}
+          disabled="{{ firewall_rule['value']['disabled'] |default('yes') }}"
+          {% if firewall_rule['value']['other_params'] is defined %}{{ firewall_rule['value']['other_params'] }}{% endif %}
+  when:
+    - '" 0 " in firewall_rule_status.stdout[0]'
+  register: update_firewall_rule_status
+
+- name: "[DEBUG] Update firewall {{ firewall_rule['key'] }} rule nat"
+  debug:
+    msg: "{{ update_firewall_rule_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_firewall_rule_status.stdout_lines is defined

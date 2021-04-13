@@ -1,0 +1,6 @@
+---
+input_role_debug: false
+input_role_ntp_client:
+  time-zone-name: "Europe/Warsaw"
+  primary-ntp: "194.146.251.100"
+  secondary-ntp: "194.146.251.101"

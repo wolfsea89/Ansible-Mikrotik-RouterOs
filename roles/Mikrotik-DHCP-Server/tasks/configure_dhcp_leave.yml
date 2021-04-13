@@ -1,0 +1,78 @@
+---
+- name: "[DEBUG] RouterOs Commands"
+  debug:
+    msg:
+      - /ip dhcp-server lease print whene client-id="{{ dhcp_leave['value']['client-id'] }}"
+      - >
+        /ip dhcp-server lease add
+          client-id="{{ dhcp_leave['value']['client-id'] }}"
+          address="{{ dhcp_leave['value']['address'] }}"
+          comment="{{ dhcp_leave['value']['comment'] | default('') }}"
+          server="{{ dhcp_leave['value']['server']  }}"
+          disabled="{{ dhcp_leave['value']['disabled'] | default('no') }}"
+          mac-address="{{ dhcp_leave['value']['mac-address'] }}"
+          {% if dhcp_leave['value']['other_params'] is defined %}{{ dhcp_leave['value']['other_params'] }}{% endif %}
+      - >
+        /ip dhcp-server lease set [ find client-id="{{ dhcp_leave['value']['client-id'] }}" ]
+          address="{{ dhcp_leave['value']['address'] }}"
+          comment="{{ dhcp_leave['value']['comment'] | default('') }}"
+          server="{{ dhcp_leave['value']['server']  }}"
+          disabled="{{ dhcp_leave['value']['disabled'] | default('no') }}"
+          mac-address="{{ dhcp_leave['value']['mac-address'] }}"
+          {% if dhcp_leave['value']['other_params'] is defined %}{{ dhcp_leave['value']['other_params'] }}{% endif %}
+  when: input_role_debug == true
+
+- name: "Check: {{ dhcp_leave['value']['name'] }} client is exist"
+  routeros_command:
+    commands:
+      - >
+        /ip dhcp-server lease print whene client-id="{{ dhcp_leave['value']['client-id'] }}"
+  register: clientlease_status
+
+- name: "[DEBUG] Check: {{ dhcp_leave['value']['name'] }} client is exist"
+  debug:
+    msg: "{{ clientlease_status.stdout_lines }}"
+  when: input_role_debug == true
+
+- name: "Add {{ dhcp_leave['value']['address'] }} client to DHCP Leaves List"
+  routeros_command:
+    commands:
+      - >
+        /ip dhcp-server lease add
+          client-id="{{ dhcp_leave['value']['client-id'] }}"
+          address="{{ dhcp_leave['value']['address'] }}"
+          comment="{{ dhcp_leave['value']['comment'] | default('') }}"
+          server="{{ dhcp_leave['value']['server']  }}"
+          disabled="{{ dhcp_leave['value']['disabled'] | default('no') }}"
+          mac-address="{{ dhcp_leave['value']['mac-address'] }}"
+          {% if dhcp_leave['value']['other_params'] is defined %}{{ dhcp_leave['value']['other_params'] }}{% endif %}
+  when: '"0 " not in clientlease_status.stdout[0]'
+  register: add_clientlease_status
+
+- name: "[DEBUG] Add {{ dhcp_leave['value']['address'] }} client to DHCP Leaves List"
+  debug:
+    msg: "{{ add_clientlease_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - add_clientlease_status.stdout_lines is defined
+
+- name: "Update {{dhcp_leave['value']['address'] }} dhcp server"
+  routeros_command:
+    commands:
+      - >
+        /ip dhcp-server lease set [ find client-id="{{ dhcp_leave['value']['client-id'] }}" ]
+          address="{{ dhcp_leave['value']['address'] }}"
+          comment="{{ dhcp_leave['value']['comment'] | default('') }}"
+          server="{{ dhcp_leave['value']['server']  }}"
+          disabled="{{ dhcp_leave['value']['disabled'] | default('no') }}"
+          mac-address="{{ dhcp_leave['value']['mac-address'] }}"
+          {% if dhcp_leave['value']['other_params'] is defined %}{{ dhcp_leave['value']['other_params'] }}{% endif %}
+  when: '"0 " in clientlease_status.stdout[0]'
+  register: update_clientlease_status
+
+- name: "[DEBUG] Update {{ dhcp_leave['value']['address'] }} client to DHCP Leaves List"
+  debug:
+    msg: "{{ update_clientlease_status.stdout_lines }}"
+  when:
+    - input_role_debug == true
+    - update_clientlease_status.stdout_lines is defined

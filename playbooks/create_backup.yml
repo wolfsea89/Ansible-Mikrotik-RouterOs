@@ -1,0 +1,14 @@
+---
+- name: Create backup
+  hosts: routeros
+  vars:
+    playbooks_roles_debug: false
+  tasks:
+    - include_role:
+        name: Mikrotik-CreateBackup
+      vars:
+        input_role_destination_path: "{{ inventory_host_routeros_backup_path }}"
+        input_role_ansible_host:     "{{ ansible_host }}"
+        input_role_ansible_user:     "{{ ansible_user }}"
+        input_role_ansible_password: "{{ ansible_ssh_pass }}"
+        input_role_debug:            "{{ playbooks_roles_debug }}"
