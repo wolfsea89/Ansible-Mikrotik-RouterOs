@@ -23,6 +23,7 @@ Skrypt wykonuje konfiguracje w następujnącej kolejności
 - [Konfiguracja certyfikatów SSL (role: Mikrotik-SSL-Certificates)](docs/ssl_certificates/overview.md)
 - [Konfiguracja monitoringu portów (role: Mikrotik-Graphing)](docs/graphing/overview.md)
 - [Konfiguracja firewall (role: Mikrotik-Firewall)](docs/firewall/overview.md)
+- [Konfiguracja grup i użytkowników (role: Mikrotik-UsersManagment)](docs/user_managment/users_managment.md)
 
 Author Information
 =========
