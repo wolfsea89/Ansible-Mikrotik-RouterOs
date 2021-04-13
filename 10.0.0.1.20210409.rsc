@@ -1,12 +1,5 @@
 /snmp community
 set [ find default=yes ] disabled=yes
-/user group
-set full policy="local,telnet,ssh,ftp,reboot,read,write,policy,test,winbox,pas\
-    sword,web,sniff,sensitive,api,romon,dude,tikapp"
-add name=prometheus policy="read,web,api,!local,!telnet,!ssh,!ftp,!reboot,!wri\
-    te,!policy,!test,!winbox,!password,!sniff,!sensitive,!romon,!dude,!tikapp"
-add name=ansible policy="local,telnet,ssh,ftp,reboot,read,write,policy,test,wi\
-    nbox,password,web,sniff,sensitive,api,romon,dude,tikapp"
 /ip neighbor discovery-settings
 set discover-interface-list=LIST-LAN-USERS
 /ip cloud
@@ -32,13 +25,6 @@ set enabled=yes
 set enabled=yes
 /system upgrade mirror
 set enabled=yes
-/tool graphing
-set store-every=24hours
-/tool graphing interface
-/tool graphing queue
-add store-on-disk=no
-/tool graphing resource
-add store-on-disk=no
 /tool mac-server
 set allowed-interface-list=LIST-LAN-USERS
 /tool mac-server mac-winbox
