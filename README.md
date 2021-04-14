@@ -3,7 +3,8 @@ Mikrotik-RouterOs-Ansible
 
 Playbooki:
 - playbooks/create_backup.yml - Wykonanie kopii zapasowej
-- playbooks/configure_router.yml - Konfiguracja routera
+- playbooks/configure_router.yml - Konfiguracja routera (ALL)
+- playbooks/configure_SSL_certificate - Wgrywanie certyfikcatu SSL
 
 Konfiguracja połączenia SSH - Anisble
 - [Komunikacja](docs/ansible_connections/overview.md)
